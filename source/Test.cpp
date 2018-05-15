@@ -11,13 +11,34 @@
  * Created on May 9, 2018, 11:44 AM
  */
 
-using namespace std;
+#include <stdlib.h>
+#include <iostream>
+#include <stdint.h>
+#include"AdjacencyMatrix.hpp"
 
 /*
- * 
+ * Simple C++ Test Suite
  */
-int main(int argc, char** argv) {
 
-    return 0;
+
+void testInsertNode() {
+    AdjacencyMatrix* adjacencyMatrix = new AdjacencyMatrix();
+    adjacencyMatrix->insertNode();
+    adjacencyMatrix->insertNode();
+    adjacencyMatrix->insertNode();
+    adjacencyMatrix->insertNode();
+
+    uint64_t nodeIdPre = adjacencyMatrix->getNodeIndex(2);
+    adjacencyMatrix->removeNode(1);
+    uint64_t nodeIdPost = adjacencyMatrix->getNodeIndex(2);
+
+    std::cout << "Pre Node ID: " << nodeIdPre << ", Post Node ID: " << nodeIdPost << std::endl;
 }
+
+int main(int argc, char** argv) {
+    testInsertNode();
+    return (EXIT_SUCCESS);
+}
+
+
 

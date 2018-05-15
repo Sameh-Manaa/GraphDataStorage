@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>header/AdjacencyMatrix.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -12,6 +13,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>source/AdjacencyMatrix.cpp</itemPath>
       <itemPath>source/Test.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -28,6 +30,7 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>source</Elem>
+    <Elem>header</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -38,7 +41,34 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <cTool>
+          <incDir>
+            <pElem>header</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>header</pElem>
+          </incDir>
+          <commandLine>-std=c++11</commandLine>
+        </ccTool>
       </compileType>
+      <folder path="HeaderFiles">
+        <cTool>
+          <incDir>
+            <pElem>header</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>header</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
+      <item path="header/AdjacencyMatrix.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="source/AdjacencyMatrix.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="source/Test.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -62,6 +92,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="header/AdjacencyMatrix.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="source/AdjacencyMatrix.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="source/Test.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>

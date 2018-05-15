@@ -6,11 +6,12 @@
             <name>GraphStorage</name>
             <c-extensions/>
             <cpp-extensions>cpp</cpp-extensions>
-            <header-extensions/>
+            <header-extensions>hpp</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList>
                 <sourceRootElem>source</sourceRootElem>
+                <sourceRootElem>header</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
