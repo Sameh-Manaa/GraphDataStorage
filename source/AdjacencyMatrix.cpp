@@ -59,20 +59,19 @@ bool AdjacencyMatrix::removeNeighbour(uint64_t nodeId, uint64_t neighbourId) {
     }
 }
 
-std::list<uint64_t>* AdjacencyMatrix::getNeighbours(uint64_t nodeId) {
-    std::list<uint64_t>* neighbourList;
+std::list<uint64_t> AdjacencyMatrix::getNeighbours(uint64_t nodeId) {
+    std::list<uint64_t> neighbourList(0);
     if (nodeAdjacencyMap.find(nodeId) != nodeAdjacencyMap.end()) {
         for (std::vector<uint64_t>::size_type i = 0; i != nodeAdjacencyMap.at(nodeId).size(); i++) {
             if (nodeAdjacencyMap.at(nodeId)[i]) {
                 std::map<uint64_t, std::vector<bool> >::iterator it = nodeAdjacencyMap.begin();
                 std::advance(it, i);
-                neighbourList->push_back(it->first);
+                neighbourList.push_back(it->first);
             }
         }
-        return neighbourList;
-    } else {
-        return nullptr;
     }
+
+    return neighbourList;
 }
 
 uint64_t AdjacencyMatrix::getNodeIndex(uint64_t nodeId) {

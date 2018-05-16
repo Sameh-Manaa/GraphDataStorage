@@ -29,7 +29,7 @@ public:
     bool removeNode(uint64_t nodeId);
     bool addNeighbour(uint64_t nodeId, uint64_t neighbourId);
     bool removeNeighbour(uint64_t nodeId, uint64_t neighbourId);
-    std::list<uint64_t>* getNeighbours(uint64_t nodeId);
+    std::list<uint64_t> getNeighbours(uint64_t nodeId);
     uint64_t getNodeIndex(uint64_t nodeId);
     AdjacencyMatrix();
 };
