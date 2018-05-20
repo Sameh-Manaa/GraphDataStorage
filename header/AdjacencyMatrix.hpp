@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /* 
  * File:   AdjacencyMatrix.hpp
  * Author: Sameh-Manaa
@@ -21,16 +15,16 @@
 
 class AdjacencyMatrix {
 private:
-    std::map<uint64_t, std::vector<bool> > nodeAdjacencyMap;
-    uint64_t nextNodeId = 0;
+    std::map<uint64_t, std::vector<bool> > veretexAdjacencyMap;
+    uint64_t nextVertexId = 0;
 
 public:
-    uint64_t insertNode();
-    bool removeNode(uint64_t nodeId);
-    bool addNeighbour(uint64_t nodeId, uint64_t neighbourId);
-    bool removeNeighbour(uint64_t nodeId, uint64_t neighbourId);
-    std::list<uint64_t> getNeighbours(uint64_t nodeId);
-    uint64_t getNodeIndex(uint64_t nodeId);
+    uint64_t insertVertex();
+    bool removeVeretex(uint64_t vertexId);
+    bool addNeighbourVertex(uint64_t vertexId, uint64_t neighbourVertexId);
+    bool removeNeighbourVertex(uint64_t vertexId, uint64_t neighbourVertexId);
+    std::list<uint64_t> getNeighbourVertices(uint64_t vertexId);
+    uint64_t getVertexIndex(uint64_t vertexId);
     AdjacencyMatrix();
 };
 

@@ -11,27 +11,27 @@ AdjacencyMatrix::AdjacencyMatrix() {
 
 }
 
-uint64_t AdjacencyMatrix::insertNode() {
-    uint64_t nodesCount = (nodeAdjacencyMap.empty()) ? 1 : nodeAdjacencyMap.begin()->second.size() + 1;
-    for (auto& nodeNeighbours : nodeAdjacencyMap) {
+uint64_t AdjacencyMatrix::insertVertex() {
+    uint64_t nodesCount = (veretexAdjacencyMap.empty()) ? 1 : veretexAdjacencyMap.begin()->second.size() + 1;
+    for (auto& nodeNeighbours : veretexAdjacencyMap) {
         nodeNeighbours.second.push_back(false);
     }
     std::vector<bool> neighbours(nodesCount, false);
-    nodeAdjacencyMap[nextNodeId] = neighbours;
-    nextNodeId++;
+    veretexAdjacencyMap[nextVertexId] = neighbours;
+    nextVertexId++;
 
-    return nextNodeId - 1;
+    return nextVertexId - 1;
 }
 
-bool AdjacencyMatrix::removeNode(uint64_t nodeId) {
-    if (nodeAdjacencyMap.find(nodeId) != nodeAdjacencyMap.end()) {
-        uint64_t nodeIndex = getNodeIndex(nodeId);
+bool AdjacencyMatrix::removeVeretex(uint64_t vertexId) {
+    if (veretexAdjacencyMap.find(vertexId) != veretexAdjacencyMap.end()) {
+        uint64_t nodeIndex = getVertexIndex(vertexId);
 
-        for (auto& nodeNeighbours : nodeAdjacencyMap) {
+        for (auto& nodeNeighbours : veretexAdjacencyMap) {
             nodeNeighbours.second.erase(nodeNeighbours.second.begin() + nodeIndex);
         }
 
-        nodeAdjacencyMap.erase(nodeId);
+        veretexAdjacencyMap.erase(vertexId);
 
         return true;
     } else {
@@ -39,32 +39,32 @@ bool AdjacencyMatrix::removeNode(uint64_t nodeId) {
     }
 }
 
-bool AdjacencyMatrix::addNeighbour(uint64_t nodeId, uint64_t neighbourId) {
-    if (nodeAdjacencyMap.find(nodeId) != nodeAdjacencyMap.end() &&
-            nodeAdjacencyMap.find(neighbourId) != nodeAdjacencyMap.end()) {
-        nodeAdjacencyMap.at(nodeId).at(getNodeIndex(neighbourId)) = true;
+bool AdjacencyMatrix::addNeighbourVertex(uint64_t vertexId, uint64_t neighbourVertexId) {
+    if (veretexAdjacencyMap.find(vertexId) != veretexAdjacencyMap.end() &&
+            veretexAdjacencyMap.find(neighbourVertexId) != veretexAdjacencyMap.end()) {
+        veretexAdjacencyMap.at(vertexId).at(getVertexIndex(neighbourVertexId)) = true;
         return true;
     } else {
         return false;
     }
 }
 
-bool AdjacencyMatrix::removeNeighbour(uint64_t nodeId, uint64_t neighbourId) {
-    if (nodeAdjacencyMap.find(nodeId) != nodeAdjacencyMap.end() &&
-            nodeAdjacencyMap.find(neighbourId) != nodeAdjacencyMap.end()) {
-        nodeAdjacencyMap.at(nodeId).at(getNodeIndex(neighbourId)) = false;
+bool AdjacencyMatrix::removeNeighbourVertex(uint64_t vertexId, uint64_t neighbourVertexId) {
+    if (veretexAdjacencyMap.find(vertexId) != veretexAdjacencyMap.end() &&
+            veretexAdjacencyMap.find(neighbourVertexId) != veretexAdjacencyMap.end()) {
+        veretexAdjacencyMap.at(vertexId).at(getVertexIndex(neighbourVertexId)) = false;
         return true;
     } else {
         return false;
     }
 }
 
-std::list<uint64_t> AdjacencyMatrix::getNeighbours(uint64_t nodeId) {
+std::list<uint64_t> AdjacencyMatrix::getNeighbourVertices(uint64_t vertexId) {
     std::list<uint64_t> neighbourList(0);
-    if (nodeAdjacencyMap.find(nodeId) != nodeAdjacencyMap.end()) {
-        for (std::vector<uint64_t>::size_type i = 0; i != nodeAdjacencyMap.at(nodeId).size(); i++) {
-            if (nodeAdjacencyMap.at(nodeId)[i]) {
-                std::map<uint64_t, std::vector<bool> >::iterator it = nodeAdjacencyMap.begin();
+    if (veretexAdjacencyMap.find(vertexId) != veretexAdjacencyMap.end()) {
+        for (std::vector<uint64_t>::size_type i = 0; i != veretexAdjacencyMap.at(vertexId).size(); i++) {
+            if (veretexAdjacencyMap.at(vertexId)[i]) {
+                std::map<uint64_t, std::vector<bool> >::iterator it = veretexAdjacencyMap.begin();
                 std::advance(it, i);
                 neighbourList.push_back(it->first);
             }
@@ -74,6 +74,6 @@ std::list<uint64_t> AdjacencyMatrix::getNeighbours(uint64_t nodeId) {
     return neighbourList;
 }
 
-uint64_t AdjacencyMatrix::getNodeIndex(uint64_t nodeId) {
-    return std::distance(nodeAdjacencyMap.begin(), nodeAdjacencyMap.find(nodeId));
+uint64_t AdjacencyMatrix::getVertexIndex(uint64_t vertexId) {
+    return std::distance(veretexAdjacencyMap.begin(), veretexAdjacencyMap.find(vertexId));
 }
