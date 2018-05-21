@@ -15,17 +15,16 @@
 
 class AdjacencyList {
 private:
-    std::map<uint64_t, std::map<std::string, std::vector<uint64_t> > > vertexAdjacencyMap;
-    uint64_t nextVertexId = 0;
+    std::map<std::string, std::map<std::string, std::vector<std::string> > > vertexAdjacencyMap;
 
 public:
-    uint64_t insertVertex();
-    bool removeVertex(uint64_t vertexId);
-    bool addNeighbourVertex(uint64_t vertexId, uint64_t neighbourVertexId, std::string edgeLabel);
-    bool removeNeighbourVertex(uint64_t vertexId, uint64_t neighbourVertexId);
-    bool removeNeighbourVertex(uint64_t vertexId, uint64_t neighbourVertexId, std::string edgeLabel);
-    std::map<std::string, std::vector<uint64_t> > getNeighbourVertices(uint64_t vertexId);
-    uint64_t getVertexIndex(uint64_t vertexId);
+    bool insertVertex(std::string vertexId);
+    bool removeVertex(std::string vertexId);
+    bool addNeighbourVertex(std::string vertexId, std::string neighbourVertexId, std::string edgeLabel);
+    bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId);
+    bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId, std::string edgeLabel);
+    std::map<std::string, std::vector<std::string> > getNeighbourVertices(std::string vertexId);
+    uint64_t getVertexIndex(std::string vertexId);
     AdjacencyList();
 };
 

@@ -18,6 +18,7 @@
       <itemPath>source/AdjacencyList.cpp</itemPath>
       <itemPath>source/AdjacencyMatrix.cpp</itemPath>
       <itemPath>source/Test.cpp</itemPath>
+      <itemPath>source/UniversalTable.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -80,6 +81,8 @@
       </item>
       <item path="source/Test.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="source/UniversalTable.cpp" ex="false" tool="1" flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -119,6 +122,8 @@
       <item path="source/AdjacencyMatrix.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="source/Test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="source/UniversalTable.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
   </confs>

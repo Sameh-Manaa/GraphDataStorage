@@ -24,73 +24,73 @@
 
 void testInsertNode() {
     AdjacencyMatrix* adjacencyMatrix = new AdjacencyMatrix();
-    adjacencyMatrix->insertVertex();
-    adjacencyMatrix->insertVertex();
-    adjacencyMatrix->insertVertex();
-    adjacencyMatrix->insertVertex();
-    adjacencyMatrix->insertVertex();
+    adjacencyMatrix->insertVertex("0");
+    adjacencyMatrix->insertVertex("1");
+    adjacencyMatrix->insertVertex("2");
+    adjacencyMatrix->insertVertex("3");
+    adjacencyMatrix->insertVertex("4");
 
-    uint64_t nodeIdPre = adjacencyMatrix->getVertexIndex(2);
-    adjacencyMatrix->removeVeretex(1);
-    uint64_t nodeIdPost = adjacencyMatrix->getVertexIndex(2);
+    uint64_t nodeIdPre = adjacencyMatrix->getVertexIndex("2");
+    adjacencyMatrix->removeVeretex("1");
+    uint64_t nodeIdPost = adjacencyMatrix->getVertexIndex("2");
 
     std::cout << "Adjacency Matrix: \r\nPre Node ID: " << nodeIdPre << ", Post Node ID: " << nodeIdPost << std::endl;
 
-    adjacencyMatrix->addNeighbourVertex(0,4);
-    adjacencyMatrix->addNeighbourVertex(0,3);
-    adjacencyMatrix->addNeighbourVertex(0,2);
+    adjacencyMatrix->addNeighbourVertex("0","4");
+    adjacencyMatrix->addNeighbourVertex("0","3");
+    adjacencyMatrix->addNeighbourVertex("0","2");
     
-    std::cout<<adjacencyMatrix->getNeighbourVertices(0).back()<<std::endl;
+    std::cout<<adjacencyMatrix->getNeighbourVertices("0").back()<<std::endl;
     
-    adjacencyMatrix->removeVeretex(4);
-    std::cout<<adjacencyMatrix->getNeighbourVertices(0).back()<<std::endl;
+    adjacencyMatrix->removeVeretex("4");
+    std::cout<<adjacencyMatrix->getNeighbourVertices("0").back()<<std::endl;
     
-    adjacencyMatrix->removeNeighbourVertex(0,3);
-    std::cout<<adjacencyMatrix->getNeighbourVertices(0).back()<<std::endl;
+    adjacencyMatrix->removeNeighbourVertex("0","3");
+    std::cout<<adjacencyMatrix->getNeighbourVertices("0").back()<<std::endl;
     
-    adjacencyMatrix->addNeighbourVertex(0,3);
-    std::cout<<adjacencyMatrix->getNeighbourVertices(0).back()<<std::endl;
+    adjacencyMatrix->addNeighbourVertex("0","3");
+    std::cout<<adjacencyMatrix->getNeighbourVertices("0").back()<<std::endl;
     
-    adjacencyMatrix->removeNeighbourVertex(0,2);
-    adjacencyMatrix->insertVertex();
-    bool test = adjacencyMatrix->addNeighbourVertex(0,5);
-    std::cout<<adjacencyMatrix->getNeighbourVertices(0).back()<<std::endl;
+    adjacencyMatrix->removeNeighbourVertex("0","2");
+    adjacencyMatrix->insertVertex("5");
+    bool test = adjacencyMatrix->addNeighbourVertex("0","5");
+    std::cout<<adjacencyMatrix->getNeighbourVertices("0").back()<<std::endl;
     
     
     /////////////////////////////////////////////////////
 
     AdjacencyList* adjacencyList = new AdjacencyList();
-    adjacencyList->insertNode();
-    adjacencyList->insertNode();
-    adjacencyList->insertNode();
-    adjacencyList->insertNode();
-    adjacencyList->insertNode();
+    adjacencyList->insertVertex("0");
+    adjacencyList->insertVertex("1");
+    adjacencyList->insertVertex("2");
+    adjacencyList->insertVertex("3");
+    adjacencyList->insertVertex("4");
 
-    nodeIdPre = adjacencyList->getNodeIndex(2);
-    adjacencyList->removeNode(1);
-    nodeIdPost = adjacencyList->getNodeIndex(2);
+    nodeIdPre = adjacencyList->getVertexIndex("2");
+    adjacencyList->removeVertex("1");
+    nodeIdPost = adjacencyList->getVertexIndex("2");
     
     std::cout << "Adjacency List: \r\nPre Node ID: " << nodeIdPre << ", Post Node ID: " << nodeIdPost << std::endl;
     
-    adjacencyList->addNeighbour(0,4,"test");
-    adjacencyList->addNeighbour(0,3,"test");
-    adjacencyList->addNeighbour(0,2,"test");
+    adjacencyList->addNeighbourVertex("0","4","test");
+    adjacencyList->addNeighbourVertex("0","3","test");
+    adjacencyList->addNeighbourVertex("0","2","test");
     
-    std::cout<<adjacencyList->getNeighbours(0).at("test").at(0)<<std::endl;
+    std::cout<<adjacencyList->getNeighbourVertices("0").at("test").at(0)<<std::endl;
     
-    adjacencyList->removeNode(4);
-    std::cout<<adjacencyList->getNeighbours(0).at("test").at(0)<<std::endl;
+    adjacencyList->removeVertex("4");
+    std::cout<<adjacencyList->getNeighbourVertices("0").at("test").at(0)<<std::endl;
     
-    adjacencyList->removeNeighbour(0,3,"test");
-    std::cout<<adjacencyList->getNeighbours(0).at("test").at(0)<<std::endl;
+    adjacencyList->removeNeighbourVertex("0","3","test");
+    std::cout<<adjacencyList->getNeighbourVertices("0").at("test").at(0)<<std::endl;
     
-    adjacencyList->removeNeighbour(0,2,"test");
-    adjacencyList->insertNode();
-    adjacencyList->insertNode();
-    test = adjacencyList->addNeighbour(0,5,"test");
-    test = adjacencyList->addNeighbour(0,6,"test2");
-    std::cout<<adjacencyList->getNeighbours(0).at("test").at(0)<<std::endl;
-    std::cout<<adjacencyList->getNeighbours(0).at("test2").at(0)<<std::endl;
+    adjacencyList->removeNeighbourVertex("0","2","test");
+    adjacencyList->insertVertex("5");
+    adjacencyList->insertVertex("6");
+    test = adjacencyList->addNeighbourVertex("0","5","test");
+    test = adjacencyList->addNeighbourVertex("0","6","test2");
+    std::cout<<adjacencyList->getNeighbourVertices("0").at("test").at(0)<<std::endl;
+    std::cout<<adjacencyList->getNeighbourVertices("0").at("test2").at(0)<<std::endl;
 }
 
 int main(int argc, char** argv) {

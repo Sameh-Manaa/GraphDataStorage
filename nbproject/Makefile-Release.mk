@@ -37,7 +37,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/source/AdjacencyList.o \
 	${OBJECTDIR}/source/AdjacencyMatrix.o \
-	${OBJECTDIR}/source/Test.o
+	${OBJECTDIR}/source/Test.o \
+	${OBJECTDIR}/source/UniversalTable.o
 
 
 # C Compiler Flags
@@ -78,6 +79,11 @@ ${OBJECTDIR}/source/Test.o: source/Test.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/Test.o source/Test.cpp
+
+${OBJECTDIR}/source/UniversalTable.o: source/UniversalTable.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/UniversalTable.o source/UniversalTable.cpp
 
 # Subprojects
 .build-subprojects:

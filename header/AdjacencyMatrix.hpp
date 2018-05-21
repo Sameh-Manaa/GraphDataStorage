@@ -15,16 +15,15 @@
 
 class AdjacencyMatrix {
 private:
-    std::map<uint64_t, std::vector<bool> > veretexAdjacencyMap;
-    uint64_t nextVertexId = 0;
+    std::map<std::string, std::vector<bool> > veretexAdjacencyMap;
 
 public:
-    uint64_t insertVertex();
-    bool removeVeretex(uint64_t vertexId);
-    bool addNeighbourVertex(uint64_t vertexId, uint64_t neighbourVertexId);
-    bool removeNeighbourVertex(uint64_t vertexId, uint64_t neighbourVertexId);
-    std::list<uint64_t> getNeighbourVertices(uint64_t vertexId);
-    uint64_t getVertexIndex(uint64_t vertexId);
+    bool insertVertex(std::string vertexId);
+    bool removeVeretex(std::string vertexId);
+    bool addNeighbourVertex(std::string vertexId, std::string neighbourVertexId);
+    bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId);
+    std::list<std::string> getNeighbourVertices(std::string vertexId);
+    uint64_t getVertexIndex(std::string vertexId);
     AdjacencyMatrix();
 };
 

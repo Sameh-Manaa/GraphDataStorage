@@ -12,23 +12,24 @@ AdjacencyList::AdjacencyList() {
 
 }
 
-uint64_t AdjacencyList::insertVertex() {
-    std::map<std::string, std::vector<uint64_t> > labeledNeighbourVertexMap;
-    std::vector<uint64_t> neighbourVertexIds(0);
+bool AdjacencyList::insertVertex(std::string vertexId) {
+    if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end()) {
+        return false;
+    }
+    std::map<std::string, std::vector<std::string> > labeledNeighbourVertexMap;
+    std::vector<std::string> neighbourVertexIds(0);
     labeledNeighbourVertexMap[""] = neighbourVertexIds;
-    vertexAdjacencyMap[nextVertexId] = labeledNeighbourVertexMap;
-    nextVertexId++;
+    vertexAdjacencyMap[vertexId] = labeledNeighbourVertexMap;
 
-    return nextVertexId - 1;
+    return true;
 }
 
-
-bool AdjacencyList::removeVertex(uint64_t vertexId) {
+bool AdjacencyList::removeVertex(std::string vertexId) {
     if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end()) {
 
         for (auto& labeledNeighbourVertexMap : vertexAdjacencyMap) {
             for (auto& vertexLabeledNeighbourVertexs : labeledNeighbourVertexMap.second) {
-                std::vector<uint64_t>::iterator it = std::find(vertexLabeledNeighbourVertexs.second.begin(), vertexLabeledNeighbourVertexs.second.end(), vertexId);
+                std::vector<std::string>::iterator it = std::find(vertexLabeledNeighbourVertexs.second.begin(), vertexLabeledNeighbourVertexs.second.end(), vertexId);
                 if (it != vertexLabeledNeighbourVertexs.second.end()) {
                     vertexLabeledNeighbourVertexs.second.erase(it);
                 }
@@ -43,8 +44,7 @@ bool AdjacencyList::removeVertex(uint64_t vertexId) {
     }
 }
 
-
-bool AdjacencyList::addNeighbourVertex(uint64_t vertexId, uint64_t neighbourVertexId, std::string edgeLabel) {
+bool AdjacencyList::addNeighbourVertex(std::string vertexId, std::string neighbourVertexId, std::string edgeLabel) {
     if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end() &&
             vertexAdjacencyMap.find(neighbourVertexId) != vertexAdjacencyMap.end()) {
         vertexAdjacencyMap.at(vertexId)[edgeLabel].push_back(neighbourVertexId);
@@ -54,12 +54,11 @@ bool AdjacencyList::addNeighbourVertex(uint64_t vertexId, uint64_t neighbourVert
     }
 }
 
-
-bool AdjacencyList::removeNeighbourVertex(uint64_t vertexId, uint64_t neighbourVertexId) {
+bool AdjacencyList::removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId) {
     if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end() &&
             vertexAdjacencyMap.find(neighbourVertexId) != vertexAdjacencyMap.end()) {
         for (auto& vertexLabeledNeighbourVertexs : vertexAdjacencyMap.at(vertexId)) {
-            std::vector<uint64_t>::iterator it = std::find(vertexLabeledNeighbourVertexs.second.begin(), vertexLabeledNeighbourVertexs.second.end(), neighbourVertexId);
+            std::vector<std::string>::iterator it = std::find(vertexLabeledNeighbourVertexs.second.begin(), vertexLabeledNeighbourVertexs.second.end(), neighbourVertexId);
             if (it != vertexLabeledNeighbourVertexs.second.end()) {
                 vertexLabeledNeighbourVertexs.second.erase(it);
             }
@@ -70,11 +69,10 @@ bool AdjacencyList::removeNeighbourVertex(uint64_t vertexId, uint64_t neighbourV
     }
 }
 
-
-bool AdjacencyList::removeNeighbourVertex(uint64_t vertexId, uint64_t neighbourVertexId, std::string edgeLabel) {
+bool AdjacencyList::removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId, std::string edgeLabel) {
     if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end() &&
             vertexAdjacencyMap.find(neighbourVertexId) != vertexAdjacencyMap.end()) {
-        std::vector<uint64_t>::iterator it = std::find(vertexAdjacencyMap.at(vertexId).at(edgeLabel).begin(), vertexAdjacencyMap.at(vertexId).at(edgeLabel).end(), neighbourVertexId);
+        std::vector<std::string>::iterator it = std::find(vertexAdjacencyMap.at(vertexId).at(edgeLabel).begin(), vertexAdjacencyMap.at(vertexId).at(edgeLabel).end(), neighbourVertexId);
         if (it != vertexAdjacencyMap.at(vertexId).at(edgeLabel).end()) {
             vertexAdjacencyMap.at(vertexId).at(edgeLabel).erase(it);
         }
@@ -84,8 +82,7 @@ bool AdjacencyList::removeNeighbourVertex(uint64_t vertexId, uint64_t neighbourV
     }
 }
 
-
-std::map<std::string, std::vector<uint64_t> > AdjacencyList::getNeighbourVertices(uint64_t vertexId) {
+std::map<std::string, std::vector<std::string> > AdjacencyList::getNeighbourVertices(std::string vertexId) {
     if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end()) {
         return vertexAdjacencyMap.at(vertexId);
     } else {
@@ -93,7 +90,6 @@ std::map<std::string, std::vector<uint64_t> > AdjacencyList::getNeighbourVertice
     }
 }
 
-
-uint64_t AdjacencyList::getVertexIndex(uint64_t vertexId) {
+uint64_t AdjacencyList::getVertexIndex(std::string vertexId) {
     return std::distance(vertexAdjacencyMap.begin(), vertexAdjacencyMap.find(vertexId));
 }
