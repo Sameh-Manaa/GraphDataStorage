@@ -9,7 +9,8 @@
 namespace fs = std::experimental::filesystem;
 
 bool AdjacencyListUniversalTableManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory) {
-    if (loadVertices(verticesDirectory) && loadEdges(edgesDirectory)) {
+    if (loadVertices(verticesDirectory) &&             loadEdges(edgesDirectory)
+            ) {
         return true;
     } else {
         return false;
@@ -91,7 +92,7 @@ bool AdjacencyListUniversalTableManager::loadEdges(std::string edgesDirectory) {
 
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
-    //this->addEdgeProperties("EdgeLable");
+    //this->addEdgeProperties("EdgeLabel");
 
     std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > edgeUniversalMap;
     std::set<std::string> edgeIds;
@@ -108,15 +109,15 @@ bool AdjacencyListUniversalTableManager::loadEdges(std::string edgesDirectory) {
         std::vector<std::string> properties(universalTable->getEdgePropertyOrder().size());
 
         std::istringstream iss(p.path().filename().string());
-        std::string sourceVertex, edgeLable, targetVertex;
+        std::string sourceVertex, edgeLabel, targetVertex;
         getline(iss, sourceVertex, '_');
-        getline(iss, edgeLable, '_');
+        getline(iss, edgeLabel, '_');
         getline(iss, targetVertex, '_');
 
 
         while (std::getline(edgeFile, edgeLine)) {
             rowCount++;
-            //properties[0] = edgeLable;
+            //properties[0] = edgeLabel;
             std::istringstream iss(edgeLine);
             std::string property, sourceVertexId, targetVertexId;
             uint64_t propertyCounter = 0;
@@ -131,8 +132,8 @@ bool AdjacencyListUniversalTableManager::loadEdges(std::string edgesDirectory) {
                     properties[propertiesPositions[propertyCounter++]] = property;
                 }
             }
-            if (this->adjacencyList->addNeighbourVertex(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId, edgeLable)) {
-                edgeUniversalMap[std::make_pair(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId)][edgeLable] = properties;
+            if (this->adjacencyList->addNeighbourVertex(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId, edgeLabel)) {
+                edgeUniversalMap[std::make_pair(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId)][edgeLabel] = properties;
                 //this->universalTable->upsertEdge(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId, properties);
             }
             //edgeIds.insert(properties[0] + "_" + sourceOriginalId);

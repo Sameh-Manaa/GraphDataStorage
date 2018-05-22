@@ -49,14 +49,14 @@ public:
     bool upsertVertex(std::string vertexId, std::vector<std::string> properties);
     bool upsertVertex(std::map<std::string, std::vector<std::string> > vertexUniversalMap);
     bool removeVertex(std::string vertexId);
-    bool upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLable, std::vector<std::string> properties);
+    bool upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::vector<std::string> properties);
     bool upsertEdge(std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > edgeUniversalMap);
     bool removeEdge(std::string sourceVertexId, std::string targetVertexId);
     std::string getVertexProperty(std::string vertexId, std::string propertyName);
     std::vector<std::string> getVertexAllProperties(std::string vertexId);
     std::list<std::string> getQualifiedVertices(std::vector<std::string> selectiveProperties);
-    std::string getEdgeProperty(std::string sourceVertexId, std::string targetVertexId, std::string edgeLable, std::string propertyName);
-    std::vector<std::string> getEdgeAllProperties(std::string sourceVertexId, std::string targetVertexId, std::string edgeLable);
+    std::string getEdgeProperty(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::string propertyName);
+    std::vector<std::string> getEdgeAllProperties(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel);
     std::list<std::pair<std::string, std::string> > getQualifiedEdges(std::vector<std::string> selectiveProperties);
     uint64_t getVertexUniversalTableSize();
     uint64_t getEdgeUniversalTableSize();

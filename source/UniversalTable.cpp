@@ -62,8 +62,8 @@ bool UniversalTable::removeVertex(std::string vertexId) {
     }
 }
 
-bool UniversalTable::upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLable, std::vector<std::string> properties) {
-    this->edgeUniversalMap[std::make_pair(sourceVertexId, targetVertexId)][edgeLable] = properties;
+bool UniversalTable::upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::vector<std::string> properties) {
+    this->edgeUniversalMap[std::make_pair(sourceVertexId, targetVertexId)][edgeLabel] = properties;
     return true;
 }
 
@@ -106,12 +106,12 @@ std::list<std::string> UniversalTable::getQualifiedVertices(std::vector<std::str
     return qualifiedVertices;
 }
 
-std::string UniversalTable::getEdgeProperty(std::string sourceVertexId, std::string targetVertexId, std::string edgeLable, std::string propertyName) {
-    return this->edgeUniversalMap.at(std::make_pair(sourceVertexId, targetVertexId)).at(edgeLable).at(this->edgePropertyOrder.at(propertyName));
+std::string UniversalTable::getEdgeProperty(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::string propertyName) {
+    return this->edgeUniversalMap.at(std::make_pair(sourceVertexId, targetVertexId)).at(edgeLabel).at(this->edgePropertyOrder.at(propertyName));
 }
 
-std::vector<std::string> UniversalTable::getEdgeAllProperties(std::string sourceVertexId, std::string targetVertexId, std::string edgeLable) {
-    return this->edgeUniversalMap.at(std::make_pair(sourceVertexId, targetVertexId)).at(edgeLable);
+std::vector<std::string> UniversalTable::getEdgeAllProperties(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel) {
+    return this->edgeUniversalMap.at(std::make_pair(sourceVertexId, targetVertexId)).at(edgeLabel);
 }
 
 std::list<std::pair<std::string, std::string> > UniversalTable::getQualifiedEdges(std::vector<std::string> selectiveProperties) {
