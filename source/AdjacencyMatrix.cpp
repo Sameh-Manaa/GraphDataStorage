@@ -10,15 +10,17 @@ AdjacencyMatrix::AdjacencyMatrix() {
 }
 
 bool AdjacencyMatrix::insertVertex(std::string vertexId) {
-    uint64_t nodesCount = (vertexAdjacencyMap.empty()) ? 1 : vertexAdjacencyMap.begin()->second.size() + 1;
+    uint64_t nodesCount = (vertexAdjacencyMap.empty()) ? 0 : vertexAdjacencyMap.begin()->second.size();
 
-    std::vector<bool> neighbours(nodesCount - 1, false);
-    std::pair < std::unordered_map < std::string, std::vector<bool> >::iterator, bool> insertResult = vertexAdjacencyMap.insert(std::make_pair(vertexId, neighbours));
+    std::vector<bool> neighbours(nodesCount, false);
+    std::pair < std::unordered_map < std::string, std::vector<bool> >::iterator, bool> insertResult =
+            vertexAdjacencyMap.insert(std::make_pair(vertexId, neighbours));
 
     if (insertResult.second) {
         for (auto& nodeNeighbours : vertexAdjacencyMap) {
             nodeNeighbours.second.push_back(false);
         }
+        this->vertexIndexMap.insert(std::make_pair(vertexId, nodesCount));
         return true;
     } else {
         return false;
@@ -27,18 +29,30 @@ bool AdjacencyMatrix::insertVertex(std::string vertexId) {
 }
 
 bool AdjacencyMatrix::insertVertex(std::set<std::string> vertexIds) {
-    uint64_t nodesCount = (vertexAdjacencyMap.empty()) ? vertexIds.size() : vertexAdjacencyMap.begin()->second.size() + vertexIds.size();
+
+    this->vertexIndexMap.reserve(this->vertexIndexMap.size() + vertexIds.size());
+    this->vertexAdjacencyMap.reserve(this->vertexAdjacencyMap.size() + vertexIds.size());
+
+    uint64_t nodesCount = (vertexAdjacencyMap.empty()) ? 0 : vertexAdjacencyMap.begin()->second.size();
+    
+    std::vector<bool> neighbours(nodesCount, false);
+
+    u_int64_t countInserted = 0;
+    for (std::set<std::string>::iterator it = vertexIds.begin(); it != vertexIds.end(); ++it) {
+        std::string vertexId = *it;
+        std::pair < std::unordered_map < std::string, std::vector<bool> >::iterator, bool> insertResult =
+                vertexAdjacencyMap.insert(std::make_pair(vertexId, neighbours));
+        if (insertResult.second) {
+            this->vertexIndexMap.insert(std::make_pair(vertexId, nodesCount + countInserted));
+            countInserted++;
+        }
+    }
+    
+    nodesCount = (vertexAdjacencyMap.empty()) ? countInserted : vertexAdjacencyMap.begin()->second.size() + countInserted;
+    
     for (auto& nodeNeighbours : vertexAdjacencyMap) {
         nodeNeighbours.second.resize(nodesCount, false);
     }
-    std::vector<bool> neighbours(nodesCount, false);
-    //std::vector<bool> neighbours(0);
-
-    for (std::set<std::string>::iterator it = vertexIds.begin(); it != vertexIds.end(); ++it) {
-        std::string vertexId = *it;
-        vertexAdjacencyMap[vertexId] = neighbours;
-    }
-    //nextVertexId++;
 
     return true;
 }
@@ -72,7 +86,7 @@ bool AdjacencyMatrix::addNeighbourVertex(std::string vertexId, std::string neigh
 bool AdjacencyMatrix::addNeighbourVertex(std::set<std::pair<std::string, std::string> > neighbourIds) {
     for (std::set<std::pair<std::string, std::string> >::iterator it = neighbourIds.begin(); it != neighbourIds.end(); ++it) {
         std::pair<std::string, std::string> neighbourPairIds = *it;
-        this->addNeighbourVertex(neighbourPairIds.first,neighbourPairIds.second);
+        this->addNeighbourVertex(neighbourPairIds.first, neighbourPairIds.second);
     }
     return true;
 }
@@ -103,7 +117,7 @@ std::list<std::string> AdjacencyMatrix::getNeighbourVertices(std::string vertexI
 }
 
 uint64_t AdjacencyMatrix::getVertexIndex(std::string vertexId) {
-    return std::distance(vertexAdjacencyMap.begin(), vertexAdjacencyMap.find(vertexId));
+    return this->vertexIndexMap.at(vertexId);
 }
 
 uint64_t AdjacencyMatrix::getAdjacencyMatrixSize() {
