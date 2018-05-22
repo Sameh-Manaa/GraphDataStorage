@@ -5,8 +5,6 @@
  */
 
 #include"AdjacencyList.hpp"
-#include<iostream>
-#include <algorithm>
 
 AdjacencyList::AdjacencyList() {
 
@@ -20,6 +18,15 @@ bool AdjacencyList::insertVertex(std::string vertexId) {
     std::vector<std::string> neighbourVertexIds(0);
     labeledNeighbourVertexMap[""] = neighbourVertexIds;
     vertexAdjacencyMap[vertexId] = labeledNeighbourVertexMap;
+
+    return true;
+}
+
+bool AdjacencyList::insertVertex(std::set<std::string> vertexIds) {
+    for (std::set<std::string>::iterator it = vertexIds.begin(); it != vertexIds.end(); ++it) {
+        std::string vertexId = *it;
+        this->insertVertex(vertexId);
+    }
 
     return true;
 }
@@ -92,4 +99,8 @@ std::map<std::string, std::vector<std::string> > AdjacencyList::getNeighbourVert
 
 uint64_t AdjacencyList::getVertexIndex(std::string vertexId) {
     return std::distance(vertexAdjacencyMap.begin(), vertexAdjacencyMap.find(vertexId));
+}
+
+uint64_t AdjacencyList::getAdjacencyListSize() {
+    return this->vertexAdjacencyMap.size();
 }
