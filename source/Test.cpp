@@ -108,7 +108,7 @@ void testAdjacencyListUniversalTable() {
 int main(int argc, char** argv) {
     
     //testInsertNode();
-    //testAdjacencyMatrixUniversalTable();
-    testAdjacencyListUniversalTable();
+    testAdjacencyMatrixUniversalTable();
+    //testAdjacencyListUniversalTable();
     return (EXIT_SUCCESS);
 }

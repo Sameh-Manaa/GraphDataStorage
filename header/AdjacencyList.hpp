@@ -12,13 +12,14 @@
 #include <list>
 #include <stdint.h>
 #include <map>
+#include <unordered_map>
 #include <set>
 #include <iostream>
 #include <algorithm>
 
 class AdjacencyList {
 private:
-    std::map<std::string, std::map<std::string, std::vector<std::string> > > vertexAdjacencyMap;
+    std::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::string> > > vertexAdjacencyMap;
 
 public:
     bool insertVertex(std::string vertexId);
@@ -27,7 +28,7 @@ public:
     bool addNeighbourVertex(std::string vertexId, std::string neighbourVertexId, std::string edgeLabel);
     bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId);
     bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId, std::string edgeLabel);
-    std::map<std::string, std::vector<std::string> > getNeighbourVertices(std::string vertexId);
+    std::unordered_map<std::string, std::vector<std::string> > getNeighbourVertices(std::string vertexId);
     uint64_t getVertexIndex(std::string vertexId);
     uint64_t getAdjacencyListSize();
     AdjacencyList();

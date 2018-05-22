@@ -20,6 +20,7 @@
 class AdjacencyMatrix {
 private:
     std::unordered_map<std::string, std::vector<bool> > vertexAdjacencyMap;
+    std::unordered_map<std::string, uint64_t> vertexIndexMap;
 
 public:
     bool insertVertex(std::string vertexId);
