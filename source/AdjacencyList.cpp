@@ -14,7 +14,7 @@ bool AdjacencyList::insertVertex(std::string vertexId) {
     if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end()) {
         return false;
     }
-    std::unordered_map<std::string, std::vector<std::string> > labeledNeighbourVertexMap;
+    std::map<std::string, std::vector<std::string> > labeledNeighbourVertexMap;
     std::vector<std::string> neighbourVertexIds(0);
     labeledNeighbourVertexMap[""] = neighbourVertexIds;
     vertexAdjacencyMap[vertexId] = labeledNeighbourVertexMap;
@@ -89,7 +89,7 @@ bool AdjacencyList::removeNeighbourVertex(std::string vertexId, std::string neig
     }
 }
 
-std::unordered_map<std::string, std::vector<std::string> > AdjacencyList::getNeighbourVertices(std::string vertexId) {
+std::map<std::string, std::vector<std::string> > AdjacencyList::getNeighbourVertices(std::string vertexId) {
     if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end()) {
         return vertexAdjacencyMap.at(vertexId);
     } else {
