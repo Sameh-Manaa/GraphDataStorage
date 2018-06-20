@@ -18,6 +18,7 @@
 #include "AdjacencyList.hpp"
 #include "AdjacencyMatrixUniversalTableManager.hpp"
 #include "AdjacencyListUniversalTableManager.hpp"
+#include "AdjacencyListSchemaHashedTableManager.hpp"
 
 /*
  * Simple C++ Test Suite
@@ -32,9 +33,9 @@ void testInsertNode() {
     adjacencyMatrix->insertVertex("3");
     adjacencyMatrix->insertVertex("4");
 
-    uint64_t nodeIdPre = adjacencyMatrix->getVertexIndex("2");
+    uint64_t nodeIdPre = adjacencyMatrix->getVertexIndexByVertexId("2");
     adjacencyMatrix->removeVeretex("1");
-    uint64_t nodeIdPost = adjacencyMatrix->getVertexIndex("2");
+    uint64_t nodeIdPost = adjacencyMatrix->getVertexIndexByVertexId("2");
 
     std::cout << "Adjacency Matrix: \r\nPre Node ID: " << nodeIdPre << ", Post Node ID: " << nodeIdPost << std::endl;
 
@@ -68,9 +69,9 @@ void testInsertNode() {
     adjacencyList->insertVertex("3");
     adjacencyList->insertVertex("4");
 
-    nodeIdPre = adjacencyList->getVertexIndex("2");
+    nodeIdPre = adjacencyList->getVertexIndexByVertexId("2");
     adjacencyList->removeVertex("1");
-    nodeIdPost = adjacencyList->getVertexIndex("2");
+    nodeIdPost = adjacencyList->getVertexIndexByVertexId("2");
 
     std::cout << "Adjacency List: \r\nPre Node ID: " << nodeIdPre << ", Post Node ID: " << nodeIdPost << std::endl;
 
@@ -105,10 +106,19 @@ void testAdjacencyListUniversalTable() {
     adjLstUniTblMgr->loadGraph("data/vertexes","data/edges");
 }
 
+void testAdjacencyListSchemaHashedTable() {
+    AdjacencyListSchemaHashedTableManager adjLstSHahsedTblMgr;// = new AdjacencyListSchemaHashedTableManager();
+    adjLstSHahsedTblMgr.loadGraph("data/vertexes","data/edges");
+    //delete adjLstSHahsedTblMgr;
+}
+
 int main(int argc, char** argv) {
     
     //testInsertNode();
-    testAdjacencyMatrixUniversalTable();
+    //testAdjacencyMatrixUniversalTable();
     //testAdjacencyListUniversalTable();
+    testAdjacencyListSchemaHashedTable();
+    //int x;
+    //std::cin>>x;
     return (EXIT_SUCCESS);
 }
