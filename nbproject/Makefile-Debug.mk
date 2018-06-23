@@ -36,9 +36,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/source/AdjacencyList.o \
+	${OBJECTDIR}/source/AdjacencyListSchemaHashedTableManager.o \
 	${OBJECTDIR}/source/AdjacencyListUniversalTableManager.o \
 	${OBJECTDIR}/source/AdjacencyMatrix.o \
 	${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o \
+	${OBJECTDIR}/source/SchemaHashedTable.o \
 	${OBJECTDIR}/source/Test.o \
 	${OBJECTDIR}/source/UniversalTable.o
 
@@ -72,6 +74,11 @@ ${OBJECTDIR}/source/AdjacencyList.o: source/AdjacencyList.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyList.o source/AdjacencyList.cpp
 
+${OBJECTDIR}/source/AdjacencyListSchemaHashedTableManager.o: source/AdjacencyListSchemaHashedTableManager.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyListSchemaHashedTableManager.o source/AdjacencyListSchemaHashedTableManager.cpp
+
 ${OBJECTDIR}/source/AdjacencyListUniversalTableManager.o: source/AdjacencyListUniversalTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
@@ -86,6 +93,11 @@ ${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o: source/AdjacencyMatr
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o source/AdjacencyMatrixUniversalTableManager.cpp
+
+${OBJECTDIR}/source/SchemaHashedTable.o: source/SchemaHashedTable.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/SchemaHashedTable.o source/SchemaHashedTable.cpp
 
 ${OBJECTDIR}/source/Test.o: source/Test.cpp
 	${MKDIR} -p ${OBJECTDIR}/source

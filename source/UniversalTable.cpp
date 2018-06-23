@@ -11,8 +11,9 @@ UniversalTable::UniversalTable() {
 }
 
 uint64_t UniversalTable::addVertexProperty(std::string propertyName) {
-    if (this->vertexPropertyOrder.find(propertyName) == this->vertexPropertyOrder.end()) {
-        this->vertexPropertyOrder[propertyName] = this->vertexPropertyOrder.size() - 1;
+    bool inserted = this->vertexPropertyOrder.insert(std::make_pair(propertyName, this->vertexPropertyOrder.size())).second;
+
+    if (inserted) {
         for (auto& vertex : this->vertexUniversalMap) {
             vertex.second.push_back("");
         }
@@ -21,8 +22,8 @@ uint64_t UniversalTable::addVertexProperty(std::string propertyName) {
 }
 
 uint64_t UniversalTable::addEdgeProperty(std::string propertyName) {
-    if (this->edgePropertyOrder.find(propertyName) == this->edgePropertyOrder.end()) {
-        this->edgePropertyOrder[propertyName] = this->edgePropertyOrder.size() - 1;
+    bool inserted = this->edgePropertyOrder.insert(std::make_pair(propertyName, this->edgePropertyOrder.size())).second;
+    if (inserted) {
         for (auto& edge : this->edgeUniversalMap) {
             for (auto& labledEdge : edge.second) {
                 labledEdge.second.push_back("");
@@ -32,50 +33,42 @@ uint64_t UniversalTable::addEdgeProperty(std::string propertyName) {
     return this->edgePropertyOrder.at(propertyName);
 }
 
-std::map<std::string, uint64_t> UniversalTable::getVertexPropertyOrder() {
+std::unordered_map<std::string, uint64_t> UniversalTable::getVertexPropertyOrder() {
     return this->vertexPropertyOrder;
 }
 
-std::map<std::string, uint64_t> UniversalTable::getEdgePropertyOrder() {
+std::unordered_map<std::string, uint64_t> UniversalTable::getEdgePropertyOrder() {
     return this->edgePropertyOrder;
 }
 
-bool UniversalTable::upsertVertex(std::string vertexId, std::vector<std::string> properties) {
+void UniversalTable::upsertVertex(std::string vertexId, std::vector<std::string> properties) {
     this->vertexUniversalMap[vertexId] = properties;
-    return true;
 }
 
-bool UniversalTable::upsertVertex(std::map<std::string, std::vector<std::string> > vertexUniversalMap) {
-    //vertexUniversalMap.insert(this->vertexUniversalMap.begin(), this->vertexUniversalMap.end());
-    //this->vertexUniversalMap.swap(vertexUniversalMap);
+void UniversalTable::upsertVertex(std::unordered_map<std::string, std::vector<std::string> > vertexUniversalMap) {
     this->vertexUniversalMap.reserve(this->vertexUniversalMap.size() + vertexUniversalMap.size());
     this->vertexUniversalMap.insert(vertexUniversalMap.begin(), vertexUniversalMap.end());
-    return true;
 }
 
 bool UniversalTable::removeVertex(std::string vertexId) {
-    std::size_t countRemoved = this->vertexUniversalMap.erase(vertexId);
-    if (countRemoved == 1) {
+    if (this->vertexUniversalMap.erase(vertexId) == 1) {
         return true;
     } else {
         return false;
     }
 }
 
-bool UniversalTable::upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::vector<std::string> properties) {
+void UniversalTable::upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::vector<std::string> properties) {
     this->edgeUniversalMap[std::make_pair(sourceVertexId, targetVertexId)][edgeLabel] = properties;
-    return true;
 }
 
-bool UniversalTable::upsertEdge(std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > edgeUniversalMap) {
+void UniversalTable::upsertEdge(std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > edgeUniversalMap) {
     this->edgeUniversalMap.reserve(this->edgeUniversalMap.size() + edgeUniversalMap.size());
     this->edgeUniversalMap.insert(edgeUniversalMap.begin(), edgeUniversalMap.end());
-    return true;
 }
 
 bool UniversalTable::removeEdge(std::string sourceVertexId, std::string targetVertexId) {
-    std::size_t countRemoved = this->edgeUniversalMap.erase(std::make_pair(sourceVertexId, targetVertexId));
-    if (countRemoved == 1) {
+    if (this->edgeUniversalMap.erase(std::make_pair(sourceVertexId, targetVertexId)) == 1) {
         return true;
     } else {
         return false;

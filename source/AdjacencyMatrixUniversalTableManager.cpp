@@ -23,7 +23,7 @@ bool AdjacencyMatrixUniversalTableManager::loadVertices(std::string verticesDire
     uint64_t rowCount = 0;
     this->addVertexProperties("VertexType");
 
-    std::map < std::string, std::vector<std::string> > vertexUniversalMap;
+    std::unordered_map < std::string, std::vector<std::string> > vertexUniversalMap;
     std::set<std::string> vertexIds;
 
     for (auto & p : fs::directory_iterator(verticesDirectory)) {

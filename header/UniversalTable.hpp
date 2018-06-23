@@ -32,9 +32,9 @@ struct hash_Pair
     
     
     //vertexPropertyOrder: <property_name, property_order>
-    std::map<std::string, uint64_t> vertexPropertyOrder;
+    std::unordered_map<std::string, uint64_t> vertexPropertyOrder;
     //edgePropertyOrder: <property_name, property_order>
-    std::map<std::string, uint64_t> edgePropertyOrder;
+    std::unordered_map<std::string, uint64_t> edgePropertyOrder;
     //vertexUniversalTable: <v_id, <property_value> >
     std::unordered_map<std::string, std::vector<std::string> > vertexUniversalMap;
     //edgeUniversalTable: < <vs_id, vt_id>, <edge_lable , <property_value > > >
@@ -43,14 +43,14 @@ struct hash_Pair
 public:
     uint64_t addVertexProperty(std::string propertyName);
     uint64_t addEdgeProperty(std::string propertyName);
-    std::map<std::string, uint64_t> getVertexPropertyOrder();
-    std::map<std::string, uint64_t> getEdgePropertyOrder();
+    std::unordered_map<std::string, uint64_t> getVertexPropertyOrder();
+    std::unordered_map<std::string, uint64_t> getEdgePropertyOrder();
 
-    bool upsertVertex(std::string vertexId, std::vector<std::string> properties);
-    bool upsertVertex(std::map<std::string, std::vector<std::string> > vertexUniversalMap);
+    void upsertVertex(std::string vertexId, std::vector<std::string> properties);
+    void upsertVertex(std::unordered_map<std::string, std::vector<std::string> > vertexUniversalMap);
     bool removeVertex(std::string vertexId);
-    bool upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::vector<std::string> properties);
-    bool upsertEdge(std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > edgeUniversalMap);
+    void upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::vector<std::string> properties);
+    void upsertEdge(std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > edgeUniversalMap);
     bool removeEdge(std::string sourceVertexId, std::string targetVertexId);
     std::string getVertexProperty(std::string vertexId, std::string propertyName);
     std::vector<std::string> getVertexAllProperties(std::string vertexId);

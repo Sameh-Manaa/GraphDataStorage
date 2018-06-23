@@ -21,17 +21,17 @@
 class AdjacencyList {
 private:
     //vertexAdjacencyMap: map<[VERTEX_ID],map<[EDGE_LABEL],vector<[NEIGHBOUR_VERTEX_ID]> > >
-    std::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::string> > > vertexAdjacencyMap;
+    std::unordered_map<std::string, std::map<std::string, std::vector<std::string> > > vertexAdjacencyMap;
 
 public:
     bool insertVertex(std::string vertexId);
-    void insertVertex(std::set<std::string> vertexIds);
+    void insertVertex(std::set<std::string> &vertexIds);
     bool removeVertex(std::string vertexId);
     bool addNeighbourVertex(std::string vertexId, std::string edgeLabel, std::string neighbourVertexId);
-    void addNeighbourVertex(std::set<std::tuple<std::string , std::string , std::string> > edges);
+    std::vector<bool> addNeighbourVertex(std::vector<std::tuple<std::string , std::string , std::string> > &edges);
     bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId);
     bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId, std::string edgeLabel);
-    std::unordered_map<std::string, std::vector<std::string> > getNeighbourVertices(std::string vertexId);
+    std::map<std::string, std::vector<std::string> > getNeighbourVertices(std::string vertexId);
     uint64_t getVertexIndexByVertexId(std::string vertexId);
     uint64_t getAdjacencyListSize();
     AdjacencyList();

@@ -10,10 +10,10 @@ AdjacencyList::AdjacencyList() {
 
 }
 
-inline bool AdjacencyList::insertVertex(std::string vertexId) {
+bool AdjacencyList::insertVertex(std::string vertexId) {
     //insert the new vertexId into the vertexAdjacencyMap
-    std::unordered_map<std::string, std::vector<std::string> > labeledNeighbourVertexMap;
-    std::pair < std::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::string> > >::iterator, bool> insertResult =
+    std::map<std::string, std::vector<std::string> > labeledNeighbourVertexMap;
+    std::pair < std::unordered_map<std::string, std::map<std::string, std::vector<std::string> > >::iterator, bool> insertResult =
             vertexAdjacencyMap.insert(std::make_pair(vertexId, labeledNeighbourVertexMap));
     if (insertResult.second) {
         return true;
@@ -22,7 +22,7 @@ inline bool AdjacencyList::insertVertex(std::string vertexId) {
     }
 }
 
-void AdjacencyList::insertVertex(std::set<std::string> vertexIds) {
+void AdjacencyList::insertVertex(std::set<std::string> &vertexIds) {
     //loop over the vertexIds, and insert them one by one
     for (std::set<std::string>::iterator it = vertexIds.begin(); it != vertexIds.end(); ++it) {
         std::string vertexId = *it;
@@ -53,7 +53,7 @@ bool AdjacencyList::removeVertex(std::string vertexId) {
     }
 }
 
-bool inline AdjacencyList::addNeighbourVertex(std::string vertexId, std::string edgeLabel, std::string neighbourVertexId) {
+bool AdjacencyList::addNeighbourVertex(std::string vertexId, std::string edgeLabel, std::string neighbourVertexId) {
     //check for the existence of the vertexId & neighbourVertexId
     if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end() &&
             vertexAdjacencyMap.find(neighbourVertexId) != vertexAdjacencyMap.end()) {
@@ -65,12 +65,14 @@ bool inline AdjacencyList::addNeighbourVertex(std::string vertexId, std::string 
     }
 }
 
-void AdjacencyList::addNeighbourVertex(std::set<std::tuple<std::string, std::string, std::string> > edges) {
+std::vector<bool> AdjacencyList::addNeighbourVertex(std::vector<std::tuple<std::string, std::string, std::string> > &edges) {
+    std::vector<bool> result;
     //loop over all edges and add them one by one
-    for (std::set<std::tuple<std::string, std::string, std::string> >::iterator it = edges.begin(); it != edges.end(); ++it) {
+    for (std::vector<std::tuple<std::string, std::string, std::string> >::iterator it = edges.begin(); it != edges.end(); ++it) {
         std::tuple<std::string, std::string, std::string> edge = *it;
-        this->addNeighbourVertex(std::get<0>(edge), std::get<1>(edge), std::get<2>(edge));
+        result.push_back(this->addNeighbourVertex(std::get<0>(edge), std::get<1>(edge), std::get<2>(edge)));
     }
+    return result;
 }
 
 bool AdjacencyList::removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId) {
@@ -107,7 +109,7 @@ bool AdjacencyList::removeNeighbourVertex(std::string vertexId, std::string neig
     }
 }
 
-std::unordered_map<std::string, std::vector<std::string> > AdjacencyList::getNeighbourVertices(std::string vertexId) {
+std::map<std::string, std::vector<std::string> > AdjacencyList::getNeighbourVertices(std::string vertexId) {
     if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end()) {
         return vertexAdjacencyMap.at(vertexId);
     } else {

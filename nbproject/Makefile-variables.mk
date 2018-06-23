@@ -15,13 +15,13 @@ CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux/package
 CND_PACKAGE_NAME_Debug=graphstorage.tar
 CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux/package/graphstorage.tar
 # Release configuration
-CND_PLATFORM_Release=GNU-Linux
-CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux
+CND_PLATFORM_Release=Cygwin-Windows
+CND_ARTIFACT_DIR_Release=dist/Release/Cygwin-Windows
 CND_ARTIFACT_NAME_Release=graphstorage
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux/graphstorage
-CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux/package
+CND_ARTIFACT_PATH_Release=dist/Release/Cygwin-Windows/graphstorage
+CND_PACKAGE_DIR_Release=dist/Release/Cygwin-Windows/package
 CND_PACKAGE_NAME_Release=graphstorage.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux/package/graphstorage.tar
+CND_PACKAGE_PATH_Release=dist/Release/Cygwin-Windows/package/graphstorage.tar
 #
 # include compiler specific variables
 #

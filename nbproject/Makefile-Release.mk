@@ -21,8 +21,8 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=GNU-Linux
-CND_DLIB_EXT=so
+CND_PLATFORM=Cygwin-Windows
+CND_DLIB_EXT=dll
 CND_CONF=Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -36,9 +36,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/source/AdjacencyList.o \
+	${OBJECTDIR}/source/AdjacencyListSchemaHashedTableManager.o \
 	${OBJECTDIR}/source/AdjacencyListUniversalTableManager.o \
 	${OBJECTDIR}/source/AdjacencyMatrix.o \
 	${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o \
+	${OBJECTDIR}/source/SchemaHashedTable.o \
 	${OBJECTDIR}/source/Test.o \
 	${OBJECTDIR}/source/UniversalTable.o
 
@@ -61,9 +63,9 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage ${OBJECTFILES} ${LDLIBSOPTIONS} -lstdc++fs
 
@@ -71,6 +73,11 @@ ${OBJECTDIR}/source/AdjacencyList.o: source/AdjacencyList.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyList.o source/AdjacencyList.cpp
+
+${OBJECTDIR}/source/AdjacencyListSchemaHashedTableManager.o: source/AdjacencyListSchemaHashedTableManager.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyListSchemaHashedTableManager.o source/AdjacencyListSchemaHashedTableManager.cpp
 
 ${OBJECTDIR}/source/AdjacencyListUniversalTableManager.o: source/AdjacencyListUniversalTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
@@ -86,6 +93,11 @@ ${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o: source/AdjacencyMatr
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o source/AdjacencyMatrixUniversalTableManager.cpp
+
+${OBJECTDIR}/source/SchemaHashedTable.o: source/SchemaHashedTable.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/SchemaHashedTable.o source/SchemaHashedTable.cpp
 
 ${OBJECTDIR}/source/Test.o: source/Test.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
