@@ -77,14 +77,14 @@ bool AdjacencyMatrixSchemaHashedTableManager::loadVertices(std::string verticesD
         properties.clear();
         
         std::cout << "file: " << pent->d_name << std::endl;
-        std::cout << "Adjacency List Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
+        std::cout << "Adjacency Matrix Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
         std::cout << "Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
     this->adjacencyMatrix.insertVertex(vertexIds);
     this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
 
-    std::cout << "Adjacency List Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
+    std::cout << "Adjacency Matrix Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
     std::cout << "Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
     std::cout << "--------------------------------------------------------------------------" << std::endl;
     return true;
@@ -161,7 +161,7 @@ bool AdjacencyMatrixSchemaHashedTableManager::loadEdges(std::string edgesDirecto
         properties.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
-        std::cout << "Adjacency List Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
+        std::cout << "Adjacency Matrix Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
         std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
         std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
@@ -176,7 +176,7 @@ bool AdjacencyMatrixSchemaHashedTableManager::loadEdges(std::string edgesDirecto
 
     this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
 
-    std::cout << "Adjacency List Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
+    std::cout << "Adjacency Matrix Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
     std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
     std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
     std::cout << "--------------------------------------------------------------------------" << std::endl;
