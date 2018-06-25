@@ -19,6 +19,7 @@
 #include "AdjacencyMatrixUniversalTableManager.hpp"
 #include "AdjacencyListUniversalTableManager.hpp"
 #include "AdjacencyListSchemaHashedTableManager.hpp"
+#include <chrono>
 
 /*
  * Simple C++ Test Suite
@@ -97,28 +98,41 @@ void testInsertNode() {
 }
 
 void testAdjacencyMatrixUniversalTable() {
-    AdjacencyMatrixUniversalTableManager* adjMatUniTblMgr = new AdjacencyMatrixUniversalTableManager();
-    adjMatUniTblMgr->loadGraph("data/vertexes","data/edges");
+    AdjacencyMatrixUniversalTableManager adjMatUniTblMgr(1000);
+    adjMatUniTblMgr.loadGraph("data/vertexes", "data/edges");
 }
 
 void testAdjacencyListUniversalTable() {
-    AdjacencyListUniversalTableManager* adjLstUniTblMgr = new AdjacencyListUniversalTableManager();
-    adjLstUniTblMgr->loadGraph("data/vertexes","data/edges");
+    AdjacencyListUniversalTableManager adjLstUniTblMgr(1000);
+    adjLstUniTblMgr.loadGraph("data/vertexes", "data/edges");
 }
 
 void testAdjacencyListSchemaHashedTable() {
-    AdjacencyListSchemaHashedTableManager adjLstSHahsedTblMgr;// = new AdjacencyListSchemaHashedTableManager();
-    adjLstSHahsedTblMgr.loadGraph("data/vertexes","data/edges");
-    //delete adjLstSHahsedTblMgr;
+    AdjacencyListSchemaHashedTableManager adjLstSHahsedTblMgr(1000);
+    adjLstSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
 }
 
 int main(int argc, char** argv) {
-    
-    //testInsertNode();
-    //testAdjacencyMatrixUniversalTable();
-    //testAdjacencyListUniversalTable();
+
+    auto t1 = std::chrono::steady_clock::now();
+
+    testAdjacencyListUniversalTable();
+    auto t2 = std::chrono::steady_clock::now();
+
     testAdjacencyListSchemaHashedTable();
-    //int x;
-    //std::cin>>x;
+    auto t3 = std::chrono::steady_clock::now();
+    
+    testAdjacencyMatrixUniversalTable();
+    auto t4 = std::chrono::steady_clock::now();
+
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+    std::cout << "ElapsedTime(AdjacencyListUniversalTable): " << duration << " ms\n";
+    
+    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
+    std::cout << "ElapsedTime(AdjacencyListSchemaHashedTable): " << duration << " ms\n";
+    
+    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count();
+    std::cout << "ElapsedTime(AdjacencyMatrixUniversalTable): " << duration << " ms\n";
+    
     return (EXIT_SUCCESS);
 }

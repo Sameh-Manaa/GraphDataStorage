@@ -12,6 +12,8 @@
             <sourceRootList>
                 <sourceRootElem>source</sourceRootElem>
                 <sourceRootElem>header</sourceRootElem>
+                <sourceRootElem>source</sourceRootElem>
+                <sourceRootElem>header</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

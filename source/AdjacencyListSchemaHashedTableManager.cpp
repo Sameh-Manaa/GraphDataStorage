@@ -6,8 +6,6 @@
 
 #include "AdjacencyListSchemaHashedTableManager.hpp"
 
-//namespace fs = std::experimental::filesystem;
-
 bool AdjacencyListSchemaHashedTableManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory) {
     if (loadVertices(verticesDirectory) &&
             loadEdges(edgesDirectory)
@@ -84,11 +82,8 @@ bool AdjacencyListSchemaHashedTableManager::loadVertices(std::string verticesDir
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
     this->adjacencyList.insertVertex(vertexIds);
-    //vertexIds.clear();
     this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
-    //vertexSchemaHashedMap.clear();
 
-    //std::cout << "file: " << p.path().filename().string() << std::endl;
     std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
     std::cout << "Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
     std::cout << "--------------------------------------------------------------------------" << std::endl;
@@ -181,7 +176,6 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
 
     this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
 
-    //std::cout << "file: " << p.path().filename().string() << std::endl;
     std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
     std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
     std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;

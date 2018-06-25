@@ -21,8 +21,8 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=Cygwin-Windows
-CND_DLIB_EXT=dll
+CND_PLATFORM=GNU-Linux
+CND_DLIB_EXT=so
 CND_CONF=Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -49,8 +49,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-std=c++17
-CXXFLAGS=-std=c++17
+CCFLAGS=-m64 -std=c++17
+CXXFLAGS=-m64 -std=c++17
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -63,11 +63,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage.exe: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage ${OBJECTFILES} ${LDLIBSOPTIONS} -lstdc++fs
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/source/AdjacencyList.o: source/AdjacencyList.cpp
 	${MKDIR} -p ${OBJECTDIR}/source

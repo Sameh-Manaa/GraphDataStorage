@@ -67,7 +67,7 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage ${OBJECTFILES} ${LDLIBSOPTIONS} -lstdc++fs
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/source/AdjacencyList.o: source/AdjacencyList.cpp
 	${MKDIR} -p ${OBJECTDIR}/source

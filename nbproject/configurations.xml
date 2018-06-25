@@ -39,8 +39,21 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
   </logicalFolder>
   <sourceRootList>
+    <Elem>source</Elem>
+    <Elem>header</Elem>
     <Elem>source</Elem>
     <Elem>header</Elem>
   </sourceRootList>
@@ -64,9 +77,6 @@
           </incDir>
           <commandLine>-std=c++17</commandLine>
         </ccTool>
-        <linkerTool>
-          <commandLine>-lstdc++fs</commandLine>
-        </linkerTool>
       </compileType>
       <folder path="HeaderFiles">
         <cTool>
@@ -144,6 +154,7 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <architecture>2</architecture>
           <incDir>
             <pElem>header</pElem>
           </incDir>
@@ -155,9 +166,6 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
-        <linkerTool>
-          <commandLine>-lstdc++fs</commandLine>
-        </linkerTool>
       </compileType>
       <item path="header/AdjacencyList.hpp" ex="false" tool="3" flavor2="0">
       </item>

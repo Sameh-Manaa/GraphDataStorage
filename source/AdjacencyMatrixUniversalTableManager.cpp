@@ -6,8 +6,6 @@
 
 #include "AdjacencyMatrixUniversalTableManager.hpp"
 
-//namespace fs = std::experimental::filesystem;
-
 bool AdjacencyMatrixUniversalTableManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory) {
     if (loadVertices(verticesDirectory) && loadEdges(edgesDirectory)) {
         return true;
@@ -84,11 +82,8 @@ bool AdjacencyMatrixUniversalTableManager::loadVertices(std::string verticesDire
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
     this->adjacencyMatrix.insertVertex(vertexIds);
-    //vertexIds.clear();
     this->universalTable.upsertVertex(vertexUniversalMap);
-    //vertexUniversalMap.clear();
 
-    //std::cout << "file: " << p.path().filename().string() << std::endl;
     std::cout << "Adjacency Matrix Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
     std::cout << "Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
     std::cout << "--------------------------------------------------------------------------" << std::endl;
@@ -181,7 +176,6 @@ bool AdjacencyMatrixUniversalTableManager::loadEdges(std::string edgesDirectory)
     
     this->universalTable.upsertEdge(edgeUniversalMap);
 
-    //std::cout << "file: " << p.path().filename().string() << std::endl;
     std::cout << "Adjacency Matrix Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
     std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
     std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
