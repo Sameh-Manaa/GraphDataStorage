@@ -33,11 +33,11 @@ uint64_t UniversalTable::addEdgeProperty(std::string propertyName) {
     return this->edgePropertyOrder.at(propertyName);
 }
 
-std::unordered_map<std::string, uint64_t> UniversalTable::getVertexPropertyOrder() {
+std::map<std::string, uint64_t> UniversalTable::getVertexPropertyOrder() {
     return this->vertexPropertyOrder;
 }
 
-std::unordered_map<std::string, uint64_t> UniversalTable::getEdgePropertyOrder() {
+std::map<std::string, uint64_t> UniversalTable::getEdgePropertyOrder() {
     return this->edgePropertyOrder;
 }
 
@@ -45,8 +45,8 @@ void UniversalTable::upsertVertex(std::string vertexId, std::vector<std::string>
     this->vertexUniversalMap[vertexId] = properties;
 }
 
-void UniversalTable::upsertVertex(std::unordered_map<std::string, std::vector<std::string> > vertexUniversalMap) {
-    this->vertexUniversalMap.reserve(this->vertexUniversalMap.size() + vertexUniversalMap.size());
+void UniversalTable::upsertVertex(std::map<std::string, std::vector<std::string> > &vertexUniversalMap) {
+    //this->vertexUniversalMap.reserve(this->vertexUniversalMap.size() + vertexUniversalMap.size());
     this->vertexUniversalMap.insert(vertexUniversalMap.begin(), vertexUniversalMap.end());
 }
 
@@ -62,8 +62,8 @@ void UniversalTable::upsertEdge(std::string sourceVertexId, std::string targetVe
     this->edgeUniversalMap[std::make_pair(sourceVertexId, targetVertexId)][edgeLabel] = properties;
 }
 
-void UniversalTable::upsertEdge(std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > edgeUniversalMap) {
-    this->edgeUniversalMap.reserve(this->edgeUniversalMap.size() + edgeUniversalMap.size());
+void UniversalTable::upsertEdge(std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > &edgeUniversalMap) {
+    //this->edgeUniversalMap.reserve(this->edgeUniversalMap.size() + edgeUniversalMap.size());
     this->edgeUniversalMap.insert(edgeUniversalMap.begin(), edgeUniversalMap.end());
 }
 
@@ -83,7 +83,7 @@ std::vector<std::string> UniversalTable::getVertexAllProperties(std::string vert
     return this->vertexUniversalMap.at(vertexId);
 }
 
-std::list<std::string> UniversalTable::getQualifiedVertices(std::vector<std::string> selectiveProperties) {
+std::list<std::string> UniversalTable::getQualifiedVertices(std::vector<std::string> &selectiveProperties) {
     std::list<std::string> qualifiedVertices(0);
     for (auto const& vertex : this->vertexUniversalMap) {
         for (uint64_t i = 0; i < this->vertexPropertyOrder.size(); i++) {
@@ -107,7 +107,7 @@ std::vector<std::string> UniversalTable::getEdgeAllProperties(std::string source
     return this->edgeUniversalMap.at(std::make_pair(sourceVertexId, targetVertexId)).at(edgeLabel);
 }
 
-std::list<std::pair<std::string, std::string> > UniversalTable::getQualifiedEdges(std::vector<std::string> selectiveProperties) {
+std::list<std::pair<std::string, std::string> > UniversalTable::getQualifiedEdges(std::vector<std::string> &selectiveProperties) {
     std::list<std::pair<std::string, std::string> > qualifiedEdges(0);
     for (auto const& edge : this->edgeUniversalMap) {
         for (auto const& labledEdge : edge.second) {

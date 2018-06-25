@@ -10,9 +10,11 @@
 
 #include <iostream>
 #include <fstream>
+#include <functional>
 #include <sstream>
 #include <string>
-#include <experimental/filesystem>
+#include <tuple>
+#include <dirent.h>
 
 #include "AdjacencyList.hpp"
 #include "UniversalTable.hpp"
@@ -21,8 +23,9 @@
 
 class AdjacencyListUniversalTableManager {
 private:
-    AdjacencyList* adjacencyList = new AdjacencyList();
-    UniversalTable* universalTable = new UniversalTable();
+    AdjacencyList adjacencyList;
+    UniversalTable universalTable;
+    int batchSize;
 public:
 
     bool loadGraph(std::string verticesDirectory, std::string edgesDirectory);
@@ -31,6 +34,7 @@ public:
     std::vector<int64_t> addVertexProperties(std::string vertexHeaderLine);
     std::vector<int64_t> addEdgeProperties(std::string edgeHeaderLine);
     
+    AdjacencyListUniversalTableManager(int bSize):batchSize(bSize){};
 };
 
 #endif /* ADJACENCYLISTUNIVERSALTABLEMANAGER_HPP */

@@ -10,9 +10,11 @@
 
 #include <iostream>
 #include <fstream>
+#include <functional>
 #include <sstream>
 #include <string>
-#include <experimental/filesystem>
+#include <tuple>
+#include <dirent.h>
 
 #include "AdjacencyMatrix.hpp"
 #include "UniversalTable.hpp"
@@ -21,8 +23,9 @@
 
 class AdjacencyMatrixUniversalTableManager {
 private:
-    AdjacencyMatrix* adjacencyMatrix = new AdjacencyMatrix();
-    UniversalTable* universalTable = new UniversalTable();
+    AdjacencyMatrix adjacencyMatrix;
+    UniversalTable universalTable;
+    int batchSize;
 public:
 
     bool loadGraph(std::string verticesDirectory, std::string edgesDirectory);
@@ -30,6 +33,8 @@ public:
     bool loadEdges(std::string edgesDirectory);
     std::vector<int64_t> addVertexProperties(std::string vertexHeaderLine);
     std::vector<int64_t> addEdgeProperties(std::string edgeHeaderLine);
+    
+    AdjacencyMatrixUniversalTableManager(int bSize):batchSize(bSize){};
     
 };
 

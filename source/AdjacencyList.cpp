@@ -13,7 +13,7 @@ AdjacencyList::AdjacencyList() {
 bool AdjacencyList::insertVertex(std::string vertexId) {
     //insert the new vertexId into the vertexAdjacencyMap
     std::map<std::string, std::vector<std::string> > labeledNeighbourVertexMap;
-    std::pair < std::unordered_map<std::string, std::map<std::string, std::vector<std::string> > >::iterator, bool> insertResult =
+    std::pair < std::map<std::string, std::map<std::string, std::vector<std::string> > >::iterator, bool> insertResult =
             vertexAdjacencyMap.insert(std::make_pair(vertexId, labeledNeighbourVertexMap));
     if (insertResult.second) {
         return true;

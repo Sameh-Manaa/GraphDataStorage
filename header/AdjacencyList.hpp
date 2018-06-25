@@ -21,7 +21,7 @@
 class AdjacencyList {
 private:
     //vertexAdjacencyMap: map<[VERTEX_ID],map<[EDGE_LABEL],vector<[NEIGHBOUR_VERTEX_ID]> > >
-    std::unordered_map<std::string, std::map<std::string, std::vector<std::string> > > vertexAdjacencyMap;
+    std::map<std::string, std::map<std::string, std::vector<std::string> > > vertexAdjacencyMap;
 
 public:
     bool insertVertex(std::string vertexId);

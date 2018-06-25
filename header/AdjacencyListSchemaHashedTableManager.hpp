@@ -10,20 +10,20 @@
 
 #include <iostream>
 #include <fstream>
+#include <functional>
 #include <sstream>
 #include <string>
-#include <filesystem>
+#include <tuple>
+#include <dirent.h>
 
 #include "AdjacencyList.hpp"
 #include "SchemaHashedTable.hpp"
-
-
 
 class AdjacencyListSchemaHashedTableManager {
 private:
     AdjacencyList adjacencyList;
     SchemaHashedTable schemaHashedTable;
-    int batchSize = 500;
+    int batchSize;
 public:
 
     bool loadGraph(std::string verticesDirectory, std::string edgesDirectory);
@@ -31,6 +31,8 @@ public:
     bool loadEdges(std::string edgesDirectory);
     std::map<int, std::string> getVertexProperties(std::string vertexHeaderLine);
     std::map<int, std::string> getEdgeProperties(std::string edgeHeaderLine);
+    
+    AdjacencyListSchemaHashedTableManager(int bSize):batchSize(bSize){};
 };
 
 #endif /* ADJACENCYLISTSCHEMAHASHEDTABLEMANAGER_HPP */

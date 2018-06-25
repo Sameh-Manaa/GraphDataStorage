@@ -32,32 +32,32 @@ struct hash_Pair
     
     
     //vertexPropertyOrder: <property_name, property_order>
-    std::unordered_map<std::string, uint64_t> vertexPropertyOrder;
+    std::map<std::string, uint64_t> vertexPropertyOrder;
     //edgePropertyOrder: <property_name, property_order>
-    std::unordered_map<std::string, uint64_t> edgePropertyOrder;
+    std::map<std::string, uint64_t> edgePropertyOrder;
     //vertexUniversalTable: <v_id, <property_value> >
-    std::unordered_map<std::string, std::vector<std::string> > vertexUniversalMap;
+    std::map<std::string, std::vector<std::string> > vertexUniversalMap;
     //edgeUniversalTable: < <vs_id, vt_id>, <edge_lable , <property_value > > >
-    std::unordered_map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > , hash_Pair> edgeUniversalMap;
+    std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > edgeUniversalMap;
 
 public:
     uint64_t addVertexProperty(std::string propertyName);
     uint64_t addEdgeProperty(std::string propertyName);
-    std::unordered_map<std::string, uint64_t> getVertexPropertyOrder();
-    std::unordered_map<std::string, uint64_t> getEdgePropertyOrder();
+    std::map<std::string, uint64_t> getVertexPropertyOrder();
+    std::map<std::string, uint64_t> getEdgePropertyOrder();
 
     void upsertVertex(std::string vertexId, std::vector<std::string> properties);
-    void upsertVertex(std::unordered_map<std::string, std::vector<std::string> > vertexUniversalMap);
+    void upsertVertex(std::map<std::string, std::vector<std::string> > &vertexUniversalMap);
     bool removeVertex(std::string vertexId);
     void upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::vector<std::string> properties);
-    void upsertEdge(std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > edgeUniversalMap);
+    void upsertEdge(std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > &edgeUniversalMap);
     bool removeEdge(std::string sourceVertexId, std::string targetVertexId);
     std::string getVertexProperty(std::string vertexId, std::string propertyName);
     std::vector<std::string> getVertexAllProperties(std::string vertexId);
-    std::list<std::string> getQualifiedVertices(std::vector<std::string> selectiveProperties);
+    std::list<std::string> getQualifiedVertices(std::vector<std::string> &selectiveProperties);
     std::string getEdgeProperty(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::string propertyName);
     std::vector<std::string> getEdgeAllProperties(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel);
-    std::list<std::pair<std::string, std::string> > getQualifiedEdges(std::vector<std::string> selectiveProperties);
+    std::list<std::pair<std::string, std::string> > getQualifiedEdges(std::vector<std::string> &selectiveProperties);
     uint64_t getVertexUniversalTableSize();
     uint64_t getEdgeUniversalTableSize();
     UniversalTable();

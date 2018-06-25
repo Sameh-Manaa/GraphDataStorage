@@ -18,7 +18,7 @@ bool AdjacencyMatrix::insertVertex(std::string vertexId) {
      * insert the vertex neighborhood row along with its vertexId into the vertexAdjacencyMap
      * (IF NOT ALREADY THERE)
      */
-    std::pair < std::unordered_map < std::string, std::vector<bool> >::iterator, bool> insertResult =
+    std::pair < std::map < std::string, std::vector<bool> >::iterator, bool> insertResult =
             vertexAdjacencyMap.insert(std::make_pair(vertexId, neighbours));
 
     //Check if the insertion occurred or not
@@ -39,11 +39,11 @@ bool AdjacencyMatrix::insertVertex(std::string vertexId) {
 
 }
 
-void AdjacencyMatrix::insertVertex(std::set<std::string> vertexIds) {
+void AdjacencyMatrix::insertVertex(std::set<std::string> &vertexIds) {
 
     //reserve space in the data structures for inserting the new vertexIds
-    this->vertexAdjacencyMap.reserve(this->vertexAdjacencyMap.size() + vertexIds.size());
-    this->vertexIndexMap.reserve(this->vertexIndexMap.size() + vertexIds.size());
+    //this->vertexAdjacencyMap.reserve(this->vertexAdjacencyMap.size() + vertexIds.size());
+    //this->vertexIndexMap.reserve(this->vertexIndexMap.size() + vertexIds.size());
 
     uint64_t nodesCount = (vertexAdjacencyMap.empty()) ? 0 : vertexAdjacencyMap.begin()->second.size();
 
@@ -57,7 +57,7 @@ void AdjacencyMatrix::insertVertex(std::set<std::string> vertexIds) {
          * insert the vertex neighborhood row along with its vertexId into the vertexAdjacencyMap
          * (IF NOT ALREADY THERE)
          */
-        std::pair < std::unordered_map < std::string, std::vector<bool> >::iterator, bool> insertResult =
+        std::pair < std::map < std::string, std::vector<bool> >::iterator, bool> insertResult =
                 vertexAdjacencyMap.insert(std::make_pair(vertexId, neighbours));
         //Check if the insertion occurred or not
         if (insertResult.second) {
@@ -110,12 +110,14 @@ bool AdjacencyMatrix::addNeighbourVertex(std::string vertexId, std::string neigh
     }
 }
 
-void AdjacencyMatrix::addNeighbourVertex(std::set<std::pair<std::string, std::string> > VertexNeighbourIds) {
+std::vector<bool> AdjacencyMatrix::addNeighbourVertex(std::vector<std::pair<std::string, std::string> > &edges) {
+    std::vector<bool> result;
     //loop over all VertexNeighbourIds pairs and add them one by one
-    for (std::set<std::pair<std::string, std::string> >::iterator it = VertexNeighbourIds.begin(); it != VertexNeighbourIds.end(); ++it) {
+    for (std::vector<std::pair<std::string, std::string> >::iterator it = edges.begin(); it != edges.end(); ++it) {
         std::pair<std::string, std::string> neighbourPairIds = *it;
-        this->addNeighbourVertex(neighbourPairIds.first, neighbourPairIds.second);
+        result.push_back(this->addNeighbourVertex(neighbourPairIds.first, neighbourPairIds.second));
     }
+    return result;
 }
 
 bool AdjacencyMatrix::removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId) {

@@ -31,15 +31,11 @@ private:
 
 
     //vertexUniversalTable: MAP<VERTEX_ID, map<[PROPERTY_NAME],[PROPERTY_VALUE]> >
-    std::unordered_map<std::string, std::map<std::string, std::string> > vertexSchemaHashedMap;
+    std::map<std::string, std::map<std::string, std::string> > vertexSchemaHashedMap;
     //edgeUniversalTable: map< <vs_id, vt_id>, map<[EDGE_LABEL] , map<[PROPERTY_NAME],[PROPERTY_VALUE]> > >
     std::map<std::pair<std::string, std::string>, std::map<std::string, std::map<std::string, std::string> > > edgeSchemaHashedMap;
 
 public:
-    uint64_t addVertexProperty(std::string propertyName);
-    uint64_t addEdgeProperty(std::string propertyName);
-    std::unordered_map<std::string, uint64_t> getVertexPropertyOrder();
-    std::unordered_map<std::string, uint64_t> getEdgePropertyOrder();
 
     void upsertVertex(std::string vertexId, std::map<std::string, std::string> properties);
     void upsertVertex(std::map<std::string,  std::map<std::string, std::string> > &vertexSchemaHashedMap);
