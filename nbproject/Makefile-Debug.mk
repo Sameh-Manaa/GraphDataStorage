@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/source/AdjacencyListSchemaHashedTableManager.o \
 	${OBJECTDIR}/source/AdjacencyListUniversalTableManager.o \
 	${OBJECTDIR}/source/AdjacencyMatrix.o \
+	${OBJECTDIR}/source/AdjacencyMatrixSchemaHashedTableManager.o \
 	${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o \
 	${OBJECTDIR}/source/SchemaHashedTable.o \
 	${OBJECTDIR}/source/Test.o \
@@ -88,6 +89,11 @@ ${OBJECTDIR}/source/AdjacencyMatrix.o: source/AdjacencyMatrix.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrix.o source/AdjacencyMatrix.cpp
+
+${OBJECTDIR}/source/AdjacencyMatrixSchemaHashedTableManager.o: source/AdjacencyMatrixSchemaHashedTableManager.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrixSchemaHashedTableManager.o source/AdjacencyMatrixSchemaHashedTableManager.cpp
 
 ${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o: source/AdjacencyMatrixUniversalTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source

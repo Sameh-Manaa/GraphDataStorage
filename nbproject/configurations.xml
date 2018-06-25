@@ -8,6 +8,7 @@
       <itemPath>header/AdjacencyListSchemaHashedTableManager.hpp</itemPath>
       <itemPath>header/AdjacencyListUniversalTableManager.hpp</itemPath>
       <itemPath>header/AdjacencyMatrix.hpp</itemPath>
+      <itemPath>header/AdjacencyMatrixSchemaHashedTableManager.hpp</itemPath>
       <itemPath>header/AdjacencyMatrixUniversalTableManager.hpp</itemPath>
       <itemPath>header/SchemaHashedTable.hpp</itemPath>
       <itemPath>header/UniversalTable.hpp</itemPath>
@@ -23,6 +24,7 @@
       <itemPath>source/AdjacencyListSchemaHashedTableManager.cpp</itemPath>
       <itemPath>source/AdjacencyListUniversalTableManager.cpp</itemPath>
       <itemPath>source/AdjacencyMatrix.cpp</itemPath>
+      <itemPath>source/AdjacencyMatrixSchemaHashedTableManager.cpp</itemPath>
       <itemPath>source/AdjacencyMatrixUniversalTableManager.cpp</itemPath>
       <itemPath>source/SchemaHashedTable.cpp</itemPath>
       <itemPath>source/Test.cpp</itemPath>
@@ -104,6 +106,11 @@
       </item>
       <item path="header/AdjacencyMatrix.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="header/AdjacencyMatrixSchemaHashedTableManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="header/AdjacencyMatrixUniversalTableManager.hpp"
             ex="false"
             tool="3"
@@ -126,6 +133,11 @@
             flavor2="0">
       </item>
       <item path="source/AdjacencyMatrix.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="source/AdjacencyMatrixSchemaHashedTableManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="source/AdjacencyMatrixUniversalTableManager.cpp"
             ex="false"
@@ -181,6 +193,11 @@
       </item>
       <item path="header/AdjacencyMatrix.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="header/AdjacencyMatrixSchemaHashedTableManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="header/AdjacencyMatrixUniversalTableManager.hpp"
             ex="false"
             tool="3"
@@ -203,6 +220,11 @@
             flavor2="0">
       </item>
       <item path="source/AdjacencyMatrix.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="source/AdjacencyMatrixSchemaHashedTableManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="source/AdjacencyMatrixUniversalTableManager.cpp"
             ex="false"

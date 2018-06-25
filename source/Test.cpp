@@ -19,6 +19,7 @@
 #include "AdjacencyMatrixUniversalTableManager.hpp"
 #include "AdjacencyListUniversalTableManager.hpp"
 #include "AdjacencyListSchemaHashedTableManager.hpp"
+#include "AdjacencyMatrixSchemaHashedTableManager.hpp"
 #include <chrono>
 
 /*
@@ -107,6 +108,11 @@ void testAdjacencyListUniversalTable() {
     adjLstUniTblMgr.loadGraph("data/vertexes", "data/edges");
 }
 
+void testAdjacencyMatrixSchemaHashedTable() {
+    AdjacencyMatrixSchemaHashedTableManager adjMatSHahsedTblMgr(1000);
+    adjMatSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
+}
+
 void testAdjacencyListSchemaHashedTable() {
     AdjacencyListSchemaHashedTableManager adjLstSHahsedTblMgr(1000);
     adjLstSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
@@ -116,23 +122,29 @@ int main(int argc, char** argv) {
 
     auto t1 = std::chrono::steady_clock::now();
 
-    testAdjacencyListUniversalTable();
+    testAdjacencyMatrixUniversalTable();
     auto t2 = std::chrono::steady_clock::now();
 
-    testAdjacencyListSchemaHashedTable();
+    testAdjacencyListUniversalTable();
     auto t3 = std::chrono::steady_clock::now();
     
-    testAdjacencyMatrixUniversalTable();
+    testAdjacencyMatrixSchemaHashedTable();
     auto t4 = std::chrono::steady_clock::now();
+    
+    testAdjacencyListSchemaHashedTable();
+    auto t5 = std::chrono::steady_clock::now();
 
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-    std::cout << "ElapsedTime(AdjacencyListUniversalTable): " << duration << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyMatrixUniversalTable): " << duration << " ms\n";
     
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
-    std::cout << "ElapsedTime(AdjacencyListSchemaHashedTable): " << duration << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyListUniversalTable): " << duration << " ms\n";
     
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count();
-    std::cout << "ElapsedTime(AdjacencyMatrixUniversalTable): " << duration << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyMatrixSchemaHashedTable): " << duration << " ms\n";
+    
+    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t5 - t4).count();
+    std::cout << "ElapsedTime(AdjacencyListSchemaHashedTable): " << duration << " ms\n";
     
     return (EXIT_SUCCESS);
 }
