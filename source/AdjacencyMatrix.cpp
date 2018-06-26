@@ -91,6 +91,11 @@ bool AdjacencyMatrix::removeVeretex(std::string vertexId) {
         //erase the vertex row from the vertexAdjacencyMap and vertexIndexMap
         vertexAdjacencyMap.erase(vertexId);
         vertexIndexMap.erase(vertexId);
+        for (auto& vertexIdToIndex : vertexIndexMap) {
+            if (vertexIdToIndex.second > nodeIndex) {
+                vertexIdToIndex.second-=1;
+            }
+        }
 
         return true;
     } else {
