@@ -10,6 +10,9 @@
       <itemPath>header/AdjacencyMatrix.hpp</itemPath>
       <itemPath>header/AdjacencyMatrixSchemaHashedTableManager.hpp</itemPath>
       <itemPath>header/AdjacencyMatrixUniversalTableManager.hpp</itemPath>
+      <itemPath>header/CSR.hpp</itemPath>
+      <itemPath>header/CSRSchemaHashedTableManager.hpp</itemPath>
+      <itemPath>header/CSRUniversalTableManager.hpp</itemPath>
       <itemPath>header/SchemaHashedTable.hpp</itemPath>
       <itemPath>header/UniversalTable.hpp</itemPath>
     </logicalFolder>
@@ -26,6 +29,9 @@
       <itemPath>source/AdjacencyMatrix.cpp</itemPath>
       <itemPath>source/AdjacencyMatrixSchemaHashedTableManager.cpp</itemPath>
       <itemPath>source/AdjacencyMatrixUniversalTableManager.cpp</itemPath>
+      <itemPath>source/CSR.cpp</itemPath>
+      <itemPath>source/CSRSchemaHashedTableManager.cpp</itemPath>
+      <itemPath>source/CSRUniversalTableManager.cpp</itemPath>
       <itemPath>source/SchemaHashedTable.cpp</itemPath>
       <itemPath>source/Test.cpp</itemPath>
       <itemPath>source/UniversalTable.cpp</itemPath>
@@ -116,6 +122,18 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="header/CSR.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="header/CSRSchemaHashedTableManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="header/CSRUniversalTableManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="header/SchemaHashedTable.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/UniversalTable.hpp" ex="false" tool="3" flavor2="0">
@@ -140,6 +158,18 @@
             flavor2="0">
       </item>
       <item path="source/AdjacencyMatrixUniversalTableManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="source/CSR.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="source/CSRSchemaHashedTableManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="source/CSRUniversalTableManager.cpp"
             ex="false"
             tool="1"
             flavor2="0">
@@ -203,6 +233,18 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="header/CSR.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="header/CSRSchemaHashedTableManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="header/CSRUniversalTableManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="header/SchemaHashedTable.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/UniversalTable.hpp" ex="false" tool="3" flavor2="0">
@@ -227,6 +269,18 @@
             flavor2="0">
       </item>
       <item path="source/AdjacencyMatrixUniversalTableManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="source/CSR.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="source/CSRSchemaHashedTableManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="source/CSRUniversalTableManager.cpp"
             ex="false"
             tool="1"
             flavor2="0">

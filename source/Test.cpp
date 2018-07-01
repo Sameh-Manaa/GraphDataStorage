@@ -20,12 +20,16 @@
 #include "AdjacencyListUniversalTableManager.hpp"
 #include "AdjacencyListSchemaHashedTableManager.hpp"
 #include "AdjacencyMatrixSchemaHashedTableManager.hpp"
+#include "CSRUniversalTableManager.hpp"
+#include "CSRSchemaHashedTableManager.hpp"
 #include <chrono>
+#include <unistd.h>
 
 /*
  * Simple C++ Test Suite
  */
 
+int batchSize = 10000;
 
 void testInsertNode() {
     AdjacencyMatrix* adjacencyMatrix = new AdjacencyMatrix();
@@ -99,23 +103,33 @@ void testInsertNode() {
 }
 
 void testAdjacencyMatrixUniversalTable() {
-    AdjacencyMatrixUniversalTableManager adjMatUniTblMgr(1000);
+    AdjacencyMatrixUniversalTableManager adjMatUniTblMgr(batchSize);
     adjMatUniTblMgr.loadGraph("data/vertexes", "data/edges");
 }
 
 void testAdjacencyListUniversalTable() {
-    AdjacencyListUniversalTableManager adjLstUniTblMgr(1000);
+    AdjacencyListUniversalTableManager adjLstUniTblMgr(batchSize);
     adjLstUniTblMgr.loadGraph("data/vertexes", "data/edges");
 }
 
+void testCSRUniversalTable() {
+    CSRUniversalTableManager csrUniTblMgr(batchSize);
+    csrUniTblMgr.loadGraph("data/vertexes", "data/edges");
+}
+
 void testAdjacencyMatrixSchemaHashedTable() {
-    AdjacencyMatrixSchemaHashedTableManager adjMatSHahsedTblMgr(1000);
+    AdjacencyMatrixSchemaHashedTableManager adjMatSHahsedTblMgr(batchSize);
     adjMatSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
 }
 
 void testAdjacencyListSchemaHashedTable() {
-    AdjacencyListSchemaHashedTableManager adjLstSHahsedTblMgr(1000);
+    AdjacencyListSchemaHashedTableManager adjLstSHahsedTblMgr(batchSize);
     adjLstSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
+}
+
+void testCSRSchemaHashedTable() {
+    CSRSchemaHashedTableManager csrSHashedTblMgr(batchSize);
+    csrSHashedTblMgr.loadGraph("data/vertexes", "data/edges");
 }
 
 int main(int argc, char** argv) {
@@ -127,24 +141,36 @@ int main(int argc, char** argv) {
 
     testAdjacencyListUniversalTable();
     auto t3 = std::chrono::steady_clock::now();
-    
-    testAdjacencyMatrixSchemaHashedTable();
+
+    testCSRUniversalTable();
     auto t4 = std::chrono::steady_clock::now();
-    
-    testAdjacencyListSchemaHashedTable();
+
+    testAdjacencyMatrixSchemaHashedTable();
     auto t5 = std::chrono::steady_clock::now();
+
+    testAdjacencyListSchemaHashedTable();
+    auto t6 = std::chrono::steady_clock::now();
+
+    testCSRSchemaHashedTable();
+    auto t7 = std::chrono::steady_clock::now();
 
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
     std::cout << "ElapsedTime(AdjacencyMatrixUniversalTable): " << duration << " ms\n";
-    
+
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
     std::cout << "ElapsedTime(AdjacencyListUniversalTable): " << duration << " ms\n";
-    
+
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count();
-    std::cout << "ElapsedTime(AdjacencyMatrixSchemaHashedTable): " << duration << " ms\n";
-    
+    std::cout << "ElapsedTime(CSRUniversalTable): " << duration << " ms\n";
+
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(t5 - t4).count();
+    std::cout << "ElapsedTime(AdjacencyMatrixSchemaHashedTable): " << duration << " ms\n";
+
+    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t6 - t5).count();
     std::cout << "ElapsedTime(AdjacencyListSchemaHashedTable): " << duration << " ms\n";
-    
+
+    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t7 - t6).count();
+    std::cout << "ElapsedTime(CSRSchemaHashedTable): " << duration << " ms\n";
+
     return (EXIT_SUCCESS);
 }

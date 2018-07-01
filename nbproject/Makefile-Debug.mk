@@ -41,6 +41,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/source/AdjacencyMatrix.o \
 	${OBJECTDIR}/source/AdjacencyMatrixSchemaHashedTableManager.o \
 	${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o \
+	${OBJECTDIR}/source/CSR.o \
+	${OBJECTDIR}/source/CSRSchemaHashedTableManager.o \
+	${OBJECTDIR}/source/CSRUniversalTableManager.o \
 	${OBJECTDIR}/source/SchemaHashedTable.o \
 	${OBJECTDIR}/source/Test.o \
 	${OBJECTDIR}/source/UniversalTable.o
@@ -99,6 +102,21 @@ ${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o: source/AdjacencyMatr
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o source/AdjacencyMatrixUniversalTableManager.cpp
+
+${OBJECTDIR}/source/CSR.o: source/CSR.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSR.o source/CSR.cpp
+
+${OBJECTDIR}/source/CSRSchemaHashedTableManager.o: source/CSRSchemaHashedTableManager.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSRSchemaHashedTableManager.o source/CSRSchemaHashedTableManager.cpp
+
+${OBJECTDIR}/source/CSRUniversalTableManager.o: source/CSRUniversalTableManager.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSRUniversalTableManager.o source/CSRUniversalTableManager.cpp
 
 ${OBJECTDIR}/source/SchemaHashedTable.o: source/SchemaHashedTable.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
