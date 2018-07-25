@@ -32,7 +32,7 @@ public:
     void insertVertex(std::set<std::string> &vertexIds);
     bool removeVeretex(std::string vertexId);
     bool addNeighbourVertex(std::string vertexId, std::string neighbourVertexId);
-    std::vector<bool> addNeighbourVertex(std::vector<std::pair<std::string,std::string> > &edges);
+    void addNeighbourVertex(std::vector<std::pair<std::string,std::string> > &edges);
     bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId);
     std::list<std::string> getNeighbourVertices(std::string vertexId);
     uint64_t getVertexIndexByVertexId(std::string vertexId);

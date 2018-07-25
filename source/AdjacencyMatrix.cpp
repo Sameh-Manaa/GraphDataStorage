@@ -105,8 +105,10 @@ bool AdjacencyMatrix::removeVeretex(std::string vertexId) {
 
 bool AdjacencyMatrix::addNeighbourVertex(std::string vertexId, std::string neighbourVertexId) {
     //check for the existence of the vertexId & neighbourVertexId
-    if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end() &&
-            vertexAdjacencyMap.find(neighbourVertexId) != vertexAdjacencyMap.end()) {
+    if ((vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end() //|| this->insertVertex(vertexId)
+            ) &&
+            (vertexAdjacencyMap.find(neighbourVertexId) != vertexAdjacencyMap.end() //|| this->insertVertex(neighbourVertexId)
+            )) {
         //set the neighborhood flag between the two vertices to true
         vertexAdjacencyMap.at(vertexId).at(getVertexIndexByVertexId(neighbourVertexId)) = true;
         return true;
@@ -115,14 +117,14 @@ bool AdjacencyMatrix::addNeighbourVertex(std::string vertexId, std::string neigh
     }
 }
 
-std::vector<bool> AdjacencyMatrix::addNeighbourVertex(std::vector<std::pair<std::string, std::string> > &edges) {
-    std::vector<bool> result;
+void AdjacencyMatrix::addNeighbourVertex(std::vector<std::pair<std::string, std::string> > &edges) {
+    //std::vector<bool> result;
     //loop over all VertexNeighbourIds pairs and add them one by one
     for (std::vector<std::pair<std::string, std::string> >::iterator it = edges.begin(); it != edges.end(); ++it) {
         std::pair<std::string, std::string> neighbourPairIds = *it;
-        result.push_back(this->addNeighbourVertex(neighbourPairIds.first, neighbourPairIds.second));
+        this->addNeighbourVertex(neighbourPairIds.first, neighbourPairIds.second);
     }
-    return result;
+    //return result;
 }
 
 bool AdjacencyMatrix::removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId) {

@@ -55,8 +55,10 @@ bool AdjacencyList::removeVertex(std::string vertexId) {
 
 bool AdjacencyList::addNeighbourVertex(std::string vertexId, std::string edgeLabel, std::string neighbourVertexId) {
     //check for the existence of the vertexId & neighbourVertexId
-    if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end() &&
-            vertexAdjacencyMap.find(neighbourVertexId) != vertexAdjacencyMap.end()) {
+    if ((vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end() //|| this->insertVertex(vertexId)
+            ) &&
+            (vertexAdjacencyMap.find(neighbourVertexId) != vertexAdjacencyMap.end() //|| this->insertVertex(neighbourVertexId)
+            )) {
         //set the neighbourVertexId as a neighbor to the vertexId with the edgeLabel 
         vertexAdjacencyMap.at(vertexId)[edgeLabel].push_back(neighbourVertexId);
         return true;
@@ -65,14 +67,14 @@ bool AdjacencyList::addNeighbourVertex(std::string vertexId, std::string edgeLab
     }
 }
 
-std::vector<bool> AdjacencyList::addNeighbourVertex(std::vector<std::tuple<std::string, std::string, std::string> > &edges) {
-    std::vector<bool> result;
+void AdjacencyList::addNeighbourVertex(std::vector<std::tuple<std::string, std::string, std::string> > &edges) {
+    //std::vector<bool> result;
     //loop over all edges and add them one by one
     for (std::vector<std::tuple<std::string, std::string, std::string> >::iterator it = edges.begin(); it != edges.end(); ++it) {
         std::tuple<std::string, std::string, std::string> edge = *it;
-        result.push_back(this->addNeighbourVertex(std::get<0>(edge), std::get<1>(edge), std::get<2>(edge)));
+        this->addNeighbourVertex(std::get<0>(edge), std::get<1>(edge), std::get<2>(edge));
     }
-    return result;
+    //return result;
 }
 
 bool AdjacencyList::removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId) {
@@ -97,7 +99,7 @@ bool AdjacencyList::removeNeighbourVertex(std::string vertexId, std::string neig
     //check for the existence of the vertexId & neighbourVertexId
     if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end() &&
             vertexAdjacencyMap.find(neighbourVertexId) != vertexAdjacencyMap.end()) {
-        
+
         //remove the vertex from the neighborhood of the neighbor vertex
         std::vector<std::string>::iterator it = std::find(vertexAdjacencyMap.at(vertexId).at(edgeLabel).begin(), vertexAdjacencyMap.at(vertexId).at(edgeLabel).end(), neighbourVertexId);
         if (it != vertexAdjacencyMap.at(vertexId).at(edgeLabel).end()) {

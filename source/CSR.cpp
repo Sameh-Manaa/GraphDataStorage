@@ -14,11 +14,14 @@ bool CSR::insertVertex(std::string vertexId) {
 
     uint64_t vertexCount = this->vertexRowIndex.size() - 1;
 
-    this->vertexIndexMap.insert(std::make_pair(vertexId, vertexCount));
+    bool inserted = this->vertexIndexMap.insert(std::make_pair(vertexId, vertexCount)).second;
 
-    this->vertexRowIndex.emplace_back(this->vertexRowIndex.at(vertexCount));
-
-    return true;
+    if (inserted) {
+        this->vertexRowIndex.emplace_back(this->vertexRowIndex.at(vertexCount));
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void CSR::insertVertex(std::set<std::string> &vertexIds) {
@@ -61,15 +64,29 @@ bool CSR::removeVeretex(std::string vertexId) {
 }
  */
 bool CSR::addNeighbourVertex(std::string vertexId, std::string neighbourVertexId) {
-    uint64_t sourceVertexIndex = this->getVertexIndexByVertexId(vertexId);
-    uint64_t targetVertexIndex = this->getVertexIndexByVertexId(neighbourVertexId);
+    uint64_t sourceVertexIndex, targetVertexIndex;
+
+    try {
+        sourceVertexIndex = this->getVertexIndexByVertexId(vertexId);
+    } catch (std::exception e) {
+        return false;
+        //this->insertVertex(vertexId);
+        //sourceVertexIndex = this->getVertexIndexByVertexId(vertexId);
+    }
+    try {
+        targetVertexIndex = this->getVertexIndexByVertexId(neighbourVertexId);
+    } catch (std::exception e) {
+        return false;
+        //this->insertVertex(neighbourVertexId);
+        //targetVertexIndex = this->getVertexIndexByVertexId(neighbourVertexId);
+    }
 
     uint64_t idx;
     for (idx = this->vertexRowIndex.at(sourceVertexIndex);
             idx < this->vertexRowIndex.at(sourceVertexIndex + 1) && this->vertexColumnIndex.at(idx) < targetVertexIndex;
             idx++) {
     }
-    
+
     if (idx == this->vertexRowIndex.at(sourceVertexIndex + 1) ||
             this->vertexColumnIndex.at(idx) > targetVertexIndex) {
         this->vertexColumnIndex.emplace(this->vertexColumnIndex.begin() + idx, targetVertexIndex);
@@ -83,14 +100,14 @@ bool CSR::addNeighbourVertex(std::string vertexId, std::string neighbourVertexId
     }
 }
 
-std::vector<bool> CSR::addNeighbourVertex(std::vector<std::pair<std::string, std::string> > &edges) {
-    std::vector<bool> result;
+void CSR::addNeighbourVertex(std::vector<std::pair<std::string, std::string> > &edges) {
+    //std::vector<bool> result;
     //loop over all VertexNeighbourIds pairs and add them one by one
     for (std::vector<std::pair<std::string, std::string> >::iterator it = edges.begin(); it != edges.end(); ++it) {
         std::pair<std::string, std::string> neighbourPairIds = *it;
-        result.push_back(this->addNeighbourVertex(neighbourPairIds.first, neighbourPairIds.second));
+        this->addNeighbourVertex(neighbourPairIds.first, neighbourPairIds.second);
     }
-    return result;
+    //return result;
 }
 
 /*

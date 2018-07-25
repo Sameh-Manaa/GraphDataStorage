@@ -28,7 +28,7 @@ public:
     void insertVertex(std::set<std::string> &vertexIds);
     bool removeVertex(std::string vertexId);
     bool addNeighbourVertex(std::string vertexId, std::string edgeLabel, std::string neighbourVertexId);
-    std::vector<bool> addNeighbourVertex(std::vector<std::tuple<std::string , std::string , std::string> > &edges);
+    void addNeighbourVertex(std::vector<std::tuple<std::string , std::string , std::string> > &edges);
     bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId);
     bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId, std::string edgeLabel);
     std::map<std::string, std::vector<std::string> > getNeighbourVertices(std::string vertexId);
