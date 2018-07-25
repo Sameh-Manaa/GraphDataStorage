@@ -74,19 +74,18 @@ bool CSRUniversalTableManager::loadVertices(std::string verticesDirectory) {
 
             }
         }
-        std::fill(properties.begin(), properties.end(), "");
+
+        this->csr.insertVertex(vertexIds);
+        vertexIds.clear();
+        this->universalTable.upsertVertex(vertexUniversalMap);
+        vertexUniversalMap.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
         std::cout << "Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
-    this->csr.insertVertex(vertexIds);
-    this->universalTable.upsertVertex(vertexUniversalMap);
 
-    std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
-    std::cout << "Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
-    std::cout << "--------------------------------------------------------------------------" << std::endl;
     return true;
 }
 
@@ -145,20 +144,18 @@ bool CSRUniversalTableManager::loadEdges(std::string edgesDirectory) {
 
             if (++loadCounter % batchSize == 0) {
 
-                std::vector<bool> result = this->csr.addNeighbourVertex(edges);
-                for (int i = 0; i < result.size(); i++) {
-                    if (!result[i]) {
-                        edgeUniversalMap.erase(std::make_pair(edges[i].first, edges[i].second));
-                    }
-                }
-
+                this->csr.addNeighbourVertex(edges);
                 edges.clear();
                 this->universalTable.upsertEdge(edgeUniversalMap);
                 edgeUniversalMap.clear();
 
             }
         }
-        std::fill(properties.begin(), properties.end(), "");
+
+        this->csr.addNeighbourVertex(edges);
+        edges.clear();
+        this->universalTable.upsertEdge(edgeUniversalMap);
+        edgeUniversalMap.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
@@ -167,19 +164,6 @@ bool CSRUniversalTableManager::loadEdges(std::string edgesDirectory) {
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
-    std::vector<bool> result = this->csr.addNeighbourVertex(edges);
-    for (int i = 0; i < result.size(); i++) {
-        if (!result[i]) {
-            edgeUniversalMap.erase(std::make_pair(edges[i].first, edges[i].second));
-        }
-    }
-    
-    this->universalTable.upsertEdge(edgeUniversalMap);
-
-    std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
-    std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
-    std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
-    std::cout << "--------------------------------------------------------------------------" << std::endl;
     return true;
 }
 

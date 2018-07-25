@@ -34,10 +34,10 @@ bool AdjacencyListSchemaHashedTableManager::loadVertices(std::string verticesDir
 
         std::cout << verticesDirectory + "/" + pent->d_name << std::endl;
         std::ifstream vertexFile(verticesDirectory + "/" + pent->d_name);
-        
+
         std::string vertexLine, headerLine;
         std::getline(vertexFile, headerLine);
-        
+
         std::map<int, std::string> propertiesPositions = this->getVertexProperties(headerLine);
         std::map<std::string, std::string> properties;
 
@@ -64,7 +64,7 @@ bool AdjacencyListSchemaHashedTableManager::loadVertices(std::string verticesDir
             }
             vertexIds.emplace(vertexType + "_" + vertexOriginalId);
             vertexSchemaHashedMap.emplace(vertexType + "_" + vertexOriginalId, properties);
-            
+
             if (++loadCounter % batchSize == 0) {
 
                 this->adjacencyList.insertVertex(vertexIds);
@@ -74,19 +74,18 @@ bool AdjacencyListSchemaHashedTableManager::loadVertices(std::string verticesDir
 
             }
         }
-        properties.clear();
-        
+
+        this->adjacencyList.insertVertex(vertexIds);
+        vertexIds.clear();
+        this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
+        vertexSchemaHashedMap.clear();
+
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
         std::cout << "Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
-    this->adjacencyList.insertVertex(vertexIds);
-    this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
 
-    std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-    std::cout << "Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-    std::cout << "--------------------------------------------------------------------------" << std::endl;
     return true;
 }
 
@@ -107,7 +106,7 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
 
         std::cout << edgesDirectory + "/" + pent->d_name << std::endl;
         std::ifstream edgeFile(edgesDirectory + "/" + pent->d_name);
-        
+
         std::string edgeLine, headerLine;
         std::getline(edgeFile, headerLine);
 
@@ -123,10 +122,10 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
 
         while (std::getline(edgeFile, edgeLine)) {
             rowCount++;
-            
+
             std::istringstream iss(edgeLine);
             std::string property, sourceVertexId, targetVertexId;
-            
+
             uint64_t propertyCounter = 0;
             while (getline(iss, property, '|')) {
                 if (propertyCounter == 0) {
@@ -142,23 +141,21 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
 
             edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
             edgeSchemaHashedMap[std::make_pair(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId)][edgeLabel] = properties;
-            
+
             if (++loadCounter % batchSize == 0) {
-                
-                std::vector<bool> result = this->adjacencyList.addNeighbourVertex(edges);
-                for (int i = 0; i < result.size(); i++) {
-                    if (!result[i]) {
-                        edgeSchemaHashedMap.erase(std::make_pair(std::get<0>(edges[i]), std::get<2>(edges[i])));
-                    }
-                }
-                
+
+                this->adjacencyList.addNeighbourVertex(edges);
                 edges.clear();
                 this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
                 edgeSchemaHashedMap.clear();
 
             }
         }
-        properties.clear();
+
+        this->adjacencyList.addNeighbourVertex(edges);
+        edges.clear();
+        this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
+        edgeSchemaHashedMap.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
@@ -166,20 +163,7 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
         std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
-
-    std::vector<bool> result = this->adjacencyList.addNeighbourVertex(edges);
-    for (int i = 0; i < result.size(); i++) {
-        if (!result[i]) {
-            edgeSchemaHashedMap.erase(std::make_pair(std::get<0>(edges[i]), std::get<2>(edges[i])));
-        }
-    }
-
-    this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
-
-    std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-    std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-    std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
-    std::cout << "--------------------------------------------------------------------------" << std::endl;
+    
     return true;
 }
 

@@ -48,7 +48,7 @@ bool AdjacencyListUniversalTableManager::loadVertices(std::string verticesDirect
 
         while (std::getline(vertexFile, vertexLine)) {
             rowCount++;
-            
+
             std::istringstream iss(vertexLine);
             std::string property, vertexOriginalId;
 
@@ -75,19 +75,18 @@ bool AdjacencyListUniversalTableManager::loadVertices(std::string verticesDirect
 
             }
         }
-        std::fill(properties.begin(), properties.end(), "");
+
+        this->adjacencyList.insertVertex(vertexIds);
+        vertexIds.clear();
+        this->universalTable.upsertVertex(vertexUniversalMap);
+        vertexUniversalMap.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
         std::cout << "Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
-    this->adjacencyList.insertVertex(vertexIds);
-    this->universalTable.upsertVertex(vertexUniversalMap);
-
-    std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-    std::cout << "Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
-    std::cout << "--------------------------------------------------------------------------" << std::endl;
+    
     return true;
 }
 
@@ -143,23 +142,21 @@ bool AdjacencyListUniversalTableManager::loadEdges(std::string edgesDirectory) {
 
             edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
             edgeUniversalMap[std::make_pair(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId)][edgeLabel] = properties;
-            
+
             if (++loadCounter % batchSize == 0) {
 
-                std::vector<bool> result = this->adjacencyList.addNeighbourVertex(edges);
-                for (int i = 0; i < result.size(); i++) {
-                    if (!result[i]) {
-                        edgeUniversalMap.erase(std::make_pair(std::get<0>(edges[i]), std::get<2>(edges[i])));
-                    }
-                }
-
+                this->adjacencyList.addNeighbourVertex(edges);
                 edges.clear();
                 this->universalTable.upsertEdge(edgeUniversalMap);
                 edgeUniversalMap.clear();
 
             }
         }
-        std::fill(properties.begin(), properties.end(), "");
+
+        this->adjacencyList.addNeighbourVertex(edges);
+        edges.clear();
+        this->universalTable.upsertEdge(edgeUniversalMap);
+        edgeUniversalMap.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
@@ -167,20 +164,7 @@ bool AdjacencyListUniversalTableManager::loadEdges(std::string edgesDirectory) {
         std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
-    
-    std::vector<bool> result = this->adjacencyList.addNeighbourVertex(edges);
-    for (int i = 0; i < result.size(); i++) {
-        if (!result[i]) {
-            edgeUniversalMap.erase(std::make_pair(std::get<0>(edges[i]), std::get<2>(edges[i])));
-        }
-    }
-    
-    this->universalTable.upsertEdge(edgeUniversalMap);
 
-    std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-    std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
-    std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
-    std::cout << "--------------------------------------------------------------------------" << std::endl;
     return true;
 }
 
