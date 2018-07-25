@@ -22,6 +22,9 @@
 #include "AdjacencyMatrixSchemaHashedTableManager.hpp"
 #include "CSRUniversalTableManager.hpp"
 #include "CSRSchemaHashedTableManager.hpp"
+#include "AdjacencyMatrixEmergingSchemaManager.hpp"
+#include "AdjacencyListEmergingSchemaManager.hpp"
+#include "CSREmergingSchemaManager.hpp"
 #include <chrono>
 #include <unistd.h>
 
@@ -132,27 +135,51 @@ void testCSRSchemaHashedTable() {
     csrSHashedTblMgr.loadGraph("data/vertexes", "data/edges");
 }
 
+void testAdjacencyMatrixEmergingSchema() {
+    AdjacencyMatrixEmergingSchemaManager adjMatEsMgr(batchSize);
+    adjMatEsMgr.loadGraph("data/vertexes", "data/edges");
+}
+
+void testAdjacencyListEmergingSchema() {
+    AdjacencyListEmergingSchemaManager adjLstEsMgr(batchSize);
+    adjLstEsMgr.loadGraph("data/vertexes", "data/edges");
+}
+
+void testCSREmergingSchema() {
+    CSREmergingSchemaManager csrEsMgr(batchSize);
+    csrEsMgr.loadGraph("data/vertexes", "data/edges");
+}
+
 int main(int argc, char** argv) {
 
     auto t1 = std::chrono::steady_clock::now();
 
-    testAdjacencyMatrixUniversalTable();
+    //testAdjacencyMatrixUniversalTable();
     auto t2 = std::chrono::steady_clock::now();
 
-    testAdjacencyListUniversalTable();
+    //testAdjacencyListUniversalTable();
     auto t3 = std::chrono::steady_clock::now();
 
-    testCSRUniversalTable();
+    //testCSRUniversalTable();
     auto t4 = std::chrono::steady_clock::now();
 
-    testAdjacencyMatrixSchemaHashedTable();
+    //testAdjacencyMatrixSchemaHashedTable();
     auto t5 = std::chrono::steady_clock::now();
 
     testAdjacencyListSchemaHashedTable();
     auto t6 = std::chrono::steady_clock::now();
 
-    testCSRSchemaHashedTable();
+    //testCSRSchemaHashedTable();
     auto t7 = std::chrono::steady_clock::now();
+
+    //testAdjacencyMatrixEmergingSchema();
+    auto t8 = std::chrono::steady_clock::now();
+
+    //testAdjacencyListEmergingSchema();
+    auto t9 = std::chrono::steady_clock::now();
+
+    //testCSREmergingSchema();
+    auto t10 = std::chrono::steady_clock::now();
 
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
     std::cout << "ElapsedTime(AdjacencyMatrixUniversalTable): " << duration << " ms\n";
@@ -171,6 +198,15 @@ int main(int argc, char** argv) {
 
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(t7 - t6).count();
     std::cout << "ElapsedTime(CSRSchemaHashedTable): " << duration << " ms\n";
+
+    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t8 - t7).count();
+    std::cout << "ElapsedTime(AdjacencyMatrixEmergingSchema): " << duration << " ms\n";
+
+    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t9 - t8).count();
+    std::cout << "ElapsedTime(AdjacencyListEmergingSchema): " << duration << " ms\n";
+
+    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t10 - t9).count();
+    std::cout << "ElapsedTime(CSREmergingSchema): " << duration << " ms\n";
 
     return (EXIT_SUCCESS);
 }

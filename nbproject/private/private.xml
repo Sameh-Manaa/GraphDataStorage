@@ -10,9 +10,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/media/same7/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/CSR.cpp</file>
-            <file>file:/media/same7/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/CSRSchemaHashedTableManager.hpp</file>
-            <file>file:/media/same7/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/Test.cpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/AdjacencyMatrix.cpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/AdjacencyListSchemaHashedTableManager.hpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/Test.cpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/SchemaHashedTable.cpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/AdjacencyList.hpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/CSREmergingSchemaManager.cpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/SchemaHashedTable.hpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/CSREmergingSchemaManager.hpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/Kmeans.hpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/EmergingSchema.cpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/AdjacencyListSchemaHashedTableManager.cpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/AdjacencyList.cpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/EmergingSchema.hpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/AdjacencyListEmergingSchemaManager.cpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/AdjacencyMatrix.hpp</file>
         </group>
     </open-files>
 </project-private>

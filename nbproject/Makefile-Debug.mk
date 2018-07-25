@@ -36,14 +36,18 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/source/AdjacencyList.o \
+	${OBJECTDIR}/source/AdjacencyListEmergingSchemaManager.o \
 	${OBJECTDIR}/source/AdjacencyListSchemaHashedTableManager.o \
 	${OBJECTDIR}/source/AdjacencyListUniversalTableManager.o \
 	${OBJECTDIR}/source/AdjacencyMatrix.o \
+	${OBJECTDIR}/source/AdjacencyMatrixEmergingSchemaManager.o \
 	${OBJECTDIR}/source/AdjacencyMatrixSchemaHashedTableManager.o \
 	${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o \
 	${OBJECTDIR}/source/CSR.o \
+	${OBJECTDIR}/source/CSREmergingSchemaManager.o \
 	${OBJECTDIR}/source/CSRSchemaHashedTableManager.o \
 	${OBJECTDIR}/source/CSRUniversalTableManager.o \
+	${OBJECTDIR}/source/EmergingSchema.o \
 	${OBJECTDIR}/source/SchemaHashedTable.o \
 	${OBJECTDIR}/source/Test.o \
 	${OBJECTDIR}/source/UniversalTable.o
@@ -78,6 +82,11 @@ ${OBJECTDIR}/source/AdjacencyList.o: source/AdjacencyList.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyList.o source/AdjacencyList.cpp
 
+${OBJECTDIR}/source/AdjacencyListEmergingSchemaManager.o: source/AdjacencyListEmergingSchemaManager.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyListEmergingSchemaManager.o source/AdjacencyListEmergingSchemaManager.cpp
+
 ${OBJECTDIR}/source/AdjacencyListSchemaHashedTableManager.o: source/AdjacencyListSchemaHashedTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
@@ -92,6 +101,11 @@ ${OBJECTDIR}/source/AdjacencyMatrix.o: source/AdjacencyMatrix.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrix.o source/AdjacencyMatrix.cpp
+
+${OBJECTDIR}/source/AdjacencyMatrixEmergingSchemaManager.o: source/AdjacencyMatrixEmergingSchemaManager.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrixEmergingSchemaManager.o source/AdjacencyMatrixEmergingSchemaManager.cpp
 
 ${OBJECTDIR}/source/AdjacencyMatrixSchemaHashedTableManager.o: source/AdjacencyMatrixSchemaHashedTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
@@ -108,6 +122,11 @@ ${OBJECTDIR}/source/CSR.o: source/CSR.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSR.o source/CSR.cpp
 
+${OBJECTDIR}/source/CSREmergingSchemaManager.o: source/CSREmergingSchemaManager.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSREmergingSchemaManager.o source/CSREmergingSchemaManager.cpp
+
 ${OBJECTDIR}/source/CSRSchemaHashedTableManager.o: source/CSRSchemaHashedTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
@@ -117,6 +136,11 @@ ${OBJECTDIR}/source/CSRUniversalTableManager.o: source/CSRUniversalTableManager.
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSRUniversalTableManager.o source/CSRUniversalTableManager.cpp
+
+${OBJECTDIR}/source/EmergingSchema.o: source/EmergingSchema.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/EmergingSchema.o source/EmergingSchema.cpp
 
 ${OBJECTDIR}/source/SchemaHashedTable.o: source/SchemaHashedTable.cpp
 	${MKDIR} -p ${OBJECTDIR}/source

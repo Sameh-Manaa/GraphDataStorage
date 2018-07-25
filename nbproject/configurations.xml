@@ -5,14 +5,19 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>header/AdjacencyList.hpp</itemPath>
+      <itemPath>header/AdjacencyListEmergingSchemaManager.hpp</itemPath>
       <itemPath>header/AdjacencyListSchemaHashedTableManager.hpp</itemPath>
       <itemPath>header/AdjacencyListUniversalTableManager.hpp</itemPath>
       <itemPath>header/AdjacencyMatrix.hpp</itemPath>
+      <itemPath>header/AdjacencyMatrixEmergingSchemaManager.hpp</itemPath>
       <itemPath>header/AdjacencyMatrixSchemaHashedTableManager.hpp</itemPath>
       <itemPath>header/AdjacencyMatrixUniversalTableManager.hpp</itemPath>
       <itemPath>header/CSR.hpp</itemPath>
+      <itemPath>header/CSREmergingSchemaManager.hpp</itemPath>
       <itemPath>header/CSRSchemaHashedTableManager.hpp</itemPath>
       <itemPath>header/CSRUniversalTableManager.hpp</itemPath>
+      <itemPath>header/EmergingSchema.hpp</itemPath>
+      <itemPath>header/Kmeans.hpp</itemPath>
       <itemPath>header/SchemaHashedTable.hpp</itemPath>
       <itemPath>header/UniversalTable.hpp</itemPath>
     </logicalFolder>
@@ -24,14 +29,18 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>source/AdjacencyList.cpp</itemPath>
+      <itemPath>source/AdjacencyListEmergingSchemaManager.cpp</itemPath>
       <itemPath>source/AdjacencyListSchemaHashedTableManager.cpp</itemPath>
       <itemPath>source/AdjacencyListUniversalTableManager.cpp</itemPath>
       <itemPath>source/AdjacencyMatrix.cpp</itemPath>
+      <itemPath>source/AdjacencyMatrixEmergingSchemaManager.cpp</itemPath>
       <itemPath>source/AdjacencyMatrixSchemaHashedTableManager.cpp</itemPath>
       <itemPath>source/AdjacencyMatrixUniversalTableManager.cpp</itemPath>
       <itemPath>source/CSR.cpp</itemPath>
+      <itemPath>source/CSREmergingSchemaManager.cpp</itemPath>
       <itemPath>source/CSRSchemaHashedTableManager.cpp</itemPath>
       <itemPath>source/CSRUniversalTableManager.cpp</itemPath>
+      <itemPath>source/EmergingSchema.cpp</itemPath>
       <itemPath>source/SchemaHashedTable.cpp</itemPath>
       <itemPath>source/Test.cpp</itemPath>
       <itemPath>source/UniversalTable.cpp</itemPath>
@@ -100,6 +109,11 @@
       </folder>
       <item path="header/AdjacencyList.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="header/AdjacencyListEmergingSchemaManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="header/AdjacencyListSchemaHashedTableManager.hpp"
             ex="false"
             tool="3"
@@ -111,6 +125,11 @@
             flavor2="0">
       </item>
       <item path="header/AdjacencyMatrix.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="header/AdjacencyMatrixEmergingSchemaManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="header/AdjacencyMatrixSchemaHashedTableManager.hpp"
             ex="false"
@@ -124,6 +143,11 @@
       </item>
       <item path="header/CSR.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="header/CSREmergingSchemaManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="header/CSRSchemaHashedTableManager.hpp"
             ex="false"
             tool="3"
@@ -134,11 +158,20 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="header/EmergingSchema.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="header/Kmeans.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="header/SchemaHashedTable.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/UniversalTable.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="source/AdjacencyList.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="source/AdjacencyListEmergingSchemaManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="source/AdjacencyListSchemaHashedTableManager.cpp"
             ex="false"
@@ -152,6 +185,11 @@
       </item>
       <item path="source/AdjacencyMatrix.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="source/AdjacencyMatrixEmergingSchemaManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="source/AdjacencyMatrixSchemaHashedTableManager.cpp"
             ex="false"
             tool="1"
@@ -164,6 +202,11 @@
       </item>
       <item path="source/CSR.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="source/CSREmergingSchemaManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="source/CSRSchemaHashedTableManager.cpp"
             ex="false"
             tool="1"
@@ -174,6 +217,8 @@
             tool="1"
             flavor2="0">
       </item>
+      <item path="source/EmergingSchema.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="source/SchemaHashedTable.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="source/Test.cpp" ex="false" tool="1" flavor2="0">
@@ -183,7 +228,7 @@
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
-        <compilerSet>default</compilerSet>
+        <compilerSet>GNU|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -211,6 +256,11 @@
       </compileType>
       <item path="header/AdjacencyList.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="header/AdjacencyListEmergingSchemaManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="header/AdjacencyListSchemaHashedTableManager.hpp"
             ex="false"
             tool="3"
@@ -222,6 +272,11 @@
             flavor2="0">
       </item>
       <item path="header/AdjacencyMatrix.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="header/AdjacencyMatrixEmergingSchemaManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="header/AdjacencyMatrixSchemaHashedTableManager.hpp"
             ex="false"
@@ -235,6 +290,11 @@
       </item>
       <item path="header/CSR.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="header/CSREmergingSchemaManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="header/CSRSchemaHashedTableManager.hpp"
             ex="false"
             tool="3"
@@ -245,11 +305,20 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="header/EmergingSchema.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="header/Kmeans.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="header/SchemaHashedTable.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/UniversalTable.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="source/AdjacencyList.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="source/AdjacencyListEmergingSchemaManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="source/AdjacencyListSchemaHashedTableManager.cpp"
             ex="false"
@@ -263,6 +332,11 @@
       </item>
       <item path="source/AdjacencyMatrix.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="source/AdjacencyMatrixEmergingSchemaManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="source/AdjacencyMatrixSchemaHashedTableManager.cpp"
             ex="false"
             tool="1"
@@ -275,6 +349,11 @@
       </item>
       <item path="source/CSR.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="source/CSREmergingSchemaManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="source/CSRSchemaHashedTableManager.cpp"
             ex="false"
             tool="1"
@@ -284,6 +363,8 @@
             ex="false"
             tool="1"
             flavor2="0">
+      </item>
+      <item path="source/EmergingSchema.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="source/SchemaHashedTable.cpp" ex="false" tool="1" flavor2="0">
       </item>
