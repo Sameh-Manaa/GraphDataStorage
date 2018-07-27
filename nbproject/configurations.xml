@@ -18,6 +18,9 @@
       <itemPath>header/CSRUniversalTableManager.hpp</itemPath>
       <itemPath>header/EmergingSchema.hpp</itemPath>
       <itemPath>header/Kmeans.hpp</itemPath>
+      <itemPath>header/ParallelAdjacencyList.hpp</itemPath>
+      <itemPath>header/ParallelAdjacencyListSchemaHashedTableManager.hpp</itemPath>
+      <itemPath>header/ParallelSchemaHashedTable.hpp</itemPath>
       <itemPath>header/SchemaHashedTable.hpp</itemPath>
       <itemPath>header/UniversalTable.hpp</itemPath>
     </logicalFolder>
@@ -41,6 +44,9 @@
       <itemPath>source/CSRSchemaHashedTableManager.cpp</itemPath>
       <itemPath>source/CSRUniversalTableManager.cpp</itemPath>
       <itemPath>source/EmergingSchema.cpp</itemPath>
+      <itemPath>source/ParallelAdjacencyList.cpp</itemPath>
+      <itemPath>source/ParallelAdjacencyListSchemaHashedTableManager.cpp</itemPath>
+      <itemPath>source/ParallelSchemaHashedTable.cpp</itemPath>
       <itemPath>source/SchemaHashedTable.cpp</itemPath>
       <itemPath>source/Test.cpp</itemPath>
       <itemPath>source/UniversalTable.cpp</itemPath>
@@ -92,8 +98,11 @@
           <incDir>
             <pElem>header</pElem>
           </incDir>
-          <commandLine>-std=c++17</commandLine>
+          <commandLine>-std=c++14</commandLine>
         </ccTool>
+        <linkerTool>
+          <commandLine>-lpthread</commandLine>
+        </linkerTool>
       </compileType>
       <folder path="HeaderFiles">
         <cTool>
@@ -162,6 +171,18 @@
       </item>
       <item path="header/Kmeans.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="header/ParallelAdjacencyList.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="header/ParallelAdjacencyListSchemaHashedTableManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="header/ParallelSchemaHashedTable.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="header/SchemaHashedTable.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/UniversalTable.hpp" ex="false" tool="3" flavor2="0">
@@ -219,6 +240,18 @@
       </item>
       <item path="source/EmergingSchema.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="source/ParallelAdjacencyList.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="source/ParallelAdjacencyListSchemaHashedTableManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="source/ParallelSchemaHashedTable.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="source/SchemaHashedTable.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="source/Test.cpp" ex="false" tool="1" flavor2="0">
@@ -245,7 +278,7 @@
           <incDir>
             <pElem>header</pElem>
           </incDir>
-          <commandLine>-std=c++17</commandLine>
+          <commandLine>-std=c++14</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -253,6 +286,9 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <commandLine>-lpthread</commandLine>
+        </linkerTool>
       </compileType>
       <item path="header/AdjacencyList.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -309,6 +345,18 @@
       </item>
       <item path="header/Kmeans.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="header/ParallelAdjacencyList.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="header/ParallelAdjacencyListSchemaHashedTableManager.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="header/ParallelSchemaHashedTable.hpp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="header/SchemaHashedTable.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/UniversalTable.hpp" ex="false" tool="3" flavor2="0">
@@ -365,6 +413,18 @@
             flavor2="0">
       </item>
       <item path="source/EmergingSchema.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="source/ParallelAdjacencyList.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="source/ParallelAdjacencyListSchemaHashedTableManager.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="source/ParallelSchemaHashedTable.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
       </item>
       <item path="source/SchemaHashedTable.cpp" ex="false" tool="1" flavor2="0">
       </item>

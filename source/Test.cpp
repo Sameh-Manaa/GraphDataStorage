@@ -25,6 +25,7 @@
 #include "AdjacencyMatrixEmergingSchemaManager.hpp"
 #include "AdjacencyListEmergingSchemaManager.hpp"
 #include "CSREmergingSchemaManager.hpp"
+#include "ParallelAdjacencyListSchemaHashedTableManager.hpp"
 #include <chrono>
 #include <unistd.h>
 
@@ -32,7 +33,7 @@
  * Simple C++ Test Suite
  */
 
-int batchSize = 10000;
+int batchSize = 500;
 
 void testInsertNode() {
     AdjacencyMatrix* adjacencyMatrix = new AdjacencyMatrix();
@@ -150,63 +151,106 @@ void testCSREmergingSchema() {
     csrEsMgr.loadGraph("data/vertexes", "data/edges");
 }
 
+void testParallelAdjacencyListSchemaHashedTable() {
+    ParallelAdjacencyListSchemaHashedTableManager pAdjLstSHahsedTblMgr(batchSize, 1);
+    pAdjLstSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
+}
+
 int main(int argc, char** argv) {
+    std::vector<int> times(10, 0);
 
-    auto t1 = std::chrono::steady_clock::now();
+    int iterations = 5;
 
-    //testAdjacencyMatrixUniversalTable();
-    auto t2 = std::chrono::steady_clock::now();
+    for (int i = 0; i < iterations; i++) {
+        auto t1 = std::chrono::steady_clock::now();
 
-    //testAdjacencyListUniversalTable();
-    auto t3 = std::chrono::steady_clock::now();
+        //testAdjacencyMatrixUniversalTable();
+        auto t2 = std::chrono::steady_clock::now();
 
-    //testCSRUniversalTable();
-    auto t4 = std::chrono::steady_clock::now();
+        //testAdjacencyListUniversalTable();
+        auto t3 = std::chrono::steady_clock::now();
 
-    //testAdjacencyMatrixSchemaHashedTable();
-    auto t5 = std::chrono::steady_clock::now();
+        //testCSRUniversalTable();
+        auto t4 = std::chrono::steady_clock::now();
 
-    testAdjacencyListSchemaHashedTable();
-    auto t6 = std::chrono::steady_clock::now();
+        //testAdjacencyMatrixSchemaHashedTable();
+        auto t5 = std::chrono::steady_clock::now();
 
-    //testCSRSchemaHashedTable();
-    auto t7 = std::chrono::steady_clock::now();
+        testAdjacencyListSchemaHashedTable();
+        auto t6 = std::chrono::steady_clock::now();
 
-    //testAdjacencyMatrixEmergingSchema();
-    auto t8 = std::chrono::steady_clock::now();
+        //testCSRSchemaHashedTable();
+        auto t7 = std::chrono::steady_clock::now();
 
-    //testAdjacencyListEmergingSchema();
-    auto t9 = std::chrono::steady_clock::now();
+        //testAdjacencyMatrixEmergingSchema();
+        auto t8 = std::chrono::steady_clock::now();
 
-    //testCSREmergingSchema();
-    auto t10 = std::chrono::steady_clock::now();
+        //testAdjacencyListEmergingSchema();
+        auto t9 = std::chrono::steady_clock::now();
 
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
-    std::cout << "ElapsedTime(AdjacencyMatrixUniversalTable): " << duration << " ms\n";
+        //testCSREmergingSchema();
+        auto t10 = std::chrono::steady_clock::now();
 
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
-    std::cout << "ElapsedTime(AdjacencyListUniversalTable): " << duration << " ms\n";
+        testParallelAdjacencyListSchemaHashedTable();
+        auto t11 = std::chrono::steady_clock::now();
 
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count();
-    std::cout << "ElapsedTime(CSRUniversalTable): " << duration << " ms\n";
+        int duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+        std::cout << "ElapsedTime(AdjacencyMatrixUniversalTable): " << duration << " ms\n";
+        times[0] += duration;
 
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t5 - t4).count();
-    std::cout << "ElapsedTime(AdjacencyMatrixSchemaHashedTable): " << duration << " ms\n";
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
+        std::cout << "ElapsedTime(AdjacencyListUniversalTable): " << duration << " ms\n";
+        times[1] += duration;
 
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t6 - t5).count();
-    std::cout << "ElapsedTime(AdjacencyListSchemaHashedTable): " << duration << " ms\n";
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count();
+        std::cout << "ElapsedTime(CSRUniversalTable): " << duration << " ms\n";
+        times[2] += duration;
 
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t7 - t6).count();
-    std::cout << "ElapsedTime(CSRSchemaHashedTable): " << duration << " ms\n";
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t5 - t4).count();
+        std::cout << "ElapsedTime(AdjacencyMatrixSchemaHashedTable): " << duration << " ms\n";
+        times[3] += duration;
 
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t8 - t7).count();
-    std::cout << "ElapsedTime(AdjacencyMatrixEmergingSchema): " << duration << " ms\n";
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t6 - t5).count();
+        std::cout << "ElapsedTime(AdjacencyListSchemaHashedTable): " << duration << " ms\n";
+        times[4] += duration;
 
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t9 - t8).count();
-    std::cout << "ElapsedTime(AdjacencyListEmergingSchema): " << duration << " ms\n";
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t7 - t6).count();
+        std::cout << "ElapsedTime(CSRSchemaHashedTable): " << duration << " ms\n";
+        times[5] += duration;
 
-    duration = std::chrono::duration_cast<std::chrono::milliseconds>(t10 - t9).count();
-    std::cout << "ElapsedTime(CSREmergingSchema): " << duration << " ms\n";
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t8 - t7).count();
+        std::cout << "ElapsedTime(AdjacencyMatrixEmergingSchema): " << duration << " ms\n";
+        times[6] += duration;
+
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t9 - t8).count();
+        std::cout << "ElapsedTime(AdjacencyListEmergingSchema): " << duration << " ms\n";
+        times[7] += duration;
+
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t10 - t9).count();
+        std::cout << "ElapsedTime(CSREmergingSchema): " << duration << " ms\n";
+        times[8] += duration;
+
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t11 - t10).count();
+        std::cout << "ElapsedTime(ParallelAdjacencyListSchemaHashedTable): " << duration << " ms\n";
+        times[9] += duration;
+
+    }
+
+
+    std::cout << "--------------------------------------------------------------------------\n";
+    std::cout << "===> Final Result - " << iterations << " Iterations <===\n";
+    std::cout << "--------------------------------------------------------------------------\n";
+
+    std::cout << "ElapsedTime(AdjacencyMatrixUniversalTable): " << times[0] / iterations << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyListUniversalTable): " << times[1] / iterations << " ms\n";
+    std::cout << "ElapsedTime(CSRUniversalTable): " << times[2] / iterations << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyMatrixSchemaHashedTable): " << times[3] / iterations << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyListSchemaHashedTable): " << times[4] / iterations << " ms\n";
+    std::cout << "ElapsedTime(CSRSchemaHashedTable): " << times[5] / iterations << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyMatrixEmergingSchema): " << times[6] / iterations << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyListEmergingSchema): " << times[7] / iterations << " ms\n";
+    std::cout << "ElapsedTime(CSREmergingSchema): " << times[8] / iterations << " ms\n";
+    std::cout << "ElapsedTime(ParallelAdjacencyListSchemaHashedTable): " << times[9] / iterations << " ms\n";
 
     return (EXIT_SUCCESS);
 }

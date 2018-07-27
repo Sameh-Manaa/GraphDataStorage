@@ -48,6 +48,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/source/CSRSchemaHashedTableManager.o \
 	${OBJECTDIR}/source/CSRUniversalTableManager.o \
 	${OBJECTDIR}/source/EmergingSchema.o \
+	${OBJECTDIR}/source/ParallelAdjacencyList.o \
+	${OBJECTDIR}/source/ParallelAdjacencyListSchemaHashedTableManager.o \
+	${OBJECTDIR}/source/ParallelSchemaHashedTable.o \
 	${OBJECTDIR}/source/SchemaHashedTable.o \
 	${OBJECTDIR}/source/Test.o \
 	${OBJECTDIR}/source/UniversalTable.o
@@ -57,8 +60,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-m64 -std=c++17
-CXXFLAGS=-m64 -std=c++17
+CCFLAGS=-m64 -std=c++14
+CXXFLAGS=-m64 -std=c++14
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -75,7 +78,7 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage ${OBJECTFILES} ${LDLIBSOPTIONS} -lpthread
 
 ${OBJECTDIR}/source/AdjacencyList.o: source/AdjacencyList.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
@@ -141,6 +144,21 @@ ${OBJECTDIR}/source/EmergingSchema.o: source/EmergingSchema.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/EmergingSchema.o source/EmergingSchema.cpp
+
+${OBJECTDIR}/source/ParallelAdjacencyList.o: source/ParallelAdjacencyList.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/ParallelAdjacencyList.o source/ParallelAdjacencyList.cpp
+
+${OBJECTDIR}/source/ParallelAdjacencyListSchemaHashedTableManager.o: source/ParallelAdjacencyListSchemaHashedTableManager.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/ParallelAdjacencyListSchemaHashedTableManager.o source/ParallelAdjacencyListSchemaHashedTableManager.cpp
+
+${OBJECTDIR}/source/ParallelSchemaHashedTable.o: source/ParallelSchemaHashedTable.cpp
+	${MKDIR} -p ${OBJECTDIR}/source
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/ParallelSchemaHashedTable.o source/ParallelSchemaHashedTable.cpp
 
 ${OBJECTDIR}/source/SchemaHashedTable.o: source/SchemaHashedTable.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
