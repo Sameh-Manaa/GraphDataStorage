@@ -1,7 +1,0 @@
-Iteration, AdjacencyMatrixUniversalTable, AdjacencyListUniversalTable, CSRUniversalTable, AdjacencyMatrixSchemaHashedTable, AdjacencyListSchemaHashedTable, CSRSchemaHashedTable, AdjacencyMatrixEmergingSchema, AdjacencyListEmergingSchema, CSREmergingSchema, ParallelAdjacencyListSchemaHashedTable, Universal Table Query Execution - BI 1, Schema Hashed Table Query Execution - BI 1, Emerging Schema Query Execution - BI 1
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11614, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8064, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8075, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8291, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-Sum, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44155, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0

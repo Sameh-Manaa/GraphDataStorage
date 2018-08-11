@@ -12,12 +12,12 @@
       <itemPath>header/AdjacencyMatrixEmergingSchemaManager.hpp</itemPath>
       <itemPath>header/AdjacencyMatrixSchemaHashedTableManager.hpp</itemPath>
       <itemPath>header/AdjacencyMatrixUniversalTableManager.hpp</itemPath>
+      <itemPath>header/Aggregation.hpp</itemPath>
       <itemPath>header/CSR.hpp</itemPath>
       <itemPath>header/CSREmergingSchemaManager.hpp</itemPath>
       <itemPath>header/CSRSchemaHashedTableManager.hpp</itemPath>
       <itemPath>header/CSRUniversalTableManager.hpp</itemPath>
       <itemPath>header/EmergingSchema.hpp</itemPath>
-      <itemPath>header/GroupBy.hpp</itemPath>
       <itemPath>header/Kmeans.hpp</itemPath>
       <itemPath>header/MergeSort.hpp</itemPath>
       <itemPath>header/ParallelAdjacencyList.hpp</itemPath>
@@ -152,6 +152,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="header/Aggregation.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="header/CSR.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/CSREmergingSchemaManager.hpp"
@@ -170,8 +172,6 @@
             flavor2="0">
       </item>
       <item path="header/EmergingSchema.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="header/GroupBy.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/Kmeans.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -330,6 +330,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="header/Aggregation.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="header/CSR.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/CSREmergingSchemaManager.hpp"
@@ -348,8 +350,6 @@
             flavor2="0">
       </item>
       <item path="header/EmergingSchema.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="header/GroupBy.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/Kmeans.hpp" ex="false" tool="3" flavor2="0">
       </item>

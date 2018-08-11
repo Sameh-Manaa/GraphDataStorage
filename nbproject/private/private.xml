@@ -10,11 +10,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/AdjacencyListUniversalTableManager.hpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/AdjacencyListSchemaHashedTableManager.hpp</file>
             <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/Test.cpp</file>
-            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/ParallelAdjacencyListSchemaHashedTableManager.cpp</file>
-            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/ParallelAdjacencyListSchemaHashedTableManager.hpp</file>
-            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/ParallelAdjacencyList.hpp</file>
-            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/ParallelAdjacencyList.cpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/Aggregation.hpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/header/MergeSort.hpp</file>
+            <file>file:/media/sameh/0AD69019D69006DB/OVGU/Master%20Thesis/Implementation/GraphStorage/source/AdjacencyListEmergingSchemaManager.cpp</file>
         </group>
     </open-files>
 </project-private>

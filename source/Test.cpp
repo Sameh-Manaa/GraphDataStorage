@@ -30,6 +30,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "MergeSort.hpp"
+#include "Aggregation.hpp"
 
 int batchSize = 100;
 
@@ -84,10 +85,25 @@ void testParallelAdjacencyListSchemaHashedTable() {
 }
 
 int main(int argc, char** argv) {
-    int iterations = 5;
+    int iterations = 1;
 
     std::vector< std::vector<int> > times(iterations + 1, std::vector<int>(20, 0));
 
+    AdjacencyListUniversalTableManager* adjLstUniTblMgr = new AdjacencyListUniversalTableManager(batchSize);
+    adjLstUniTblMgr->loadGraph("data/vertexes", "data/edges");
+
+    AdjacencyListSchemaHashedTableManager* adjLstSHahsedTblMgr = new AdjacencyListSchemaHashedTableManager(batchSize);
+    adjLstSHahsedTblMgr->loadGraph("data/vertexes", "data/edges");
+
+    AdjacencyListEmergingSchemaManager* adjLstEsTblMgr = new AdjacencyListEmergingSchemaManager(batchSize);
+    adjLstEsTblMgr->loadGraph("data/vertexes", "data/edges");
+
+
+    //1 desc, -1 asc
+    std::vector<int> sortingDirection = {1, -1, -1};
+    //index: group by operation: 0 count, 1 sum, 2 average
+    //value: storage index 0,1,2
+    std::vector<uint8_t> groupByOperation = {0, 2, 1};
 
     for (int i = 0; i < iterations; i++) {
         auto t1 = std::chrono::steady_clock::now();
@@ -104,7 +120,7 @@ int main(int argc, char** argv) {
         //testAdjacencyMatrixSchemaHashedTable();
         auto t5 = std::chrono::steady_clock::now();
 
-        testAdjacencyListSchemaHashedTable();
+        //testAdjacencyListSchemaHashedTable();
         auto t6 = std::chrono::steady_clock::now();
 
         //testCSRSchemaHashedTable();
@@ -120,56 +136,54 @@ int main(int argc, char** argv) {
 
         auto t10 = std::chrono::steady_clock::now();
 
-        testParallelAdjacencyListSchemaHashedTable();
+        //testParallelAdjacencyListSchemaHashedTable();
         auto t11 = std::chrono::steady_clock::now();
 
 
 
-        const char* str = "2012-01-16";
+        const char* str = "2022-01-16";
 
         tm tm1;
 
         sscanf(str, "%4d-%2d-%2d", &tm1.tm_year, &tm1.tm_mon, &tm1.tm_mday);
 
-        //std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > resultSet;
+        std::vector<std::pair<std::vector<std::string>, std::vector<double> > > resultSet;
 
-        //AdjacencyListUniversalTableManager* adjLstUniTblMgr = new AdjacencyListUniversalTableManager(batchSize);
-        //adjLstUniTblMgr->loadGraph("data/vertexes", "data/edges");
 
         auto t12 = std::chrono::steady_clock::now();
-        //adjLstUniTblMgr->executeQueryBI1(tm1, resultSet);
+        adjLstUniTblMgr->executeQueryBI1(tm1, resultSet);
+
+        MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
+
+        Aggregation::GroupBy(resultSet, groupByOperation);
+        Aggregation::computePercentile(resultSet, 0);
         auto t13 = std::chrono::steady_clock::now();
 
-        //1 desc, -1 asc
-        //std::vector<int> sortingDirection = {1, -1, -1};
+        resultSet.clear();
 
-        //MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
-
-        //delete adjLstUniTblMgr;
-        //resultSet.clear();
-
-        //AdjacencyListSchemaHashedTableManager* adjLstSHahsedTblMgr = new AdjacencyListSchemaHashedTableManager(batchSize);
-        //adjLstSHahsedTblMgr->loadGraph("data/vertexes", "data/edges");
 
         auto t14 = std::chrono::steady_clock::now();
-        //adjLstSHahsedTblMgr->executeQueryBI1(tm1, resultSet);
+        adjLstSHahsedTblMgr->executeQueryBI1(tm1, resultSet);
+
+        MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
+
+        Aggregation::GroupBy(resultSet, groupByOperation);
+        Aggregation::computePercentile(resultSet, 0);
         auto t15 = std::chrono::steady_clock::now();
 
-        //MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
+        resultSet.clear();
 
-        //delete adjLstSHahsedTblMgr;
-        //resultSet.clear();
-
-        //AdjacencyListEmergingSchemaManager* adjLstEsTblMgr = new AdjacencyListEmergingSchemaManager(batchSize);
-        //adjLstEsTblMgr->loadGraph("data/vertexes", "data/edges");
 
         auto t16 = std::chrono::steady_clock::now();
-        //adjLstEsTblMgr->executeQueryBI1(tm1, resultSet);
+        adjLstEsTblMgr->executeQueryBI1(tm1, resultSet);
+
+        MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
+
+        Aggregation::GroupBy(resultSet, groupByOperation);
+        Aggregation::computePercentile(resultSet, 0);
         auto t17 = std::chrono::steady_clock::now();
 
-        //MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
 
-        //delete adjLstEsTblMgr;
 
         int duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
         std::cout << "ElapsedTime(AdjacencyMatrixUniversalTable): " << duration << " ms\n";
@@ -237,6 +251,9 @@ int main(int argc, char** argv) {
         times[i][12] = duration;
 
     }
+    delete adjLstUniTblMgr;
+    delete adjLstSHahsedTblMgr;
+    delete adjLstEsTblMgr;
 
 
     std::cout << "--------------------------------------------------------------------------\n";
@@ -260,7 +277,7 @@ int main(int argc, char** argv) {
     //Write Evaluation Data to file
     ofstream evalFile;
     auto t = std::chrono::steady_clock::now().time_since_epoch();
-    evalFile.open("Evaluation-Data-" + std::to_string(std::chrono::duration_cast<std::chrono::seconds>(t).count()) + ".csv");
+    evalFile.open("Evaluation-Results/Evaluation-Data-" + std::to_string(std::chrono::duration_cast<std::chrono::seconds>(t).count()) + ".csv");
 
     evalFile << "Iteration, "
             << "AdjacencyMatrixUniversalTable, AdjacencyListUniversalTable, CSRUniversalTable, "
@@ -299,9 +316,9 @@ int main(int argc, char** argv) {
 /*
  * todo list:
  * ----------
- * groupBy
  * query: bi 18
  * query: histogram
  * size in bytes
+ * groupBy (done)
  * 
  */
