@@ -8,22 +8,26 @@
 
 bool AdjacencyMatrixEmergingSchemaManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory) {
     if (loadVertices(verticesDirectory) && loadEdges(edgesDirectory)) {
-        this->emergingSchema.clearUniversalTable();
+        this->adjacencyMatrix.shrinkToFit();
+        this->emergingSchema.generateVerticesEmergingSchema(this->universalTable);
+        this->emergingSchema.generateEdgesEmergingSchema(this->universalTable);
+        this->universalTable.clearUniversalTable();
+        //        std::cout << "==========================================================================" << std::endl;
+        //        std::cout << "Vertex Universal Table Size In Bytes: " << this->universalTable.getVertexUniversalTableSizeInBytes() << std::endl;
+        //        std::cout << "Edge Universal Table Size In Bytes: " << this->universalTable.getEdgeUniversalTableSizeInBytes() << std::endl;
+        //        std::cout << "==========================================================================" << std::endl;
         return true;
     } else {
         return false;
     }
-
 }
 
 bool AdjacencyMatrixEmergingSchemaManager::loadVertices(std::string verticesDirectory) {
 
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
-    this->addVertexProperties("VertexType");
 
-    std::map < std::string, std::vector<std::string> > vertexUniversalMap;
-    std::set<std::string> vertexIds;
+    std::vector< std::pair < std::string, std::vector<char*> > > vertexUniversalMap;
 
     DIR *pdir = NULL;
     struct dirent *pent = NULL;
@@ -38,8 +42,8 @@ bool AdjacencyMatrixEmergingSchemaManager::loadVertices(std::string verticesDire
         std::string vertexLine, headerLine;
         std::getline(vertexFile, headerLine);
 
-        std::vector<int64_t> propertiesPositions = this->addVertexProperties(headerLine);
-        std::vector<std::string> properties(emergingSchema.getVertexPropertyOrder().size());
+        std::vector<int16_t> propertiesPositions = this->addVertexProperties(headerLine);
+        std::vector<char*> properties(universalTable.getVertexPropertyIndex().size());
 
         std::istringstream iss(pent->d_name);
         std::string vertexType;
@@ -53,7 +57,6 @@ bool AdjacencyMatrixEmergingSchemaManager::loadVertices(std::string verticesDire
             std::string property, vertexOriginalId;
 
             uint64_t propertyCounter = 0;
-            properties[0] = vertexType;
 
             while (getline(iss, property, '|')) {
                 if (propertiesPositions[propertyCounter] == -1) {
@@ -61,34 +64,32 @@ bool AdjacencyMatrixEmergingSchemaManager::loadVertices(std::string verticesDire
                     propertyCounter++;
                     continue;
                 }
-                properties[propertiesPositions[propertyCounter++]] = property;
+                char * propertyVal = new char [property.length() + 1];
+                strcpy(propertyVal, property.c_str());
+                properties[propertiesPositions[propertyCounter++]] = propertyVal;
             }
-            vertexIds.emplace(properties[0] + "_" + vertexOriginalId);
-            vertexUniversalMap.emplace(properties[0] + "_" + vertexOriginalId, properties);
+
+            vertexUniversalMap.emplace_back(vertexType + "_" + vertexOriginalId, properties);
 
             if (++loadCounter % batchSize == 0) {
 
-                this->adjacencyMatrix.insertVertex(vertexIds);
-                vertexIds.clear();
-                this->emergingSchema.upsertVertex(vertexUniversalMap);
+                this->universalTable.upsertVertex(vertexUniversalMap);
                 vertexUniversalMap.clear();
 
             }
         }
 
-        this->adjacencyMatrix.insertVertex(vertexIds);
-        vertexIds.clear();
-        this->emergingSchema.upsertVertex(vertexUniversalMap);
+        this->universalTable.upsertVertex(vertexUniversalMap);
         vertexUniversalMap.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "Adjacency Matrix Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
-        std::cout << "Universal Table Size: " << this->emergingSchema.getVertexEmergingSchemaSize() << std::endl;
+        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
+        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
-    this->emergingSchema.generateVerticesEmergingSchema();
-
+    closedir(pdir);
     return true;
 }
 
@@ -97,8 +98,11 @@ bool AdjacencyMatrixEmergingSchemaManager::loadEdges(std::string edgesDirectory)
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
 
-    std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > edgeUniversalMap;
-    std::vector<std::pair<std::string, std::string> > edges;
+    std::vector< std::pair < std::string, std::vector<char*> > > vertexUniversalMap;
+    std::vector<char*> vertexProperties(universalTable.getVertexPropertyIndex().size());
+
+    std::vector< std::pair<std::string, std::vector<char*> > > edgeUniversalMap;
+    std::vector<std::tuple<std::string, std::string, std::string> > edges;
 
     DIR *pdir = NULL;
     struct dirent *pent = NULL;
@@ -113,8 +117,8 @@ bool AdjacencyMatrixEmergingSchemaManager::loadEdges(std::string edgesDirectory)
         std::string edgeLine, headerLine;
         std::getline(edgeFile, headerLine);
 
-        std::vector<int64_t> propertiesPositions = this->addEdgeProperties(headerLine);
-        std::vector<std::string> properties(emergingSchema.getEdgePropertyOrder().size());
+        std::vector<int16_t> propertiesPositions = this->addEdgeProperties(headerLine);
+        std::vector<char*> properties(universalTable.getEdgePropertyIndex().size());
 
         std::istringstream iss(pent->d_name);
         std::string sourceVertex, edgeLabel, targetVertex;
@@ -138,42 +142,55 @@ bool AdjacencyMatrixEmergingSchemaManager::loadEdges(std::string edgesDirectory)
                     targetVertexId = property;
                     propertyCounter++;
                 } else {
-                    properties[propertiesPositions[propertyCounter++]] = property;
+                    char * propertyVal = new char [property.length() + 1];
+                    strcpy(propertyVal, property.c_str());
+                    properties[propertiesPositions[propertyCounter++]] = propertyVal;
                 }
             }
 
-            edges.emplace_back(std::make_pair(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId));
-            edgeUniversalMap[std::make_pair(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId)][edgeLabel] = properties;
+            vertexUniversalMap.emplace_back(sourceVertex + "_" + sourceVertexId, vertexProperties);
+            vertexUniversalMap.emplace_back(targetVertex + "_" + targetVertexId, vertexProperties);
+
+            edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
+            edgeUniversalMap.emplace_back(sourceVertex + "_" + sourceVertexId + "$" + edgeLabel + "$" + targetVertex + "_" + targetVertexId, properties);
 
             if (++loadCounter % batchSize == 0) {
 
+                this->universalTable.upsertVertex(vertexUniversalMap);
+                vertexUniversalMap.clear();
+
+                this->universalTable.upsertEdge(edgeUniversalMap);
+                edgeUniversalMap.clear();
+
                 this->adjacencyMatrix.addNeighbourVertex(edges);
                 edges.clear();
-                this->emergingSchema.upsertEdge(edgeUniversalMap);
-                edgeUniversalMap.clear();
 
             }
         }
 
+        this->universalTable.upsertVertex(vertexUniversalMap);
+        vertexUniversalMap.clear();
+
+        this->universalTable.upsertEdge(edgeUniversalMap);
+        edgeUniversalMap.clear();
+
         this->adjacencyMatrix.addNeighbourVertex(edges);
         edges.clear();
-        this->emergingSchema.upsertEdge(edgeUniversalMap);
-        edgeUniversalMap.clear();
+
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "Adjacency Matrix Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
-        std::cout << "Vertex Universal Table Size: " << this->emergingSchema.getVertexEmergingSchemaSize() << std::endl;
-        std::cout << "Edge Universal Table Size: " << this->emergingSchema.getEdgeEmergingSchemaSize() << std::endl;
+        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
+        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
-    
-    this->emergingSchema.generateEdgesEmergingSchema();
 
+    closedir(pdir);
     return true;
 }
 
-std::vector<int64_t> AdjacencyMatrixEmergingSchemaManager::addVertexProperties(std::string vertexHeaderLine) {
-    std::vector<int64_t> propertiesPositions(0);
+std::vector<int16_t> AdjacencyMatrixEmergingSchemaManager::addVertexProperties(std::string vertexHeaderLine) {
+    std::vector<int16_t> propertiesPositions(0);
     std::istringstream iss(vertexHeaderLine);
     std::string propertyName;
     while (getline(iss, propertyName, '|')) {
@@ -181,13 +198,13 @@ std::vector<int64_t> AdjacencyMatrixEmergingSchemaManager::addVertexProperties(s
             propertiesPositions.push_back(-1);
             continue;
         }
-        propertiesPositions.push_back(this->emergingSchema.addVertexProperty(propertyName));
+        propertiesPositions.push_back(this->universalTable.addVertexProperty(propertyName));
     }
     return propertiesPositions;
 }
 
-std::vector<int64_t> AdjacencyMatrixEmergingSchemaManager::addEdgeProperties(std::string edgeHeaderLine) {
-    std::vector<int64_t> propertiesPositions(0);
+std::vector<int16_t> AdjacencyMatrixEmergingSchemaManager::addEdgeProperties(std::string edgeHeaderLine) {
+    std::vector<int16_t> propertiesPositions(0);
     std::istringstream iss(edgeHeaderLine);
     std::string propertyName;
     while (getline(iss, propertyName, '|')) {
@@ -195,7 +212,7 @@ std::vector<int64_t> AdjacencyMatrixEmergingSchemaManager::addEdgeProperties(std
             propertiesPositions.push_back(-1);
             continue;
         }
-        propertiesPositions.push_back(this->emergingSchema.addEdgeProperty(propertyName));
+        propertiesPositions.push_back(this->universalTable.addEdgeProperty(propertyName));
     }
     return propertiesPositions;
 }

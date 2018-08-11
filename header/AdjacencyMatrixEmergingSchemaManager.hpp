@@ -17,13 +17,13 @@
 #include <dirent.h>
 
 #include "AdjacencyMatrix.hpp"
+#include "UniversalTable.hpp"
 #include "EmergingSchema.hpp"
-
-
 
 class AdjacencyMatrixEmergingSchemaManager {
 private:
     AdjacencyMatrix adjacencyMatrix;
+    UniversalTable universalTable;
     EmergingSchema emergingSchema;
     int batchSize;
 public:
@@ -31,11 +31,13 @@ public:
     bool loadGraph(std::string verticesDirectory, std::string edgesDirectory);
     bool loadVertices(std::string verticesDirectory);
     bool loadEdges(std::string edgesDirectory);
-    std::vector<int64_t> addVertexProperties(std::string vertexHeaderLine);
-    std::vector<int64_t> addEdgeProperties(std::string edgeHeaderLine);
-    
-    AdjacencyMatrixEmergingSchemaManager(int bSize):batchSize(bSize){};
-    
+    std::vector<int16_t> addVertexProperties(std::string vertexHeaderLine);
+    std::vector<int16_t> addEdgeProperties(std::string edgeHeaderLine);
+
+    AdjacencyMatrixEmergingSchemaManager(int bSize) : batchSize(bSize) {
+        adjacencyMatrix.setBatchSize(bSize);
+    };
+
 };
 
 #endif /* ADJACENCYMATRIXEMERGINGSCHEMAMANAGER_HPP */

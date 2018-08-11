@@ -7,9 +7,8 @@
 #include "AdjacencyMatrixSchemaHashedTableManager.hpp"
 
 bool AdjacencyMatrixSchemaHashedTableManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory) {
-    if (loadVertices(verticesDirectory) &&
-            loadEdges(edgesDirectory)
-            ) {
+    if (loadVertices(verticesDirectory) && loadEdges(edgesDirectory)) {
+        this->adjacencyMatrix.shrinkToFit();
         return true;
     } else {
         return false;
@@ -22,8 +21,7 @@ bool AdjacencyMatrixSchemaHashedTableManager::loadVertices(std::string verticesD
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
 
-    std::map<std::string, std::map<std::string, std::string> > vertexSchemaHashedMap;
-    std::set<std::string> vertexIds;
+    std::vector< std::pair <std::string, std::unordered_map<std::string, char*> > > vertexSchemaHashedMap;
 
     DIR *pdir = NULL;
     struct dirent *pent = NULL;
@@ -39,7 +37,7 @@ bool AdjacencyMatrixSchemaHashedTableManager::loadVertices(std::string verticesD
         std::getline(vertexFile, headerLine);
 
         std::map<int, std::string> propertiesPositions = this->getVertexProperties(headerLine);
-        std::map<std::string, std::string> properties;
+        std::unordered_map<std::string, char*> properties;
 
         std::istringstream iss(pent->d_name);
         std::string vertexType;
@@ -52,7 +50,6 @@ bool AdjacencyMatrixSchemaHashedTableManager::loadVertices(std::string verticesD
             std::string property, vertexOriginalId;
 
             int propertyCounter = 0;
-            properties["VertexType"] = vertexType;
 
             while (getline(iss, property, '|')) {
                 if (propertiesPositions[propertyCounter] == "id") {
@@ -60,32 +57,32 @@ bool AdjacencyMatrixSchemaHashedTableManager::loadVertices(std::string verticesD
                     propertyCounter++;
                     continue;
                 }
-                properties[propertiesPositions[propertyCounter++]] = property;
+                char * propertyVal = new char [property.length() + 1];
+                strcpy(propertyVal, property.c_str());
+                properties[propertiesPositions[propertyCounter++]] = propertyVal;
             }
-            vertexIds.emplace(vertexType + "_" + vertexOriginalId);
-            vertexSchemaHashedMap.emplace(vertexType + "_" + vertexOriginalId, properties);
+
+            vertexSchemaHashedMap.emplace_back(vertexType + "_" + vertexOriginalId, properties);
 
             if (++loadCounter % batchSize == 0) {
 
-                this->adjacencyMatrix.insertVertex(vertexIds);
-                vertexIds.clear();
                 this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
                 vertexSchemaHashedMap.clear();
 
             }
         }
 
-        this->adjacencyMatrix.insertVertex(vertexIds);
-        vertexIds.clear();
         this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
         vertexSchemaHashedMap.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "Adjacency Matrix Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
-        std::cout << "Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+        std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+        std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
+    closedir(pdir);
     return true;
 }
 
@@ -94,8 +91,11 @@ bool AdjacencyMatrixSchemaHashedTableManager::loadEdges(std::string edgesDirecto
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
 
-    std::map<std::pair<std::string, std::string>, std::map<std::string, std::map<std::string, std::string> > > edgeSchemaHashedMap;
-    std::vector<std::pair<std::string, std::string> > edges;
+    std::vector< std::pair <std::string, std::unordered_map<std::string, char*> > > vertexSchemaHashedMap;
+    std::unordered_map<std::string, char*> vertexProperties;
+
+    std::vector< std::pair <std::string, std::unordered_map<std::string, char*> > > edgeSchemaHashedMap;
+    std::vector<std::tuple<std::string, std::string, std::string> > edges;
 
     DIR *pdir = NULL;
     struct dirent *pent = NULL;
@@ -111,7 +111,7 @@ bool AdjacencyMatrixSchemaHashedTableManager::loadEdges(std::string edgesDirecto
         std::getline(edgeFile, headerLine);
 
         std::map<int, std::string> propertiesPositions = this->getEdgeProperties(headerLine);
-        std::map<std::string, std::string> properties;
+        std::unordered_map<std::string, char*> properties;
 
         std::istringstream iss(pent->d_name);
         std::string sourceVertex, edgeLabel, targetVertex;
@@ -135,27 +135,40 @@ bool AdjacencyMatrixSchemaHashedTableManager::loadEdges(std::string edgesDirecto
                     targetVertexId = property;
                     propertyCounter++;
                 } else {
-                    properties[propertiesPositions[propertyCounter++]] = property;
+                    char * propertyVal = new char [property.length() + 1];
+                    strcpy(propertyVal, property.c_str());
+                    properties[propertiesPositions[propertyCounter++]] = propertyVal;
                 }
             }
 
-            edges.emplace_back(std::make_pair(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId));
-            edgeSchemaHashedMap[std::make_pair(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId)][edgeLabel] = properties;
+            vertexSchemaHashedMap.emplace_back(sourceVertex + "_" + sourceVertexId, vertexProperties);
+            vertexSchemaHashedMap.emplace_back(targetVertex + "_" + targetVertexId, vertexProperties);
+
+            edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
+            edgeSchemaHashedMap.emplace_back(sourceVertex + "_" + sourceVertexId + "$" + edgeLabel + "$" + targetVertex + "_" + targetVertexId, properties);
 
             if (++loadCounter % batchSize == 0) {
 
-                this->adjacencyMatrix.addNeighbourVertex(edges);
-                edges.clear();
+                this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
+                vertexSchemaHashedMap.clear();
+
                 this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
                 edgeSchemaHashedMap.clear();
+
+                this->adjacencyMatrix.addNeighbourVertex(edges);
+                edges.clear();
 
             }
         }
 
-        this->adjacencyMatrix.addNeighbourVertex(edges);
-        edges.clear();
+        this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
+        vertexSchemaHashedMap.clear();
+
         this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
         edgeSchemaHashedMap.clear();
+
+        this->adjacencyMatrix.addNeighbourVertex(edges);
+        edges.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "Adjacency Matrix Size: " << this->adjacencyMatrix.getAdjacencyMatrixSize() << std::endl;
@@ -164,6 +177,7 @@ bool AdjacencyMatrixSchemaHashedTableManager::loadEdges(std::string edgesDirecto
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
+    closedir(pdir);
     return true;
 }
 
