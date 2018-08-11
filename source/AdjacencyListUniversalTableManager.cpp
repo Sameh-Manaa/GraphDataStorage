@@ -220,7 +220,7 @@ std::vector<int16_t> AdjacencyListUniversalTableManager::addEdgeProperties(std::
     return propertiesPositions;
 }
 
-void AdjacencyListUniversalTableManager::executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >& resultSet) {
+void AdjacencyListUniversalTableManager::executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
 
     // 1- get all vertices with type comment or post
     std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> commentVertices;
@@ -248,7 +248,7 @@ void AdjacencyListUniversalTableManager::executeQueryBI1(tm messageCreationDate,
                 (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
                 (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday)
                 ) {
-            std::pair<std::vector<std::string>, std::vector<std::string> > resultRecord;
+            std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
             resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
 
@@ -260,16 +260,16 @@ void AdjacencyListUniversalTableManager::executeQueryBI1(tm messageCreationDate,
             std::string messageLengthCategory;
             if (messageLength >= 0 && messageLength < 40) {
                 messageLengthCategory = "0";
-            } else if (messageLength >= 0 && messageLength < 40) {
+            } else if (messageLength >= 40 && messageLength < 80) {
                 messageLengthCategory = "1";
-            } else if (messageLength >= 0 && messageLength < 40) {
+            } else if (messageLength >= 80 && messageLength < 160) {
                 messageLengthCategory = "2";
-            } else {
+            } else if (messageLength >= 160) {
                 messageLengthCategory = "3";
             }
             resultRecord.first.emplace_back(messageLengthCategory);
 
-            resultRecord.second.emplace_back(std::to_string(messageLength));
+            resultRecord.second.emplace_back(messageLength);
 
             resultSet.emplace_back(resultRecord);
         }
@@ -286,7 +286,7 @@ void AdjacencyListUniversalTableManager::executeQueryBI1(tm messageCreationDate,
                 (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
                 (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday)
                 ) {
-            std::pair<std::vector<std::string>, std::vector<std::string> > resultRecord;
+            std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
             resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
 
@@ -298,16 +298,16 @@ void AdjacencyListUniversalTableManager::executeQueryBI1(tm messageCreationDate,
             std::string messageLengthCategory;
             if (messageLength >= 0 && messageLength < 40) {
                 messageLengthCategory = "0";
-            } else if (messageLength >= 0 && messageLength < 40) {
+            } else if (messageLength >= 40 && messageLength < 80) {
                 messageLengthCategory = "1";
-            } else if (messageLength >= 0 && messageLength < 40) {
+            } else if (messageLength >= 80 && messageLength < 160) {
                 messageLengthCategory = "2";
-            } else {
+            } else if (messageLength >= 160) {
                 messageLengthCategory = "3";
             }
             resultRecord.first.emplace_back(messageLengthCategory);
 
-            resultRecord.second.emplace_back(std::to_string(messageLength));
+            resultRecord.second.emplace_back(messageLength);
 
             resultSet.emplace_back(resultRecord);
         }
@@ -317,7 +317,7 @@ void AdjacencyListUniversalTableManager::executeQueryBI1(tm messageCreationDate,
 
 }
 
-void AdjacencyListUniversalTableManager::executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >& resultSet) {
+void AdjacencyListUniversalTableManager::executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
 
     // 1- get all vertices with type comment or post
     std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> commentVertices;
@@ -354,7 +354,7 @@ void AdjacencyListUniversalTableManager::executeQueryBI18(tm messageCreationDate
                 && (content && (content[0] != '\0'))
                 && (length < messageLength)) {
             
-            std::pair<std::vector<std::string>, std::vector<std::string> > resultRecord;
+            std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
             resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
 
@@ -363,16 +363,16 @@ void AdjacencyListUniversalTableManager::executeQueryBI18(tm messageCreationDate
             std::string messageLengthCategory;
             if (messageLength >= 0 && messageLength < 40) {
                 messageLengthCategory = "0";
-            } else if (messageLength >= 0 && messageLength < 40) {
+            } else if (messageLength >= 40 && messageLength < 80) {
                 messageLengthCategory = "1";
-            } else if (messageLength >= 0 && messageLength < 40) {
+            } else if (messageLength >= 80 && messageLength < 160) {
                 messageLengthCategory = "2";
-            } else {
+            } else if (messageLength >= 160) {
                 messageLengthCategory = "3";
             }
             resultRecord.first.emplace_back(messageLengthCategory);
 
-            resultRecord.second.emplace_back(std::to_string(messageLength));
+            resultRecord.second.emplace_back(messageLength);
 
             resultSet.emplace_back(resultRecord);
         }
@@ -399,7 +399,7 @@ void AdjacencyListUniversalTableManager::executeQueryBI18(tm messageCreationDate
                 && (language && std::find(messageLanguages.begin(), messageLanguages.end(), std::string(language)) != messageLanguages.end())
                 ) {
 
-            std::pair<std::vector<std::string>, std::vector<std::string> > resultRecord;
+            std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
             resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
 
@@ -417,7 +417,7 @@ void AdjacencyListUniversalTableManager::executeQueryBI18(tm messageCreationDate
             }
             resultRecord.first.emplace_back(messageLengthCategory);
 
-            resultRecord.second.emplace_back(std::to_string(messageLength));
+            resultRecord.second.emplace_back(messageLength);
 
             resultSet.emplace_back(resultRecord);
         }

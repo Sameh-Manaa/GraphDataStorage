@@ -202,7 +202,7 @@ std::map<int, std::string> AdjacencyListSchemaHashedTableManager::getEdgePropert
     return propertiesPositions;
 }
 
-void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >& resultSet) {
+void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
     // 1- get all vertices with type comment or post
     std::pair<std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator, std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator> commentVertices;
     commentVertices = this->schemaHashedTable.getVertices("comment");
@@ -225,7 +225,7 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDa
                 (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
                 (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday)
                 ) {
-            std::pair<std::vector<std::string>, std::vector<std::string> > resultRecord;
+            std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
             resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
 
@@ -237,16 +237,16 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDa
             std::string messageLengthCategory;
             if (messageLength >= 0 && messageLength < 40) {
                 messageLengthCategory = "0";
-            } else if (messageLength >= 0 && messageLength < 40) {
+            } else if (messageLength >= 40 && messageLength < 80) {
                 messageLengthCategory = "1";
-            } else if (messageLength >= 0 && messageLength < 40) {
+            } else if (messageLength >= 80 && messageLength < 160) {
                 messageLengthCategory = "2";
-            } else {
+            } else if (messageLength >= 160) {
                 messageLengthCategory = "3";
             }
             resultRecord.first.emplace_back(messageLengthCategory);
 
-            resultRecord.second.emplace_back(std::to_string(messageLength));
+            resultRecord.second.emplace_back(messageLength);
 
             resultSet.emplace_back(resultRecord);
         }
@@ -263,7 +263,7 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDa
                 (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
                 (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday)
                 ) {
-            std::pair<std::vector<std::string>, std::vector<std::string> > resultRecord;
+            std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
             resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
 
@@ -275,16 +275,16 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDa
             std::string messageLengthCategory;
             if (messageLength >= 0 && messageLength < 40) {
                 messageLengthCategory = "0";
-            } else if (messageLength >= 0 && messageLength < 40) {
+            } else if (messageLength >= 40 && messageLength < 80) {
                 messageLengthCategory = "1";
-            } else if (messageLength >= 0 && messageLength < 40) {
+            } else if (messageLength >= 80 && messageLength < 160) {
                 messageLengthCategory = "2";
-            } else {
+            } else if (messageLength >= 160) {
                 messageLengthCategory = "3";
             }
             resultRecord.first.emplace_back(messageLengthCategory);
 
-            resultRecord.second.emplace_back(std::to_string(messageLength));
+            resultRecord.second.emplace_back(messageLength);
 
             resultSet.emplace_back(resultRecord);
         }

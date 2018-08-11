@@ -40,13 +40,13 @@ private:
     // First subarray is keyValues[l..m]
     // Second subarray is keyValues[m+1..r]
 
-    static void merge(std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >& keyValues, int left, int middle, int right, std::vector<int>& sortingDirection) {
+    static void merge(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& keyValues, int left, int middle, int right, std::vector<int>& sortingDirection) {
         int i, j, k;
         int n1 = middle - left + 1;
         int n2 = right - middle;
 
         /* create temp arrays */
-        std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > L(n1), R(n2);
+        std::vector<std::pair<std::vector<std::string>, std::vector<double> > > L(n1), R(n2);
 
         /* Copy data to temp arrays L[] and R[] */
         for (i = 0; i < n1; i++)
@@ -91,7 +91,7 @@ public:
 
     /* l is for left index and r is right index of the
        sub-array of keyValues to be sorted */
-    static void mergeSort(std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >& keyValues, int left, int right, std::vector<int>& sortingDirection) {
+    static void mergeSort(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& keyValues, int left, int right, std::vector<int>& sortingDirection) {
         if (left < right) {
             // Same as (left+right)/2, but avoids overflow for
             // large left and right

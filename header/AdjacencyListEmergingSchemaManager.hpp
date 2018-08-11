@@ -36,7 +36,7 @@ public:
     std::vector<int16_t> addVertexProperties(std::string vertexHeaderLine);
     std::vector<int16_t> addEdgeProperties(std::string edgeHeaderLine);
     
-    void executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >& resultSet);
+    void executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     
     AdjacencyListEmergingSchemaManager(int bSize):batchSize(bSize){};
 };

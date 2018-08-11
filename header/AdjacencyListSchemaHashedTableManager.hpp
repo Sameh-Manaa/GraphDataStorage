@@ -32,7 +32,7 @@ public:
     std::map<int, std::string> getVertexProperties(std::string vertexHeaderLine);
     std::map<int, std::string> getEdgeProperties(std::string edgeHeaderLine);
     
-    void executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >& resultSet);
+    void executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     
     AdjacencyListSchemaHashedTableManager(int bSize):batchSize(bSize){};
 };
