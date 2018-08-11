@@ -22,8 +22,7 @@ bool AdjacencyListSchemaHashedTableManager::loadVertices(std::string verticesDir
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
 
-    std::map<std::string, std::map<std::string, std::string> > vertexSchemaHashedMap;
-    std::set<std::string> vertexIds;
+    std::vector < std::pair < std::string, std::unordered_map<std::string, char*> > > vertexSchemaHashedMap;
 
     DIR *pdir = NULL;
     struct dirent *pent = NULL;
@@ -39,7 +38,7 @@ bool AdjacencyListSchemaHashedTableManager::loadVertices(std::string verticesDir
         std::getline(vertexFile, headerLine);
 
         std::map<int, std::string> propertiesPositions = this->getVertexProperties(headerLine);
-        std::map<std::string, std::string> properties;
+        std::unordered_map<std::string, char*> properties;
 
         std::istringstream iss(pent->d_name);
         std::string vertexType;
@@ -52,7 +51,6 @@ bool AdjacencyListSchemaHashedTableManager::loadVertices(std::string verticesDir
             std::string property, vertexOriginalId;
 
             int propertyCounter = 0;
-            properties["VertexType"] = vertexType;
 
             while (getline(iss, property, '|')) {
                 if (propertiesPositions[propertyCounter] == "id") {
@@ -60,32 +58,32 @@ bool AdjacencyListSchemaHashedTableManager::loadVertices(std::string verticesDir
                     propertyCounter++;
                     continue;
                 }
-                properties[propertiesPositions[propertyCounter++]] = property;
+                char * propertyVal = new char [property.length() + 1];
+                strcpy(propertyVal, property.c_str());
+                properties[propertiesPositions[propertyCounter++]] = propertyVal;
             }
-            vertexIds.emplace(vertexType + "_" + vertexOriginalId);
-            vertexSchemaHashedMap.emplace(vertexType + "_" + vertexOriginalId, properties);
+
+            vertexSchemaHashedMap.emplace_back(vertexType + "_" + vertexOriginalId, properties);
 
             if (++loadCounter % batchSize == 0) {
 
-                this->adjacencyList.insertVertex(vertexIds);
-                vertexIds.clear();
                 this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
                 vertexSchemaHashedMap.clear();
 
             }
         }
 
-        this->adjacencyList.insertVertex(vertexIds);
-        vertexIds.clear();
         this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
         vertexSchemaHashedMap.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-        std::cout << "Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+        std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+        std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
+    closedir(pdir);
     return true;
 }
 
@@ -94,7 +92,10 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
 
-    std::map<std::pair<std::string, std::string>, std::map<std::string, std::map<std::string, std::string> > > edgeSchemaHashedMap;
+    std::vector< std::pair< std::string, std::unordered_map<std::string, char*> > > vertexSchemaHashedMap;
+    std::unordered_map<std::string, char*> vertexProperties;
+
+    std::vector< std::pair<std::string, std::unordered_map<std::string, char*> > > edgeSchemaHashedMap;
     std::vector<std::tuple<std::string, std::string, std::string> > edges;
 
     DIR *pdir = NULL;
@@ -111,7 +112,7 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
         std::getline(edgeFile, headerLine);
 
         std::map<int, std::string> propertiesPositions = this->getEdgeProperties(headerLine);
-        std::map<std::string, std::string> properties;
+        std::unordered_map<std::string, char*> properties;
 
         std::istringstream iss(pent->d_name);
         std::string sourceVertex, edgeLabel, targetVertex;
@@ -135,27 +136,40 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
                     targetVertexId = property;
                     propertyCounter++;
                 } else {
-                    properties[propertiesPositions[propertyCounter++]] = property;
+                    char * propertyVal = new char [property.length() + 1];
+                    strcpy(propertyVal, property.c_str());
+                    properties[propertiesPositions[propertyCounter++]] = propertyVal;
                 }
             }
 
+            vertexSchemaHashedMap.emplace_back(sourceVertex + "_" + sourceVertexId, vertexProperties);
+            vertexSchemaHashedMap.emplace_back(targetVertex + "_" + targetVertexId, vertexProperties);
+
             edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
-            edgeSchemaHashedMap[std::make_pair(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId)][edgeLabel] = properties;
+            edgeSchemaHashedMap.emplace_back(sourceVertex + "_" + sourceVertexId + "$" + edgeLabel + "$" + targetVertex + "_" + targetVertexId, properties);
 
             if (++loadCounter % batchSize == 0) {
 
-                this->adjacencyList.addNeighbourVertex(edges);
-                edges.clear();
+                this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
+                vertexSchemaHashedMap.clear();
+
                 this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
                 edgeSchemaHashedMap.clear();
+
+                this->adjacencyList.addNeighbourVertex(edges);
+                edges.clear();
 
             }
         }
 
-        this->adjacencyList.addNeighbourVertex(edges);
-        edges.clear();
+        this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
+        vertexSchemaHashedMap.clear();
+
         this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
         edgeSchemaHashedMap.clear();
+
+        this->adjacencyList.addNeighbourVertex(edges);
+        edges.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
@@ -163,7 +177,8 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
         std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
-    
+
+    closedir(pdir);
     return true;
 }
 
@@ -185,4 +200,96 @@ std::map<int, std::string> AdjacencyListSchemaHashedTableManager::getEdgePropert
         propertiesPositions[propertiesPositions.size()] = propertyName;
     }
     return propertiesPositions;
+}
+
+void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >& resultSet) {
+    // 1- get all vertices with type comment or post
+    std::pair<std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator, std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator> commentVertices;
+    commentVertices = this->schemaHashedTable.getVertices("comment");
+    std::cout << "Count of Comment Vertices Found: " << std::distance(commentVertices.first, commentVertices.second) << std::endl;
+
+    std::pair<std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator, std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator> postVertices;
+    postVertices = this->schemaHashedTable.getVertices("post");
+    std::cout << "Count of Post Vertices Found: " << std::distance(postVertices.first, postVertices.second) << std::endl;
+
+    // 2- filter result on creation date before $date
+
+    for (std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator it = commentVertices.first; it != commentVertices.second; ++it) {
+        const char* str = it->second.at("creationDate");
+
+        tm tm1;
+
+        sscanf(str, "%4d-%2d-%2d", &tm1.tm_year, &tm1.tm_mon, &tm1.tm_mday);
+
+        if (messageCreationDate.tm_year > tm1.tm_year ||
+                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
+                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday)
+                ) {
+            std::pair<std::vector<std::string>, std::vector<std::string> > resultRecord;
+
+            resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
+
+            resultRecord.first.emplace_back("true");
+
+            std::string::size_type sz; // alias of size_t
+
+            uint64_t messageLength = std::stoi(it->second.at("length"), &sz);
+            std::string messageLengthCategory;
+            if (messageLength >= 0 && messageLength < 40) {
+                messageLengthCategory = "0";
+            } else if (messageLength >= 0 && messageLength < 40) {
+                messageLengthCategory = "1";
+            } else if (messageLength >= 0 && messageLength < 40) {
+                messageLengthCategory = "2";
+            } else {
+                messageLengthCategory = "3";
+            }
+            resultRecord.first.emplace_back(messageLengthCategory);
+
+            resultRecord.second.emplace_back(std::to_string(messageLength));
+
+            resultSet.emplace_back(resultRecord);
+        }
+    }
+
+    for (std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator it = postVertices.first; it != postVertices.second; ++it) {
+        const char* str = it->second.at("creationDate");
+
+        tm tm1;
+
+        sscanf(str, "%4d-%2d-%2d", &tm1.tm_year, &tm1.tm_mon, &tm1.tm_mday);
+
+        if (messageCreationDate.tm_year > tm1.tm_year ||
+                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
+                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday)
+                ) {
+            std::pair<std::vector<std::string>, std::vector<std::string> > resultRecord;
+
+            resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
+
+            resultRecord.first.emplace_back("true");
+
+            std::string::size_type sz; // alias of size_t
+
+            uint64_t messageLength = std::stoi(it->second.at("length"), &sz);
+            std::string messageLengthCategory;
+            if (messageLength >= 0 && messageLength < 40) {
+                messageLengthCategory = "0";
+            } else if (messageLength >= 0 && messageLength < 40) {
+                messageLengthCategory = "1";
+            } else if (messageLength >= 0 && messageLength < 40) {
+                messageLengthCategory = "2";
+            } else {
+                messageLengthCategory = "3";
+            }
+            resultRecord.first.emplace_back(messageLengthCategory);
+
+            resultRecord.second.emplace_back(std::to_string(messageLength));
+
+            resultSet.emplace_back(resultRecord);
+        }
+    }
+
+    std::cout << "Count of Relevant Messages Found: " << resultSet.size() << std::endl;
+
 }

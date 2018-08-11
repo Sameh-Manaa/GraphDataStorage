@@ -18,12 +18,14 @@
 
 #include "AdjacencyList.hpp"
 #include "EmergingSchema.hpp"
+#include "UniversalTable.hpp"
 
 
 
 class AdjacencyListEmergingSchemaManager {
 private:
     AdjacencyList adjacencyList;
+    UniversalTable universalTable;
     EmergingSchema emergingSchema;
     int batchSize;
 public:
@@ -31,8 +33,10 @@ public:
     bool loadGraph(std::string verticesDirectory, std::string edgesDirectory);
     bool loadVertices(std::string verticesDirectory);
     bool loadEdges(std::string edgesDirectory);
-    std::vector<int64_t> addVertexProperties(std::string vertexHeaderLine);
-    std::vector<int64_t> addEdgeProperties(std::string edgeHeaderLine);
+    std::vector<int16_t> addVertexProperties(std::string vertexHeaderLine);
+    std::vector<int16_t> addEdgeProperties(std::string edgeHeaderLine);
+    
+    void executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >& resultSet);
     
     AdjacencyListEmergingSchemaManager(int bSize):batchSize(bSize){};
 };
