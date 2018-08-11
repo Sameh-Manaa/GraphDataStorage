@@ -10,11 +10,37 @@ SchemaHashedTable::SchemaHashedTable() {
     //this->edgeSchemaHashedMap.max_load_factor(10);
 }
 
-void SchemaHashedTable::upsertVertex(std::string vertexId, std::map<std::string, std::string> properties) {
+SchemaHashedTable::~SchemaHashedTable(){
+    for (auto const& vertex : this->vertexSchemaHashedMap) {
+        for (auto const& vertexProperty : vertex.second) {
+            delete[] vertexProperty.second;
+        }
+    }
+    
+    
+    for (auto const& edge : this->edgeSchemaHashedMap) {
+        for (auto const& edgeProperty : edge.second) {
+            delete[] edgeProperty.second;
+        }
+    }
+    
+    this->vertexSchemaHashedMap.clear();
+    this->edgeSchemaHashedMap.clear();
+}
+
+void SchemaHashedTable::upsertVertex(std::string vertexId, std::unordered_map<std::string, char*> properties) {
     this->vertexSchemaHashedMap[vertexId] = properties;
 }
 
-void SchemaHashedTable::upsertVertex(std::map<std::string, std::map<std::string, std::string> > &vertexSchemaHashedMap) {
+void SchemaHashedTable::upsertVertex(std::map<std::string, std::unordered_map<std::string, char*> > &vertexSchemaHashedMap) {
+    /*if (this->vertexSchemaHashedMap.bucket_count() - this->vertexSchemaHashedMap.size() <
+            vertexSchemaHashedMap.size()*2) {
+        this->vertexSchemaHashedMap.reserve(this->vertexSchemaHashedMap.size() + (vertexSchemaHashedMap.size()*4));
+    }*/
+    this->vertexSchemaHashedMap.insert(vertexSchemaHashedMap.begin(), vertexSchemaHashedMap.end());
+}
+
+void SchemaHashedTable::upsertVertex(std::vector< std::pair< std::string, std::unordered_map<std::string, char*> > > &vertexSchemaHashedMap) {
     /*if (this->vertexSchemaHashedMap.bucket_count() - this->vertexSchemaHashedMap.size() <
             vertexSchemaHashedMap.size()*2) {
         this->vertexSchemaHashedMap.reserve(this->vertexSchemaHashedMap.size() + (vertexSchemaHashedMap.size()*4));
@@ -30,11 +56,11 @@ bool SchemaHashedTable::removeVertex(std::string vertexId) {
     }
 }
 
-void SchemaHashedTable::upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::map<std::string, std::string> properties) {
-    this->edgeSchemaHashedMap[std::make_pair(sourceVertexId, targetVertexId)][edgeLabel] = properties;
+void SchemaHashedTable::upsertEdge(std::string sourceVertexId, std::string edgeLabel, std::string targetVertexId, std::unordered_map<std::string, char*> properties) {
+    this->edgeSchemaHashedMap[sourceVertexId + "$" + targetVertexId + "$" + edgeLabel] = properties;
 }
 
-void SchemaHashedTable::upsertEdge(std::map<std::pair<std::string, std::string>, std::map<std::string, std::map<std::string, std::string> > > &edgeSchemaHashedMap) {
+void SchemaHashedTable::upsertEdge(std::map<std::string, std::unordered_map<std::string, char*> > &edgeSchemaHashedMap) {
     /*if (this->edgeSchemaHashedMap.bucket_count() - this->edgeSchemaHashedMap.size() <
             edgeSchemaHashedMap.size()*2) {
         this->edgeSchemaHashedMap.reserve(this->edgeSchemaHashedMap.size() + (edgeSchemaHashedMap.size()*4));
@@ -42,6 +68,15 @@ void SchemaHashedTable::upsertEdge(std::map<std::pair<std::string, std::string>,
     this->edgeSchemaHashedMap.insert(edgeSchemaHashedMap.begin(), edgeSchemaHashedMap.end());
 }
 
+void SchemaHashedTable::upsertEdge(std::vector < std::pair< std::string, std::unordered_map<std::string, char*> > > &edgeSchemaHashedMap) {
+    /*if (this->edgeSchemaHashedMap.bucket_count() - this->edgeSchemaHashedMap.size() <
+            edgeSchemaHashedMap.size()*2) {
+        this->edgeSchemaHashedMap.reserve(this->edgeSchemaHashedMap.size() + (edgeSchemaHashedMap.size()*4));
+    }*/
+    this->edgeSchemaHashedMap.insert(edgeSchemaHashedMap.begin(), edgeSchemaHashedMap.end());
+}
+
+/*
 bool SchemaHashedTable::removeEdge(std::string sourceVertexId, std::string targetVertexId) {
     if (this->edgeSchemaHashedMap.erase(std::make_pair(sourceVertexId, targetVertexId)) == 1) {
         return true;
@@ -49,12 +84,13 @@ bool SchemaHashedTable::removeEdge(std::string sourceVertexId, std::string targe
         return false;
     }
 }
+*/
 
 std::string SchemaHashedTable::getVertexProperty(std::string vertexId, std::string propertyName) {
     return this->vertexSchemaHashedMap.at(vertexId).at(propertyName);
 }
 
-std::map<std::string, std::string> SchemaHashedTable::getVertexAllProperties(std::string vertexId) {
+std::unordered_map<std::string, char*> SchemaHashedTable::getVertexAllProperties(std::string vertexId) {
     return this->vertexSchemaHashedMap.at(vertexId);
 }
 
@@ -76,11 +112,11 @@ std::list<std::string> SchemaHashedTable::getQualifiedVertices(std::vector<std::
 }*/
 
 std::string SchemaHashedTable::getEdgeProperty(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::string propertyName) {
-    return this->edgeSchemaHashedMap.at(std::make_pair(sourceVertexId, targetVertexId)).at(edgeLabel).at(propertyName);
+    return this->edgeSchemaHashedMap.at(sourceVertexId + "$" + targetVertexId + "$" + edgeLabel).at(propertyName);
 }
 
-std::map<std::string, std::string> SchemaHashedTable::getEdgeAllProperties(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel) {
-    return this->edgeSchemaHashedMap.at(std::make_pair(sourceVertexId, targetVertexId)).at(edgeLabel);
+std::unordered_map<std::string, char*> SchemaHashedTable::getEdgeAllProperties(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel) {
+    return this->edgeSchemaHashedMap.at(sourceVertexId + "$" + targetVertexId + "$" + edgeLabel);
 }
 
 /*
@@ -108,4 +144,17 @@ uint64_t SchemaHashedTable::getVertexSchemaHashedTableSize() {
 
 uint64_t SchemaHashedTable::getEdgeSchemaHashedTableSize() {
     return this->edgeSchemaHashedMap.size();
+}
+
+std::pair<std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator, std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator>
+SchemaHashedTable::getVertices(std::string vertexType) {
+    std::string vertexTypeInc = vertexType;
+    char lastVertexChar = vertexType.back();
+    lastVertexChar++;
+    vertexTypeInc[vertexTypeInc.size() - 1] = lastVertexChar;
+
+    std::pair<std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator, std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator> result;
+    result.first = this->vertexSchemaHashedMap.lower_bound(vertexType);
+    result.second = this->vertexSchemaHashedMap.upper_bound(vertexTypeInc);
+    return result;
 }

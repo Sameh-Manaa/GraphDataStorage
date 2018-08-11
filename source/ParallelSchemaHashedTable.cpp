@@ -10,11 +10,39 @@ ParallelSchemaHashedTable::ParallelSchemaHashedTable() {
     //this->edgeSchemaHashedMap.max_load_factor(10);
 }
 
-void ParallelSchemaHashedTable::upsertVertex(std::string vertexId, std::map<std::string, std::string> properties) {
+ParallelSchemaHashedTable::~ParallelSchemaHashedTable(){
+    for (auto const& vertex : this->vertexSchemaHashedMap) {
+        for (auto const& vertexProperty : vertex.second) {
+            delete[] vertexProperty.second;
+        }
+    }
+    
+    
+    for (auto const& edge : this->edgeSchemaHashedMap) {
+        for (auto const& edgeProperty : edge.second) {
+            delete[] edgeProperty.second;
+        }
+    }
+    
+    this->vertexSchemaHashedMap.clear();
+    this->edgeSchemaHashedMap.clear();
+}
+
+void ParallelSchemaHashedTable::upsertVertex(std::string vertexId, std::unordered_map<std::string, char*> properties) {
+    std::lock_guard<std::shared_timed_mutex> lock(globalVSHTMutex);
     this->vertexSchemaHashedMap[vertexId] = properties;
 }
 
-void ParallelSchemaHashedTable::upsertVertex(std::map<std::string, std::map<std::string, std::string> > &vertexSchemaHashedMap) {
+void ParallelSchemaHashedTable::upsertVertex(std::map<std::string, std::unordered_map<std::string, char*> > &vertexSchemaHashedMap) {
+    std::lock_guard<std::shared_timed_mutex> lock(globalVSHTMutex);
+    /*if (this->vertexSchemaHashedMap.bucket_count() - this->vertexSchemaHashedMap.size() <
+            vertexSchemaHashedMap.size()*2) {
+        this->vertexSchemaHashedMap.reserve(this->vertexSchemaHashedMap.size() + (vertexSchemaHashedMap.size()*4));
+    }*/
+    this->vertexSchemaHashedMap.insert(vertexSchemaHashedMap.begin(), vertexSchemaHashedMap.end());
+}
+
+void ParallelSchemaHashedTable::upsertVertex(std::vector< std::pair<std::string, std::unordered_map<std::string, char*> > > &vertexSchemaHashedMap) {
     std::lock_guard<std::shared_timed_mutex> lock(globalVSHTMutex);
     /*if (this->vertexSchemaHashedMap.bucket_count() - this->vertexSchemaHashedMap.size() <
             vertexSchemaHashedMap.size()*2) {
@@ -31,14 +59,12 @@ bool ParallelSchemaHashedTable::removeVertex(std::string vertexId) {
     }
 }
 
-void ParallelSchemaHashedTable::upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::map<std::string, std::string> properties) {
-    std::map<std::string, std::map<std::string, std::string> > labeledEdgeProperties;
-    std::map<std::pair<std::string, std::string>, std::map<std::string, std::map<std::string, std::string> > >::iterator it =
-        this->edgeSchemaHashedMap.emplace(std::make_pair(sourceVertexId, targetVertexId),labeledEdgeProperties).first;
-    it->second[edgeLabel] = properties;
+void ParallelSchemaHashedTable::upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::unordered_map<std::string, char*> properties) {
+    std::lock_guard<std::shared_timed_mutex> lock(globalESHTMutex);
+    this->edgeSchemaHashedMap[sourceVertexId + "$" + targetVertexId + "$" + edgeLabel] = properties;
 }
 
-void ParallelSchemaHashedTable::upsertEdge(std::map<std::pair<std::string, std::string>, std::map<std::string, std::map<std::string, std::string> > > &edgeSchemaHashedMap) {
+void ParallelSchemaHashedTable::upsertEdge(std::map<std::string, std::unordered_map<std::string, char*> > &edgeSchemaHashedMap) {
     std::lock_guard<std::shared_timed_mutex> lock(globalESHTMutex);
     /*if (this->edgeSchemaHashedMap.bucket_count() - this->edgeSchemaHashedMap.size() <
             edgeSchemaHashedMap.size()*2) {
@@ -47,6 +73,15 @@ void ParallelSchemaHashedTable::upsertEdge(std::map<std::pair<std::string, std::
     this->edgeSchemaHashedMap.insert(edgeSchemaHashedMap.begin(), edgeSchemaHashedMap.end());
 }
 
+void ParallelSchemaHashedTable::upsertEdge(std::vector < std::pair< std::string, std::unordered_map<std::string, char*> > > &edgeSchemaHashedMap) {
+    std::lock_guard<std::shared_timed_mutex> lock(globalESHTMutex);
+    /*if (this->edgeSchemaHashedMap.bucket_count() - this->edgeSchemaHashedMap.size() <
+            edgeSchemaHashedMap.size()*2) {
+        this->edgeSchemaHashedMap.reserve(this->edgeSchemaHashedMap.size() + (edgeSchemaHashedMap.size()*4));
+    }*/
+    this->edgeSchemaHashedMap.insert(edgeSchemaHashedMap.begin(), edgeSchemaHashedMap.end());
+}
+/*
 bool ParallelSchemaHashedTable::removeEdge(std::string sourceVertexId, std::string targetVertexId) {
     if (this->edgeSchemaHashedMap.erase(std::make_pair(sourceVertexId, targetVertexId)) == 1) {
         return true;
@@ -54,12 +89,13 @@ bool ParallelSchemaHashedTable::removeEdge(std::string sourceVertexId, std::stri
         return false;
     }
 }
+*/
 
 std::string ParallelSchemaHashedTable::getVertexProperty(std::string vertexId, std::string propertyName) {
     return this->vertexSchemaHashedMap.at(vertexId).at(propertyName);
 }
 
-std::map<std::string, std::string> ParallelSchemaHashedTable::getVertexAllProperties(std::string vertexId) {
+std::unordered_map<std::string, char*> ParallelSchemaHashedTable::getVertexAllProperties(std::string vertexId) {
     return this->vertexSchemaHashedMap.at(vertexId);
 }
 
@@ -81,11 +117,11 @@ std::list<std::string> ParallelSchemaHashedTable::getQualifiedVertices(std::vect
 }*/
 
 std::string ParallelSchemaHashedTable::getEdgeProperty(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::string propertyName) {
-    return this->edgeSchemaHashedMap.at(std::make_pair(sourceVertexId, targetVertexId)).at(edgeLabel).at(propertyName);
+    return this->edgeSchemaHashedMap.at(sourceVertexId + "$" + targetVertexId + "$" + edgeLabel).at(propertyName);
 }
 
-std::map<std::string, std::string> ParallelSchemaHashedTable::getEdgeAllProperties(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel) {
-    return this->edgeSchemaHashedMap.at(std::make_pair(sourceVertexId, targetVertexId)).at(edgeLabel);
+std::unordered_map<std::string, char*> ParallelSchemaHashedTable::getEdgeAllProperties(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel) {
+    return this->edgeSchemaHashedMap.at(sourceVertexId + "$" + targetVertexId + "$" + edgeLabel);
 }
 
 /*

@@ -19,39 +19,36 @@
 class SchemaHashedTable {
 private:
 
-    struct hash_Pair {
-
-        std::size_t operator()(const std::pair<std::string, std::string>& m) const {
-            std::size_t s = 0;
-            boost::hash_combine(s, m.first);
-            boost::hash_combine(s, m.second);
-            return s;
-        }
-    };
-
-
     //vertexUniversalTable: MAP<VERTEX_ID, map<[PROPERTY_NAME],[PROPERTY_VALUE]> >
-    std::map<std::string, std::map<std::string, std::string> > vertexSchemaHashedMap;
+    std::map<std::string, std::unordered_map<std::string, char*> > vertexSchemaHashedMap;
     //edgeUniversalTable: map< <vs_id, vt_id>, map<[EDGE_LABEL] , map<[PROPERTY_NAME],[PROPERTY_VALUE]> > >
-    std::map<std::pair<std::string, std::string>, std::map<std::string, std::map<std::string, std::string> > > edgeSchemaHashedMap;
+    std::map<std::string, std::unordered_map<std::string, char*> > edgeSchemaHashedMap;
 
 public:
 
-    void upsertVertex(std::string vertexId, std::map<std::string, std::string> properties);
-    void upsertVertex(std::map<std::string,  std::map<std::string, std::string> > &vertexSchemaHashedMap);
+    void upsertVertex(std::string vertexId, std::unordered_map<std::string, char*> properties);
+    void upsertVertex(std::map<std::string,  std::unordered_map<std::string, char*> > &vertexSchemaHashedMap);
+    void upsertVertex(std::vector< std::pair< std::string, std::unordered_map<std::string, char*> > > &vertexSchemaHashedMap);
     bool removeVertex(std::string vertexId);
-    void upsertEdge(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::map<std::string, std::string> properties);
-    void upsertEdge(std::map<std::pair<std::string, std::string>, std::map<std::string, std::map<std::string, std::string> > > &edgeSchemaHashedMap);
+    void upsertEdge(std::string sourceVertexId, std::string edgeLabel, std::string targetVertexId, std::unordered_map<std::string, char*> properties);
+    void upsertEdge(std::map<std::string, std::unordered_map<std::string, char*> > &edgeSchemaHashedMap);
+    void upsertEdge(std::vector< std::pair< std::string, std::unordered_map<std::string, char*> > > &edgeSchemaHashedMap);
     bool removeEdge(std::string sourceVertexId, std::string targetVertexId);
     std::string getVertexProperty(std::string vertexId, std::string propertyName);
-    std::map<std::string, std::string> getVertexAllProperties(std::string vertexId);
+    std::unordered_map<std::string, char*> getVertexAllProperties(std::string vertexId);
     std::list<std::string> getQualifiedVertices(std::vector<std::string> &selectiveProperties);
     std::string getEdgeProperty(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel, std::string propertyName);
-    std::map<std::string, std::string> getEdgeAllProperties(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel);
+    std::unordered_map<std::string, char*> getEdgeAllProperties(std::string sourceVertexId, std::string targetVertexId, std::string edgeLabel);
     std::list<std::pair<std::string, std::string> > getQualifiedEdges(std::vector<std::string> &selectiveProperties);
     uint64_t getVertexSchemaHashedTableSize();
     uint64_t getEdgeSchemaHashedTableSize();
+    
+    std::pair<std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator, std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator>
+    getVertices(std::string vertexType);
+    
     SchemaHashedTable();
+    
+    ~SchemaHashedTable();
 };
 
 
