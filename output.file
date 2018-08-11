@@ -1,0 +1,31 @@
+==13815== Memcheck, a memory error detector
+==13815== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==13815== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==13815== Command: ./dist/Release/GNU-Linux/graphstorage
+==13815== Parent PID: 5031
+==13815== 
+==13815== 
+==13815== HEAP SUMMARY:
+==13815==     in use at exit: 105,520 bytes in 2 blocks
+==13815==   total heap usage: 43,025,147 allocs, 43,025,145 frees, 2,030,882,736 bytes allocated
+==13815== 
+==13815== 32,816 bytes in 1 blocks are definitely lost in loss record 1 of 2
+==13815==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==13815==    by 0x59CC1B9: __alloc_dir (opendir.c:247)
+==13815==    by 0x59CC1B9: opendir_tail (opendir.c:145)
+==13815==    by 0x59CC1B9: opendir (opendir.c:200)
+==13815==    by 0x459F4C: ParallelAdjacencyListSchemaHashedTableManager::loadGraph(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) (in /media/sameh/0AD69019D69006DB/OVGU/Master Thesis/Implementation/GraphStorage/dist/Release/GNU-Linux/graphstorage)
+==13815==    by 0x466A3A: testParallelAdjacencyListSchemaHashedTable() (in /media/sameh/0AD69019D69006DB/OVGU/Master Thesis/Implementation/GraphStorage/dist/Release/GNU-Linux/graphstorage)
+==13815==    by 0x40344B: main (in /media/sameh/0AD69019D69006DB/OVGU/Master Thesis/Implementation/GraphStorage/dist/Release/GNU-Linux/graphstorage)
+==13815== 
+==13815== LEAK SUMMARY:
+==13815==    definitely lost: 32,816 bytes in 1 blocks
+==13815==    indirectly lost: 0 bytes in 0 blocks
+==13815==      possibly lost: 0 bytes in 0 blocks
+==13815==    still reachable: 72,704 bytes in 1 blocks
+==13815==         suppressed: 0 bytes in 0 blocks
+==13815== Reachable blocks (those to which a pointer was found) are not shown.
+==13815== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==13815== 
+==13815== For counts of detected and suppressed errors, rerun with: -v
+==13815== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)

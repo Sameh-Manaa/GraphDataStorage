@@ -17,7 +17,9 @@
       <itemPath>header/CSRSchemaHashedTableManager.hpp</itemPath>
       <itemPath>header/CSRUniversalTableManager.hpp</itemPath>
       <itemPath>header/EmergingSchema.hpp</itemPath>
+      <itemPath>header/GroupBy.hpp</itemPath>
       <itemPath>header/Kmeans.hpp</itemPath>
+      <itemPath>header/MergeSort.hpp</itemPath>
       <itemPath>header/ParallelAdjacencyList.hpp</itemPath>
       <itemPath>header/ParallelAdjacencyListSchemaHashedTableManager.hpp</itemPath>
       <itemPath>header/ParallelSchemaHashedTable.hpp</itemPath>
@@ -169,7 +171,11 @@
       </item>
       <item path="header/EmergingSchema.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="header/GroupBy.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="header/Kmeans.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="header/MergeSort.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/ParallelAdjacencyList.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -273,7 +279,7 @@
           </incDir>
         </cTool>
         <ccTool>
-          <developmentMode>5</developmentMode>
+          <developmentMode>6</developmentMode>
           <architecture>2</architecture>
           <incDir>
             <pElem>header</pElem>
@@ -343,7 +349,11 @@
       </item>
       <item path="header/EmergingSchema.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="header/GroupBy.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="header/Kmeans.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="header/MergeSort.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/ParallelAdjacencyList.hpp" ex="false" tool="3" flavor2="0">
       </item>

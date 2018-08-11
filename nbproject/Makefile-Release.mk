@@ -83,97 +83,97 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/graphstorage: ${OBJECTFILES}
 ${OBJECTDIR}/source/AdjacencyList.o: source/AdjacencyList.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyList.o source/AdjacencyList.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyList.o source/AdjacencyList.cpp
 
 ${OBJECTDIR}/source/AdjacencyListEmergingSchemaManager.o: source/AdjacencyListEmergingSchemaManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyListEmergingSchemaManager.o source/AdjacencyListEmergingSchemaManager.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyListEmergingSchemaManager.o source/AdjacencyListEmergingSchemaManager.cpp
 
 ${OBJECTDIR}/source/AdjacencyListSchemaHashedTableManager.o: source/AdjacencyListSchemaHashedTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyListSchemaHashedTableManager.o source/AdjacencyListSchemaHashedTableManager.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyListSchemaHashedTableManager.o source/AdjacencyListSchemaHashedTableManager.cpp
 
 ${OBJECTDIR}/source/AdjacencyListUniversalTableManager.o: source/AdjacencyListUniversalTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyListUniversalTableManager.o source/AdjacencyListUniversalTableManager.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyListUniversalTableManager.o source/AdjacencyListUniversalTableManager.cpp
 
 ${OBJECTDIR}/source/AdjacencyMatrix.o: source/AdjacencyMatrix.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrix.o source/AdjacencyMatrix.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrix.o source/AdjacencyMatrix.cpp
 
 ${OBJECTDIR}/source/AdjacencyMatrixEmergingSchemaManager.o: source/AdjacencyMatrixEmergingSchemaManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrixEmergingSchemaManager.o source/AdjacencyMatrixEmergingSchemaManager.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrixEmergingSchemaManager.o source/AdjacencyMatrixEmergingSchemaManager.cpp
 
 ${OBJECTDIR}/source/AdjacencyMatrixSchemaHashedTableManager.o: source/AdjacencyMatrixSchemaHashedTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrixSchemaHashedTableManager.o source/AdjacencyMatrixSchemaHashedTableManager.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrixSchemaHashedTableManager.o source/AdjacencyMatrixSchemaHashedTableManager.cpp
 
 ${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o: source/AdjacencyMatrixUniversalTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o source/AdjacencyMatrixUniversalTableManager.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/AdjacencyMatrixUniversalTableManager.o source/AdjacencyMatrixUniversalTableManager.cpp
 
 ${OBJECTDIR}/source/CSR.o: source/CSR.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSR.o source/CSR.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSR.o source/CSR.cpp
 
 ${OBJECTDIR}/source/CSREmergingSchemaManager.o: source/CSREmergingSchemaManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSREmergingSchemaManager.o source/CSREmergingSchemaManager.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSREmergingSchemaManager.o source/CSREmergingSchemaManager.cpp
 
 ${OBJECTDIR}/source/CSRSchemaHashedTableManager.o: source/CSRSchemaHashedTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSRSchemaHashedTableManager.o source/CSRSchemaHashedTableManager.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSRSchemaHashedTableManager.o source/CSRSchemaHashedTableManager.cpp
 
 ${OBJECTDIR}/source/CSRUniversalTableManager.o: source/CSRUniversalTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSRUniversalTableManager.o source/CSRUniversalTableManager.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/CSRUniversalTableManager.o source/CSRUniversalTableManager.cpp
 
 ${OBJECTDIR}/source/EmergingSchema.o: source/EmergingSchema.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/EmergingSchema.o source/EmergingSchema.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/EmergingSchema.o source/EmergingSchema.cpp
 
 ${OBJECTDIR}/source/ParallelAdjacencyList.o: source/ParallelAdjacencyList.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/ParallelAdjacencyList.o source/ParallelAdjacencyList.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/ParallelAdjacencyList.o source/ParallelAdjacencyList.cpp
 
 ${OBJECTDIR}/source/ParallelAdjacencyListSchemaHashedTableManager.o: source/ParallelAdjacencyListSchemaHashedTableManager.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/ParallelAdjacencyListSchemaHashedTableManager.o source/ParallelAdjacencyListSchemaHashedTableManager.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/ParallelAdjacencyListSchemaHashedTableManager.o source/ParallelAdjacencyListSchemaHashedTableManager.cpp
 
 ${OBJECTDIR}/source/ParallelSchemaHashedTable.o: source/ParallelSchemaHashedTable.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/ParallelSchemaHashedTable.o source/ParallelSchemaHashedTable.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/ParallelSchemaHashedTable.o source/ParallelSchemaHashedTable.cpp
 
 ${OBJECTDIR}/source/SchemaHashedTable.o: source/SchemaHashedTable.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/SchemaHashedTable.o source/SchemaHashedTable.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/SchemaHashedTable.o source/SchemaHashedTable.cpp
 
 ${OBJECTDIR}/source/Test.o: source/Test.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/Test.o source/Test.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/Test.o source/Test.cpp
 
 ${OBJECTDIR}/source/UniversalTable.o: source/UniversalTable.cpp
 	${MKDIR} -p ${OBJECTDIR}/source
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/UniversalTable.o source/UniversalTable.cpp
+	$(COMPILE.cc) -O3 -Iheader -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/source/UniversalTable.o source/UniversalTable.cpp
 
 # Subprojects
 .build-subprojects:

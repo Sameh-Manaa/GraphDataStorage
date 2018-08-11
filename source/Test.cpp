@@ -28,83 +28,10 @@
 #include "ParallelAdjacencyListSchemaHashedTableManager.hpp"
 #include <chrono>
 #include <unistd.h>
+#include <stdio.h>
+#include "MergeSort.hpp"
 
-/*
- * Simple C++ Test Suite
- */
-
-int batchSize = 500;
-
-void testInsertNode() {
-    AdjacencyMatrix* adjacencyMatrix = new AdjacencyMatrix();
-    adjacencyMatrix->insertVertex("0");
-    adjacencyMatrix->insertVertex("1");
-    adjacencyMatrix->insertVertex("2");
-    adjacencyMatrix->insertVertex("3");
-    adjacencyMatrix->insertVertex("4");
-
-    uint64_t nodeIdPre = adjacencyMatrix->getVertexIndexByVertexId("2");
-    adjacencyMatrix->removeVeretex("1");
-    uint64_t nodeIdPost = adjacencyMatrix->getVertexIndexByVertexId("2");
-
-    std::cout << "Adjacency Matrix: \r\nPre Node ID: " << nodeIdPre << ", Post Node ID: " << nodeIdPost << std::endl;
-
-    adjacencyMatrix->addNeighbourVertex("0", "4");
-    adjacencyMatrix->addNeighbourVertex("0", "3");
-    adjacencyMatrix->addNeighbourVertex("0", "2");
-
-    std::cout << adjacencyMatrix->getNeighbourVertices("0").back() << std::endl;
-
-    adjacencyMatrix->removeVeretex("4");
-    std::cout << adjacencyMatrix->getNeighbourVertices("0").back() << std::endl;
-
-    adjacencyMatrix->removeNeighbourVertex("0", "3");
-    std::cout << adjacencyMatrix->getNeighbourVertices("0").back() << std::endl;
-
-    adjacencyMatrix->addNeighbourVertex("0", "3");
-    std::cout << adjacencyMatrix->getNeighbourVertices("0").back() << std::endl;
-
-    adjacencyMatrix->removeNeighbourVertex("0", "2");
-    adjacencyMatrix->insertVertex("5");
-    bool test = adjacencyMatrix->addNeighbourVertex("0", "5");
-    std::cout << adjacencyMatrix->getNeighbourVertices("0").back() << std::endl;
-
-
-    /////////////////////////////////////////////////////
-
-    AdjacencyList* adjacencyList = new AdjacencyList();
-    adjacencyList->insertVertex("0");
-    adjacencyList->insertVertex("1");
-    adjacencyList->insertVertex("2");
-    adjacencyList->insertVertex("3");
-    adjacencyList->insertVertex("4");
-
-    nodeIdPre = adjacencyList->getVertexIndexByVertexId("2");
-    adjacencyList->removeVertex("1");
-    nodeIdPost = adjacencyList->getVertexIndexByVertexId("2");
-
-    std::cout << "Adjacency List: \r\nPre Node ID: " << nodeIdPre << ", Post Node ID: " << nodeIdPost << std::endl;
-
-    adjacencyList->addNeighbourVertex("0", "4", "test");
-    adjacencyList->addNeighbourVertex("0", "3", "test");
-    adjacencyList->addNeighbourVertex("0", "2", "test");
-
-    std::cout << adjacencyList->getNeighbourVertices("0").at("test").at(0) << std::endl;
-
-    adjacencyList->removeVertex("4");
-    std::cout << adjacencyList->getNeighbourVertices("0").at("test").at(0) << std::endl;
-
-    adjacencyList->removeNeighbourVertex("0", "3", "test");
-    std::cout << adjacencyList->getNeighbourVertices("0").at("test").at(0) << std::endl;
-
-    adjacencyList->removeNeighbourVertex("0", "2", "test");
-    adjacencyList->insertVertex("5");
-    adjacencyList->insertVertex("6");
-    test = adjacencyList->addNeighbourVertex("0", "5", "test");
-    test = adjacencyList->addNeighbourVertex("0", "6", "test2");
-    std::cout << adjacencyList->getNeighbourVertices("0").at("test").at(0) << std::endl;
-    std::cout << adjacencyList->getNeighbourVertices("0").at("test2").at(0) << std::endl;
-}
+int batchSize = 100;
 
 void testAdjacencyMatrixUniversalTable() {
     AdjacencyMatrixUniversalTableManager adjMatUniTblMgr(batchSize);
@@ -152,14 +79,15 @@ void testCSREmergingSchema() {
 }
 
 void testParallelAdjacencyListSchemaHashedTable() {
-    ParallelAdjacencyListSchemaHashedTableManager pAdjLstSHahsedTblMgr(batchSize, 1);
+    ParallelAdjacencyListSchemaHashedTableManager pAdjLstSHahsedTblMgr(batchSize, 4);
     pAdjLstSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
 }
 
 int main(int argc, char** argv) {
-    std::vector<int> times(10, 0);
-
     int iterations = 5;
+
+    std::vector< std::vector<int> > times(iterations + 1, std::vector<int>(20, 0));
+
 
     for (int i = 0; i < iterations; i++) {
         auto t1 = std::chrono::steady_clock::now();
@@ -189,50 +117,124 @@ int main(int argc, char** argv) {
         auto t9 = std::chrono::steady_clock::now();
 
         //testCSREmergingSchema();
+
         auto t10 = std::chrono::steady_clock::now();
 
         testParallelAdjacencyListSchemaHashedTable();
         auto t11 = std::chrono::steady_clock::now();
 
+
+
+        const char* str = "2012-01-16";
+
+        tm tm1;
+
+        sscanf(str, "%4d-%2d-%2d", &tm1.tm_year, &tm1.tm_mon, &tm1.tm_mday);
+
+        //std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > > resultSet;
+
+        //AdjacencyListUniversalTableManager* adjLstUniTblMgr = new AdjacencyListUniversalTableManager(batchSize);
+        //adjLstUniTblMgr->loadGraph("data/vertexes", "data/edges");
+
+        auto t12 = std::chrono::steady_clock::now();
+        //adjLstUniTblMgr->executeQueryBI1(tm1, resultSet);
+        auto t13 = std::chrono::steady_clock::now();
+
+        //1 desc, -1 asc
+        //std::vector<int> sortingDirection = {1, -1, -1};
+
+        //MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
+
+        //delete adjLstUniTblMgr;
+        //resultSet.clear();
+
+        //AdjacencyListSchemaHashedTableManager* adjLstSHahsedTblMgr = new AdjacencyListSchemaHashedTableManager(batchSize);
+        //adjLstSHahsedTblMgr->loadGraph("data/vertexes", "data/edges");
+
+        auto t14 = std::chrono::steady_clock::now();
+        //adjLstSHahsedTblMgr->executeQueryBI1(tm1, resultSet);
+        auto t15 = std::chrono::steady_clock::now();
+
+        //MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
+
+        //delete adjLstSHahsedTblMgr;
+        //resultSet.clear();
+
+        //AdjacencyListEmergingSchemaManager* adjLstEsTblMgr = new AdjacencyListEmergingSchemaManager(batchSize);
+        //adjLstEsTblMgr->loadGraph("data/vertexes", "data/edges");
+
+        auto t16 = std::chrono::steady_clock::now();
+        //adjLstEsTblMgr->executeQueryBI1(tm1, resultSet);
+        auto t17 = std::chrono::steady_clock::now();
+
+        //MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
+
+        //delete adjLstEsTblMgr;
+
         int duration = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
         std::cout << "ElapsedTime(AdjacencyMatrixUniversalTable): " << duration << " ms\n";
-        times[0] += duration;
+        times[iterations][0] += duration;
+        times[i][0] = duration;
 
         duration = std::chrono::duration_cast<std::chrono::milliseconds>(t3 - t2).count();
         std::cout << "ElapsedTime(AdjacencyListUniversalTable): " << duration << " ms\n";
-        times[1] += duration;
+        times[iterations][1] += duration;
+        times[i][1] = duration;
 
         duration = std::chrono::duration_cast<std::chrono::milliseconds>(t4 - t3).count();
         std::cout << "ElapsedTime(CSRUniversalTable): " << duration << " ms\n";
-        times[2] += duration;
+        times[iterations][2] += duration;
+        times[i][2] = duration;
 
         duration = std::chrono::duration_cast<std::chrono::milliseconds>(t5 - t4).count();
         std::cout << "ElapsedTime(AdjacencyMatrixSchemaHashedTable): " << duration << " ms\n";
-        times[3] += duration;
+        times[iterations][3] += duration;
+        times[i][3] = duration;
 
         duration = std::chrono::duration_cast<std::chrono::milliseconds>(t6 - t5).count();
         std::cout << "ElapsedTime(AdjacencyListSchemaHashedTable): " << duration << " ms\n";
-        times[4] += duration;
+        times[iterations][4] += duration;
+        times[i][4] = duration;
 
         duration = std::chrono::duration_cast<std::chrono::milliseconds>(t7 - t6).count();
         std::cout << "ElapsedTime(CSRSchemaHashedTable): " << duration << " ms\n";
-        times[5] += duration;
+        times[iterations][5] += duration;
+        times[i][5] = duration;
 
         duration = std::chrono::duration_cast<std::chrono::milliseconds>(t8 - t7).count();
         std::cout << "ElapsedTime(AdjacencyMatrixEmergingSchema): " << duration << " ms\n";
-        times[6] += duration;
+        times[iterations][6] += duration;
+        times[i][6] = duration;
 
         duration = std::chrono::duration_cast<std::chrono::milliseconds>(t9 - t8).count();
         std::cout << "ElapsedTime(AdjacencyListEmergingSchema): " << duration << " ms\n";
-        times[7] += duration;
+        times[iterations][7] += duration;
+        times[i][7] = duration;
 
         duration = std::chrono::duration_cast<std::chrono::milliseconds>(t10 - t9).count();
         std::cout << "ElapsedTime(CSREmergingSchema): " << duration << " ms\n";
-        times[8] += duration;
+        times[iterations][8] += duration;
+        times[i][8] = duration;
 
         duration = std::chrono::duration_cast<std::chrono::milliseconds>(t11 - t10).count();
         std::cout << "ElapsedTime(ParallelAdjacencyListSchemaHashedTable): " << duration << " ms\n";
-        times[9] += duration;
+        times[iterations][9] += duration;
+        times[i][9] = duration;
+
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t13 - t12).count();
+        std::cout << "ElapsedTime(Universal Table Query Execution - BI 1): " << duration << " ms\n";
+        times[iterations][10] += duration;
+        times[i][10] = duration;
+
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t15 - t14).count();
+        std::cout << "ElapsedTime(Schema Hashed Table Query Execution - BI 1): " << duration << " ms\n";
+        times[iterations][11] += duration;
+        times[i][11] = duration;
+
+        duration = std::chrono::duration_cast<std::chrono::milliseconds>(t17 - t16).count();
+        std::cout << "ElapsedTime(Emerging Schema Query Execution - BI 1): " << duration << " ms\n";
+        times[iterations][12] += duration;
+        times[i][12] = duration;
 
     }
 
@@ -241,16 +243,65 @@ int main(int argc, char** argv) {
     std::cout << "===> Final Result - " << iterations << " Iterations <===\n";
     std::cout << "--------------------------------------------------------------------------\n";
 
-    std::cout << "ElapsedTime(AdjacencyMatrixUniversalTable): " << times[0] / iterations << " ms\n";
-    std::cout << "ElapsedTime(AdjacencyListUniversalTable): " << times[1] / iterations << " ms\n";
-    std::cout << "ElapsedTime(CSRUniversalTable): " << times[2] / iterations << " ms\n";
-    std::cout << "ElapsedTime(AdjacencyMatrixSchemaHashedTable): " << times[3] / iterations << " ms\n";
-    std::cout << "ElapsedTime(AdjacencyListSchemaHashedTable): " << times[4] / iterations << " ms\n";
-    std::cout << "ElapsedTime(CSRSchemaHashedTable): " << times[5] / iterations << " ms\n";
-    std::cout << "ElapsedTime(AdjacencyMatrixEmergingSchema): " << times[6] / iterations << " ms\n";
-    std::cout << "ElapsedTime(AdjacencyListEmergingSchema): " << times[7] / iterations << " ms\n";
-    std::cout << "ElapsedTime(CSREmergingSchema): " << times[8] / iterations << " ms\n";
-    std::cout << "ElapsedTime(ParallelAdjacencyListSchemaHashedTable): " << times[9] / iterations << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyMatrixUniversalTable): " << times[iterations][0] / iterations << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyListUniversalTable): " << times[iterations][1] / iterations << " ms\n";
+    std::cout << "ElapsedTime(CSRUniversalTable): " << times[iterations][2] / iterations << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyMatrixSchemaHashedTable): " << times[iterations][3] / iterations << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyListSchemaHashedTable): " << times[iterations][4] / iterations << " ms\n";
+    std::cout << "ElapsedTime(CSRSchemaHashedTable): " << times[iterations][5] / iterations << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyMatrixEmergingSchema): " << times[iterations][6] / iterations << " ms\n";
+    std::cout << "ElapsedTime(AdjacencyListEmergingSchema): " << times[iterations][7] / iterations << " ms\n";
+    std::cout << "ElapsedTime(CSREmergingSchema): " << times[iterations][8] / iterations << " ms\n";
+    std::cout << "ElapsedTime(ParallelAdjacencyListSchemaHashedTable): " << times[iterations][9] / iterations << " ms\n";
+    std::cout << "ElapsedTime(Universal Table Query Execution - BI 1): " << times[iterations][10] / iterations << " ms\n";
+    std::cout << "ElapsedTime(Schema Hashed Table Query Execution - BI 1): " << times[iterations][11] / iterations << " ms\n";
+    std::cout << "ElapsedTime(Emerging Schema Query Execution - BI 1): " << times[iterations][12] / iterations << " ms\n";
+
+    //Write Evaluation Data to file
+    ofstream evalFile;
+    auto t = std::chrono::steady_clock::now().time_since_epoch();
+    evalFile.open("Evaluation-Data-" + std::to_string(std::chrono::duration_cast<std::chrono::seconds>(t).count()) + ".csv");
+
+    evalFile << "Iteration, "
+            << "AdjacencyMatrixUniversalTable, AdjacencyListUniversalTable, CSRUniversalTable, "
+            << "AdjacencyMatrixSchemaHashedTable, AdjacencyListSchemaHashedTable, CSRSchemaHashedTable, "
+            << "AdjacencyMatrixEmergingSchema, AdjacencyListEmergingSchema, CSREmergingSchema, "
+            << "ParallelAdjacencyListSchemaHashedTable, "
+            << "Universal Table Query Execution - BI 1, Schema Hashed Table Query Execution - BI 1, Emerging Schema Query Execution - BI 1"
+            << endl;
+
+    for (int i = 0; i < iterations; i++) {
+        evalFile << i << ", ";
+        for (int j = 0; j < times.front().size(); j++) {
+            evalFile << times[i][j];
+            if (j != times.front().size() - 1) {
+                evalFile << ", ";
+            }
+        }
+        evalFile << endl;
+    }
+
+    evalFile << "Sum, ";
+    for (int j = 0; j < times.front().size(); j++) {
+        evalFile << times[iterations][j];
+        if (j != times.front().size() - 1) {
+            evalFile << ", ";
+        }
+    }
+    evalFile << endl;
+
+    evalFile.close();
 
     return (EXIT_SUCCESS);
 }
+
+
+/*
+ * todo list:
+ * ----------
+ * groupBy
+ * query: bi 18
+ * query: histogram
+ * size in bytes
+ * 
+ */
