@@ -8,21 +8,22 @@
 
 bool CSRUniversalTableManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory) {
     if (loadVertices(verticesDirectory) && loadEdges(edgesDirectory)) {
+//        std::cout << "==========================================================================" << std::endl;
+//        std::cout << "Vertex Universal Table Size In Bytes: " << this->universalTable.getVertexUniversalTableSizeInBytes() << std::endl;
+//        std::cout << "Edge Universal Table Size In Bytes: " << this->universalTable.getEdgeUniversalTableSizeInBytes() << std::endl;
+//        std::cout << "==========================================================================" << std::endl;
         return true;
     } else {
         return false;
     }
-
 }
 
 bool CSRUniversalTableManager::loadVertices(std::string verticesDirectory) {
 
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
-    this->addVertexProperties("VertexType");
 
-    std::map < std::string, std::vector<std::string> > vertexUniversalMap;
-    std::set<std::string> vertexIds;
+    std::vector< std::pair < std::string, std::vector<char*> > > vertexUniversalMap;
 
     DIR *pdir = NULL;
     struct dirent *pent = NULL;
@@ -37,8 +38,8 @@ bool CSRUniversalTableManager::loadVertices(std::string verticesDirectory) {
         std::string vertexLine, headerLine;
         std::getline(vertexFile, headerLine);
 
-        std::vector<int64_t> propertiesPositions = this->addVertexProperties(headerLine);
-        std::vector<std::string> properties(universalTable.getVertexPropertyOrder().size());
+        std::vector<int16_t> propertiesPositions = this->addVertexProperties(headerLine);
+        std::vector<char*> properties(universalTable.getVertexPropertyIndex().size());
 
         std::istringstream iss(pent->d_name);
         std::string vertexType;
@@ -52,7 +53,6 @@ bool CSRUniversalTableManager::loadVertices(std::string verticesDirectory) {
             std::string property, vertexOriginalId;
 
             uint64_t propertyCounter = 0;
-            properties[0] = vertexType;
 
             while (getline(iss, property, '|')) {
                 if (propertiesPositions[propertyCounter] == -1) {
@@ -60,32 +60,31 @@ bool CSRUniversalTableManager::loadVertices(std::string verticesDirectory) {
                     propertyCounter++;
                     continue;
                 }
-                properties[propertiesPositions[propertyCounter++]] = property;
+                char * propertyVal = new char [property.length() + 1];
+                strcpy(propertyVal, property.c_str());
+                properties[propertiesPositions[propertyCounter++]] = propertyVal;
             }
-            vertexIds.emplace(properties[0] + "_" + vertexOriginalId);
-            vertexUniversalMap.emplace(properties[0] + "_" + vertexOriginalId, properties);
+            vertexUniversalMap.emplace_back(vertexType + "_" + vertexOriginalId, properties);
 
             if (++loadCounter % batchSize == 0) {
 
-                this->csr.insertVertex(vertexIds);
-                vertexIds.clear();
                 this->universalTable.upsertVertex(vertexUniversalMap);
                 vertexUniversalMap.clear();
 
             }
         }
 
-        this->csr.insertVertex(vertexIds);
-        vertexIds.clear();
         this->universalTable.upsertVertex(vertexUniversalMap);
         vertexUniversalMap.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
-        std::cout << "Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
+        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
+        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
+    closedir(pdir);
     return true;
 }
 
@@ -94,8 +93,11 @@ bool CSRUniversalTableManager::loadEdges(std::string edgesDirectory) {
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
 
-    std::map<std::pair<std::string, std::string>, std::map<std::string, std::vector<std::string> > > edgeUniversalMap;
-    std::vector<std::pair<std::string, std::string> > edges;
+    std::vector< std::pair < std::string, std::vector<char*> > > vertexUniversalMap;
+    std::vector<char*> vertexProperties(universalTable.getVertexPropertyIndex().size());
+
+    std::vector< std::pair<std::string, std::vector<char*> > > edgeUniversalMap;
+    std::vector<std::tuple<std::string, std::string, std::string> > edges;
 
     DIR *pdir = NULL;
     struct dirent *pent = NULL;
@@ -110,8 +112,8 @@ bool CSRUniversalTableManager::loadEdges(std::string edgesDirectory) {
         std::string edgeLine, headerLine;
         std::getline(edgeFile, headerLine);
 
-        std::vector<int64_t> propertiesPositions = this->addEdgeProperties(headerLine);
-        std::vector<std::string> properties(universalTable.getEdgePropertyOrder().size());
+        std::vector<int16_t> propertiesPositions = this->addEdgeProperties(headerLine);
+        std::vector<char*> properties(universalTable.getEdgePropertyIndex().size());
 
         std::istringstream iss(pent->d_name);
         std::string sourceVertex, edgeLabel, targetVertex;
@@ -135,27 +137,40 @@ bool CSRUniversalTableManager::loadEdges(std::string edgesDirectory) {
                     targetVertexId = property;
                     propertyCounter++;
                 } else {
-                    properties[propertiesPositions[propertyCounter++]] = property;
+                    char * propertyVal = new char [property.length() + 1];
+                    strcpy(propertyVal, property.c_str());
+                    properties[propertiesPositions[propertyCounter++]] = propertyVal;
                 }
             }
 
-            edges.emplace_back(std::make_pair(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId));
-            edgeUniversalMap[std::make_pair(sourceVertex + "_" + sourceVertexId, targetVertex + "_" + targetVertexId)][edgeLabel] = properties;
+            vertexUniversalMap.emplace_back(sourceVertex + "_" + sourceVertexId, vertexProperties);
+            vertexUniversalMap.emplace_back(targetVertex + "_" + targetVertexId, vertexProperties);
+
+            edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
+            edgeUniversalMap.emplace_back(sourceVertex + "_" + sourceVertexId + "$" + edgeLabel + "$" + targetVertex + "_" + targetVertexId, properties);
 
             if (++loadCounter % batchSize == 0) {
 
-                this->csr.addNeighbourVertex(edges);
-                edges.clear();
+                this->universalTable.upsertVertex(vertexUniversalMap);
+                vertexUniversalMap.clear();
+
                 this->universalTable.upsertEdge(edgeUniversalMap);
                 edgeUniversalMap.clear();
+
+                this->csr.addNeighbourVertex(edges);
+                edges.clear();
 
             }
         }
 
-        this->csr.addNeighbourVertex(edges);
-        edges.clear();
+        this->universalTable.upsertVertex(vertexUniversalMap);
+        vertexUniversalMap.clear();
+
         this->universalTable.upsertEdge(edgeUniversalMap);
         edgeUniversalMap.clear();
+
+        this->csr.addNeighbourVertex(edges);
+        edges.clear();
 
         std::cout << "file: " << pent->d_name << std::endl;
         std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
@@ -164,11 +179,12 @@ bool CSRUniversalTableManager::loadEdges(std::string edgesDirectory) {
         std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
+    closedir(pdir);
     return true;
 }
 
-std::vector<int64_t> CSRUniversalTableManager::addVertexProperties(std::string vertexHeaderLine) {
-    std::vector<int64_t> propertiesPositions(0);
+std::vector<int16_t> CSRUniversalTableManager::addVertexProperties(std::string vertexHeaderLine) {
+    std::vector<int16_t> propertiesPositions(0);
     std::istringstream iss(vertexHeaderLine);
     std::string propertyName;
     while (getline(iss, propertyName, '|')) {
@@ -181,8 +197,8 @@ std::vector<int64_t> CSRUniversalTableManager::addVertexProperties(std::string v
     return propertiesPositions;
 }
 
-std::vector<int64_t> CSRUniversalTableManager::addEdgeProperties(std::string edgeHeaderLine) {
-    std::vector<int64_t> propertiesPositions(0);
+std::vector<int16_t> CSRUniversalTableManager::addEdgeProperties(std::string edgeHeaderLine) {
+    std::vector<int16_t> propertiesPositions(0);
     std::istringstream iss(edgeHeaderLine);
     std::string propertyName;
     while (getline(iss, propertyName, '|')) {

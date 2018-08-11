@@ -24,8 +24,8 @@ public:
     bool loadGraph(std::string verticesDirectory, std::string edgesDirectory);
     bool loadVertices(std::string verticesDirectory);
     bool loadEdges(std::string edgesDirectory);
-    std::vector<int64_t> addVertexProperties(std::string vertexHeaderLine);
-    std::vector<int64_t> addEdgeProperties(std::string edgeHeaderLine);
+    std::vector<int16_t> addVertexProperties(std::string vertexHeaderLine);
+    std::vector<int16_t> addEdgeProperties(std::string edgeHeaderLine);
     
     CSRUniversalTableManager(int bSize):batchSize(bSize){};
     
