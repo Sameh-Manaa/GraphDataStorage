@@ -6,94 +6,82 @@
 
 #include"AdjacencyMatrix.hpp"
 
-AdjacencyMatrix::AdjacencyMatrix() {
+void AdjacencyMatrix::resize(std::string edgeLabel) {
+    if (this->labeledAdjacencyMatrix.at(edgeLabel).second.size() < this->labeledAdjacencyMatrix.at(edgeLabel).first.size()) {
+        //construct a new vertex neighborhood row
+        std::vector<bool> neighbours(this->labeledAdjacencyMatrix.at(edgeLabel).first.size() + this->batchSize, false);
+
+        for (auto& nodeNeighbours : this->labeledAdjacencyMatrix.at(edgeLabel).second) {
+            nodeNeighbours.resize(neighbours.size(), false);
+        }
+
+        this->labeledAdjacencyMatrix.at(edgeLabel).second.resize(neighbours.size(), neighbours);
+    }
 }
 
-bool AdjacencyMatrix::insertVertex(std::string vertexId) {
-    uint64_t nodesCount = (vertexAdjacencyMap.empty()) ? 0 : vertexAdjacencyMap.begin()->second.size();
+void AdjacencyMatrix::shrinkToFit() {
+    for (auto &adjMatEntry : this->labeledAdjacencyMatrix) {
+        if (adjMatEntry.second.second.size() > adjMatEntry.second.first.size()) {
 
-    //construct a new vertex neighborhood row
-    std::vector<bool> neighbours(nodesCount, false);
-    /*
-     * insert the vertex neighborhood row along with its vertexId into the vertexAdjacencyMap
-     * (IF NOT ALREADY THERE)
-     */
-    std::pair < std::map < std::string, std::vector<bool> >::iterator, bool> insertResult =
-            vertexAdjacencyMap.insert(std::make_pair(vertexId, neighbours));
+            adjMatEntry.second.second.resize(adjMatEntry.second.first.size());
 
-    //Check if the insertion occurred or not
-    if (insertResult.second) {
-        /*
-         * push a false neighbor flag into all the vertices neighborhood rows
-         * indicating a false neighborhood with the new vertex
-         */
-        for (auto& nodeNeighbours : vertexAdjacencyMap) {
-            nodeNeighbours.second.push_back(false);
+            for (auto& nodeNeighbours : adjMatEntry.second.second) {
+                nodeNeighbours.resize(adjMatEntry.second.first.size());
+            }
+
         }
-        //insert a pair of the new vertexId and its vertexIndex into the vertexIndexMap
-        this->vertexIndexMap.insert(std::make_pair(vertexId, nodesCount));
-        return true;
-    } else {
-        return false;
     }
+}
 
+void AdjacencyMatrix::setBatchSize(int batchSize) {
+    this->batchSize = batchSize;
+}
+
+/*
+std::pair<AdjacencyMatrix::adjMat_it, bool> AdjacencyMatrix::insertVertex(std::string vertexId) {
+    uint64_t nodesCount = vertexIndexMap.size();
+    
+    //insert the vertex neighborhood row along with its vertexId into the vertexAdjacencyMap
+    //(IF NOT ALREADY THERE)
+     
+    //insert a pair of the new vertexId and its vertexIndex into the vertexIndexMap
+    std::pair<adjMat_it, bool> insertResult = this->vertexIndexMap.insert(std::make_pair(vertexId, nodesCount));
+
+    this->resize();
+
+    return insertResult;
 }
 
 void AdjacencyMatrix::insertVertex(std::set<std::string> &vertexIds) {
 
-    //reserve space in the data structures for inserting the new vertexIds
-    //this->vertexAdjacencyMap.reserve(this->vertexAdjacencyMap.size() + vertexIds.size());
-    //this->vertexIndexMap.reserve(this->vertexIndexMap.size() + vertexIds.size());
-
-    uint64_t nodesCount = (vertexAdjacencyMap.empty()) ? 0 : vertexAdjacencyMap.begin()->second.size();
-
-    std::vector<bool> neighbours(nodesCount, false);
-
-    u_int64_t countInserted = 0;
     //loop over all the vertexIds to insert them into the data structures
     for (std::set<std::string>::iterator it = vertexIds.begin(); it != vertexIds.end(); ++it) {
-        std::string vertexId = *it;
-        /*
-         * insert the vertex neighborhood row along with its vertexId into the vertexAdjacencyMap
-         * (IF NOT ALREADY THERE)
-         */
-        std::pair < std::map < std::string, std::vector<bool> >::iterator, bool> insertResult =
-                vertexAdjacencyMap.insert(std::make_pair(vertexId, neighbours));
-        //Check if the insertion occurred or not
-        if (insertResult.second) {
-            //insert a pair of the new vertexId and its vertexIndex into the vertexIndexMap
-            this->vertexIndexMap.insert(std::make_pair(vertexId, nodesCount + countInserted));
-            countInserted++;
-        }
+
+        //insert a pair of the new vertexId and its vertexIndex into the vertexIndexMap
+        this->vertexIndexMap.insert(std::make_pair(*it, this->vertexIndexMap.size()));
     }
 
-    nodesCount = (vertexAdjacencyMap.empty()) ? countInserted : vertexAdjacencyMap.begin()->second.size() + countInserted;
+    this->resize();
 
-    /*
-     * push a false neighbor flags into all the vertices neighborhood rows
-     * indicating a false neighborhood with the new vertices
-     */
-    for (auto& nodeNeighbours : vertexAdjacencyMap) {
-        nodeNeighbours.second.resize(nodesCount, false);
-    }
 }
+
 
 bool AdjacencyMatrix::removeVeretex(std::string vertexId) {
     //check for the existence of the vertexId to be removed
-    if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end()) {
+    if (vertexIndexMap.find(vertexId) != vertexIndexMap.end()) {
         uint64_t nodeIndex = getVertexIndexByVertexId(vertexId);
 
         //erase the vertex neighborhood flag from all the other vertices stored
         for (auto& nodeNeighbours : vertexAdjacencyMap) {
-            nodeNeighbours.second.erase(nodeNeighbours.second.begin() + nodeIndex);
+            nodeNeighbours.erase(nodeNeighbours.begin() + nodeIndex);
         }
 
         //erase the vertex row from the vertexAdjacencyMap and vertexIndexMap
-        vertexAdjacencyMap.erase(vertexId);
+        vertexAdjacencyMap.erase(vertexAdjacencyMap.begin() + nodeIndex);
         vertexIndexMap.erase(vertexId);
         for (auto& vertexIdToIndex : vertexIndexMap) {
             if (vertexIdToIndex.second > nodeIndex) {
-                vertexIdToIndex.second-=1;
+                vertexIdToIndex.second -= 1;
             }
         }
 
@@ -102,37 +90,55 @@ bool AdjacencyMatrix::removeVeretex(std::string vertexId) {
         return false;
     }
 }
+ */
 
-bool AdjacencyMatrix::addNeighbourVertex(std::string vertexId, std::string neighbourVertexId) {
-    //check for the existence of the vertexId & neighbourVertexId
-    if ((vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end() //|| this->insertVertex(vertexId)
-            ) &&
-            (vertexAdjacencyMap.find(neighbourVertexId) != vertexAdjacencyMap.end() //|| this->insertVertex(neighbourVertexId)
-            )) {
-        //set the neighborhood flag between the two vertices to true
-        vertexAdjacencyMap.at(vertexId).at(getVertexIndexByVertexId(neighbourVertexId)) = true;
-        return true;
-    } else {
-        return false;
+bool AdjacencyMatrix::addNeighbourVertex(std::string vertexId, std::string edgeLabel, std::string neighbourVertexId) {
+    std::pair< labeledAdjMat_it, bool> adjMatEntry = this->labeledAdjacencyMatrix.emplace(edgeLabel, std::pair<vertexIndex_map, vertexAdjacency_map>());
+
+    std::pair < vertexIndex_it, bool> srcIt =
+            adjMatEntry.first->second.first.emplace(vertexId, adjMatEntry.first->second.first.size());
+    std::pair < vertexIndex_it, bool> tgtIt =
+            adjMatEntry.first->second.first.emplace(neighbourVertexId, adjMatEntry.first->second.first.size());
+
+    this->resize(edgeLabel);
+
+    adjMatEntry.first->second.second[srcIt.first->second][tgtIt.first->second] = true;
+
+    //set the neighborhood flag between the two vertices to true
+    return true;
+}
+
+void AdjacencyMatrix::addNeighbourVertex(std::vector<std::tuple<std::string, std::string, std::string> > &edges) {
+    if (edges.empty()) {
+        return;
+    }
+
+    std::string edgeLabel = std::get<1>(edges.front());
+    std::pair< labeledAdjMat_it, bool> adjMatEntry = this->labeledAdjacencyMatrix.emplace(edgeLabel, std::pair<vertexIndex_map, vertexAdjacency_map>());
+
+
+    for (std::vector<std::tuple<std::string, std::string, std::string> >::iterator it = edges.begin(); it != edges.end(); ++it) {
+        std::pair < vertexIndex_it, bool> srcIt =
+                adjMatEntry.first->second.first.emplace(std::get<0>(*it), adjMatEntry.first->second.first.size());
+        std::pair < vertexIndex_it, bool> tgtIt =
+                adjMatEntry.first->second.first.emplace(std::get<2>(*it), adjMatEntry.first->second.first.size());
+    }
+    this->resize(edgeLabel);
+
+    for (std::vector<std::tuple<std::string, std::string, std::string> >::iterator it = edges.begin(); it != edges.end(); ++it) {
+        uint64_t sourceVertexIndex = adjMatEntry.first->second.first.at(std::get<0>(*it));
+        uint64_t targetVertexIndex = adjMatEntry.first->second.first.at(std::get<2>(*it));
+        adjMatEntry.first->second.second[sourceVertexIndex][targetVertexIndex] = true;
     }
 }
 
-void AdjacencyMatrix::addNeighbourVertex(std::vector<std::pair<std::string, std::string> > &edges) {
-    //std::vector<bool> result;
-    //loop over all VertexNeighbourIds pairs and add them one by one
-    for (std::vector<std::pair<std::string, std::string> >::iterator it = edges.begin(); it != edges.end(); ++it) {
-        std::pair<std::string, std::string> neighbourPairIds = *it;
-        this->addNeighbourVertex(neighbourPairIds.first, neighbourPairIds.second);
-    }
-    //return result;
-}
-
+/*
 bool AdjacencyMatrix::removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId) {
     //check for the existence of the vertexId & neighbourVertexId
-    if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end() &&
-            vertexAdjacencyMap.find(neighbourVertexId) != vertexAdjacencyMap.end()) {
+    if (vertexIndexMap.find(vertexId) != vertexIndexMap.end() &&
+            vertexIndexMap.find(neighbourVertexId) != vertexIndexMap.end()) {
         //set the neighborhood flag between the two vertices to false
-        vertexAdjacencyMap.at(vertexId).at(getVertexIndexByVertexId(neighbourVertexId)) = false;
+        vertexAdjacencyMap.at(getVertexIndexByVertexId(vertexId)).at(getVertexIndexByVertexId(neighbourVertexId)) = false;
         return true;
     } else {
         return false;
@@ -142,10 +148,10 @@ bool AdjacencyMatrix::removeNeighbourVertex(std::string vertexId, std::string ne
 std::list<std::string> AdjacencyMatrix::getNeighbourVertices(std::string vertexId) {
     std::list<std::string> neighbourList(0);
     //check for the existence of the vertexId
-    if (vertexAdjacencyMap.find(vertexId) != vertexAdjacencyMap.end()) {
+    if (vertexIndexMap.find(vertexId) != vertexIndexMap.end()) {
         //loop over the vertex neighborhood flags to get the vertex neighbors
-        for (uint64_t i = 0; i != vertexAdjacencyMap.at(vertexId).size(); i++) {
-            if (vertexAdjacencyMap.at(vertexId)[i]) {
+        for (uint64_t i = 0; i != vertexIndexMap.size(); i++) {
+            if (vertexAdjacencyMap.at(getVertexIndexByVertexId(vertexId))[i]) {
                 std::string neighborVertexId = this->getVertexIdByVertexIndex(i);
                 if (!neighborVertexId.empty()) {
                     neighbourList.push_back(neighborVertexId);
@@ -169,7 +175,12 @@ std::string AdjacencyMatrix::getVertexIdByVertexIndex(uint64_t vertexIndex) {
     }
     return "";
 }
+ */
 
 uint64_t AdjacencyMatrix::getAdjacencyMatrixSize() {
-    return this->vertexAdjacencyMap.size();
+    uint64_t size = 0;
+    for (labeledAdjMat_it it = this->labeledAdjacencyMatrix.begin(); it != this->labeledAdjacencyMatrix.end(); it++) {
+        size += it->second.first.size();
+    }
+    return size;
 }
