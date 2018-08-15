@@ -12,7 +12,6 @@
       <itemPath>header/AdjacencyMatrixEmergingSchemaManager.hpp</itemPath>
       <itemPath>header/AdjacencyMatrixSchemaHashedTableManager.hpp</itemPath>
       <itemPath>header/AdjacencyMatrixUniversalTableManager.hpp</itemPath>
-      <itemPath>header/Aggregation.hpp</itemPath>
       <itemPath>header/CSR.hpp</itemPath>
       <itemPath>header/CSREmergingSchemaManager.hpp</itemPath>
       <itemPath>header/CSRSchemaHashedTableManager.hpp</itemPath>
@@ -25,6 +24,7 @@
       <itemPath>header/ParallelSchemaHashedTable.hpp</itemPath>
       <itemPath>header/SchemaHashedTable.hpp</itemPath>
       <itemPath>header/UniversalTable.hpp</itemPath>
+      <itemPath>header/UtilityFunctions.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -152,8 +152,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="header/Aggregation.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="header/CSR.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/CSREmergingSchemaManager.hpp"
@@ -192,6 +190,8 @@
       <item path="header/SchemaHashedTable.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/UniversalTable.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="header/UtilityFunctions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="source/AdjacencyList.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -330,8 +330,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="header/Aggregation.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="header/CSR.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/CSREmergingSchemaManager.hpp"
@@ -370,6 +368,8 @@
       <item path="header/SchemaHashedTable.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="header/UniversalTable.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="header/UtilityFunctions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="source/AdjacencyList.cpp" ex="false" tool="1" flavor2="0">
       </item>

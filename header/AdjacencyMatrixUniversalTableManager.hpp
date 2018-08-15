@@ -15,6 +15,7 @@
 #include <string>
 #include <tuple>
 #include <dirent.h>
+#include "UtilityFunctions.hpp"
 
 #include "AdjacencyMatrix.hpp"
 #include "UniversalTable.hpp"
@@ -33,6 +34,9 @@ public:
     bool loadEdges(std::string edgesDirectory);
     std::vector<int16_t> addVertexProperties(std::string vertexHeaderLine);
     std::vector<int16_t> addEdgeProperties(std::string edgeHeaderLine);
+    
+    void executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
+    void executeQueryDC(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     
     AdjacencyMatrixUniversalTableManager(int bSize):batchSize(bSize){
         adjacencyMatrix.setBatchSize(bSize);

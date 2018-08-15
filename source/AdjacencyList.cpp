@@ -175,3 +175,42 @@ uint64_t AdjacencyList::getAdjacencyListSize() {
     }
     return size;
 }
+
+void AdjacencyList::getTargetVertex(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
+    AL_it labeledEdgesSet_it = this->vertexAdjacencyMap.find(edgeLabel);
+
+    for (uint32_t i = 0; i < resultSet.size(); i++) {
+        std::string sourceVertexId = resultSet[i].first[0];
+        MyMap_it innerMap_it = labeledEdgesSet_it->second.find(sourceVertexId);
+        while (!innerMap_it->second.vec.empty()) {
+            innerMap_it = innerMap_it->second.vec[0];
+        }
+        resultSet[i].first.emplace_back(innerMap_it->first);
+    }
+}
+
+void AdjacencyList::getTargetVertexWithReplacement(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
+    AL_it labeledEdgesSet_it = this->vertexAdjacencyMap.find(edgeLabel);
+
+    for (uint32_t i = 0; i < resultSet.size(); i++) {
+        std::string sourceVertexId = resultSet[i].first[0];
+        MyMap_it innerMap_it = labeledEdgesSet_it->second.find(sourceVertexId);
+        while (!innerMap_it->second.vec.empty()) {
+            innerMap_it = innerMap_it->second.vec[0];
+        }
+        resultSet[i].first[0] = innerMap_it->first;
+    }
+}
+
+void AdjacencyList::getAllEdges(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
+    for (auto const &labeledEdges : this->vertexAdjacencyMap) {
+        for (auto const &vertexOutEdges : labeledEdges.second) {
+            for (auto const &targetVertex : vertexOutEdges.second.vec) {
+                resultSet.emplace_back(std::make_pair(std::vector<std::string>() = {"out", labeledEdges.first, vertexOutEdges.first}
+                , std::vector<double>() = {1}));
+                resultSet.emplace_back(std::make_pair(std::vector<std::string>() = {"in", labeledEdges.first, targetVertex->first}
+                , std::vector<double>() = {1}));
+            }
+        }
+    }
+}

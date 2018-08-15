@@ -15,6 +15,7 @@
 #include <string>
 #include <tuple>
 #include <dirent.h>
+#include "UtilityFunctions.hpp"
 
 #include "AdjacencyList.hpp"
 #include "EmergingSchema.hpp"
@@ -37,6 +38,7 @@ public:
     std::vector<int16_t> addEdgeProperties(std::string edgeHeaderLine);
     
     void executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
+    void executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     
     AdjacencyListEmergingSchemaManager(int bSize):batchSize(bSize){};
 };

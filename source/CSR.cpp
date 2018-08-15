@@ -211,31 +211,38 @@ void CSR::addNeighbourVertex(std::vector<std::tuple<std::string, std::string, st
         vrIndex.emplace_back(0);
     }
 
-    int countInserted = 0;
+    uint32_t maxIndex = vrIndex.size() - 1;
 
     for (auto &edge : edges) {
 
         std::string sourceVertexId = std::get<0>(edge);
         std::string targetVertexId = std::get<2>(edge);
 
-        std::pair<vertexMap_it, bool> tgtIt = viMap.insert(std::make_pair(targetVertexId, viMap.size()));
-        std::pair<vertexMap_it, bool> srcIt = viMap.insert(std::make_pair(sourceVertexId, viMap.size()));
-
-        if (tgtIt.second) {
-            vrIndex.emplace_back(vrIndex.back());
-            countInserted++;
+        std::pair<vertexMap_it, bool> tgtIt = viMap.insert(std::make_pair(targetVertexId, -1));
+        vertexMap_it src = viMap.find(sourceVertexId);
+        std::pair<vertexMap_it, bool> srcIt;
+        if (src == viMap.end()) {
+            srcIt = viMap.insert(std::make_pair(sourceVertexId, maxIndex));
+            maxIndex++;
+        } else if (src->second == -1) {
+            src->second = maxIndex;
+            maxIndex++;
+            srcIt.first = src;
+            srcIt.second = true;
+        } else {
+            srcIt.first = src;
+            srcIt.second = false;
         }
 
         if (srcIt.second) {
             vrIndex.emplace_back(vrIndex.back() + 1);
             vcIndex.emplace_back(tgtIt.first);
-            countInserted++;
         } else {
             bool inserted = false;
-            for (uint64_t i = vrIndex.at(srcIt.first->second); i < vrIndex.at(srcIt.first->second + 1); i++) {
-                if (vcIndex.at(i)->second < tgtIt.first->second) {
+            for (uint32_t i = vrIndex.at(srcIt.first->second); i < vrIndex.at(srcIt.first->second + 1); i++) {
+                if (vcIndex.at(i)->first < tgtIt.first->first) {
                     continue;
-                } else if (vcIndex.at(i)->second > tgtIt.first->second) {
+                } else if (vcIndex.at(i)->first > tgtIt.first->first) {
                     vcIndex.emplace(vcIndex.begin() + i, tgtIt.first);
                     vrIndex[srcIt.first->second + 1]++;
                     inserted = true;
@@ -388,4 +395,56 @@ uint64_t CSR::getCSRSize() {
         size += vertexIndexMap(std::get<0>(it->second)).size();
     }
     return size;
+}
+
+void CSR::getTargetVertex(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
+    labeledCSR_it labeledEdgesSet_it = this->labeledCSR.find(edgeLabel);
+    vertexIndexMap& vi_map = std::get<0>(labeledEdgesSet_it->second);
+    vertexRowIndex& vr_vec = std::get<1>(labeledEdgesSet_it->second);
+    vertexColumnIndex& vc_vec = std::get<2>(labeledEdgesSet_it->second);
+
+
+    for (uint32_t i = 0; i < resultSet.size(); i++) {
+        std::string sourceVertexId = resultSet[i].first[0];
+        vertexMap_it sourceVertexIndex = vi_map.find(sourceVertexId);
+        while (sourceVertexIndex->second != -1) {
+            sourceVertexIndex = vc_vec.at(vr_vec.at(sourceVertexIndex->second));
+        }
+        resultSet[i].first.emplace_back(sourceVertexIndex->first);
+    }
+}
+
+void CSR::getTargetVertexWithReplacement(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
+    labeledCSR_it labeledEdgesSet_it = this->labeledCSR.find(edgeLabel);
+    vertexIndexMap& vi_map = std::get<0>(labeledEdgesSet_it->second);
+    vertexRowIndex& vr_vec = std::get<1>(labeledEdgesSet_it->second);
+    vertexColumnIndex& vc_vec = std::get<2>(labeledEdgesSet_it->second);
+
+
+    for (uint32_t i = 0; i < resultSet.size(); i++) {
+        std::string sourceVertexId = resultSet[i].first[0];
+        vertexMap_it sourceVertexIndex = vi_map.find(sourceVertexId);
+        while (sourceVertexIndex->second != -1) {
+            sourceVertexIndex = vc_vec.at(vr_vec.at(sourceVertexIndex->second));
+        }
+        resultSet[i].first[0] = sourceVertexIndex->first;
+    }
+}
+
+void CSR::getAllEdges(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
+    for (auto const &labeledCSREntry : this->labeledCSR) {
+        vertexIndexMap const &viMap = vertexIndexMap(std::get<0>(labeledCSREntry.second));
+        vertexRowIndex const &vrIndex = vertexRowIndex(std::get<1>(labeledCSREntry.second));
+        vertexColumnIndex const &vcIndex = vertexColumnIndex(std::get<2>(labeledCSREntry.second));
+        for (auto const &sourceVertex : viMap) {
+            if (sourceVertex.second != -1) {
+                for (uint32_t i = vrIndex.at(sourceVertex.second); i < vrIndex.at(sourceVertex.second + 1); i++) {
+                    resultSet.emplace_back(std::make_pair(std::vector<std::string>() = {"out", labeledCSREntry.first, sourceVertex.first}
+                    , std::vector<double>() = {1}));
+                    resultSet.emplace_back(std::make_pair(std::vector<std::string>() = {"in", labeledCSREntry.first, vcIndex.at(i)->first}
+                    , std::vector<double>() = {1}));
+                }
+            }
+        }
+    }
 }

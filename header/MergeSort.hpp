@@ -19,10 +19,30 @@ private:
 
     //compare two vectors of strings
 
-    static int compareStringVectors(std::vector<std::string> left, std::vector<std::string> right, std::vector<int>& sortingDirection) {
+    static int CompareVectors(std::vector<std::string> &left, std::vector<std::string> &right, std::vector<int>& sortingDirection, bool reverseSort = false) {
         //equal
         int result = 0;
         for (int i = 0; i < left.size(); i++) {
+            if (left[i] < right[i]) {
+                //less than
+                result = sortingDirection[i];
+                break;
+            } else if (left[i] > right[i]) {
+                //greater than
+                result = sortingDirection[i] * -1;
+                break;
+            }
+        }
+        return result;
+    }
+
+
+    //compare two vectors of double
+
+    static int CompareVectors(std::vector<double> &left, std::vector<double> &right, std::vector<int>& sortingDirection, bool reverseSort = true) {
+        //equal
+        int result = 0;
+        for (int i = left.size() - 1; i >= 0; i--) {
             if (left[i] < right[i]) {
                 //less than
                 result = sortingDirection[i];
@@ -40,7 +60,7 @@ private:
     // First subarray is keyValues[l..m]
     // Second subarray is keyValues[m+1..r]
 
-    static void merge(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& keyValues, int left, int middle, int right, std::vector<int>& sortingDirection) {
+    static void merge(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& keyValues, int left, int middle, int right, std::vector<int>& sortingDirection, bool sortOnValue, bool reverseSort) {
         int i, j, k;
         int n1 = middle - left + 1;
         int n2 = right - middle;
@@ -59,7 +79,9 @@ private:
         j = 0; // Initial index of second subarray
         k = left; // Initial index of merged subarray
         while (i < n1 && j < n2) {
-            if (compareStringVectors(L[i].first, R[j].first, sortingDirection) <= 0) {
+            if ((!sortOnValue && CompareVectors(L[i].first, R[j].first, sortingDirection) <= 0) ||
+                    (sortOnValue && CompareVectors(L[i].second, R[j].second, sortingDirection) <= 0)
+                    ) {
                 keyValues[k] = L[i];
                 i++;
             } else {
@@ -91,17 +113,17 @@ public:
 
     /* l is for left index and r is right index of the
        sub-array of keyValues to be sorted */
-    static void mergeSort(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& keyValues, int left, int right, std::vector<int>& sortingDirection) {
+    static void mergeSort(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& keyValues, int left, int right, std::vector<int>& sortingDirection, bool sortOnValue = false, bool reverseSort = false) {
         if (left < right) {
             // Same as (left+right)/2, but avoids overflow for
             // large left and right
             int middle = left + (right - left) / 2;
 
             // Sort first and second halves
-            mergeSort(keyValues, left, middle, sortingDirection);
-            mergeSort(keyValues, middle + 1, right, sortingDirection);
+            mergeSort(keyValues, left, middle, sortingDirection, sortOnValue, reverseSort);
+            mergeSort(keyValues, middle + 1, right, sortingDirection, sortOnValue, reverseSort);
 
-            merge(keyValues, left, middle, right, sortingDirection);
+            merge(keyValues, left, middle, right, sortingDirection, sortOnValue, reverseSort);
         }
     }
 };

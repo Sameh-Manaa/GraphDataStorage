@@ -327,3 +327,147 @@ void AdjacencyListEmergingSchemaManager::executeQueryBI1(tm messageCreationDate,
     std::cout << "Count of Relevant Messages Found: " << resultSet.size() << std::endl;
 
 }
+
+void AdjacencyListEmergingSchemaManager::executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
+
+// 1- get all vertices with type comment or post
+    std::unordered_map<std::string, std::pair<uint16_t, uint16_t> > vertexPropertyOrder = this->emergingSchema.getVertexPropertyIndex();
+
+    std::pair<uint16_t, uint16_t> creationDatePropertyIndex = vertexPropertyOrder.at("creationDate");
+    std::pair<uint16_t, uint16_t> lengthPropertyIndex = vertexPropertyOrder.at("length");
+    std::pair<uint16_t, uint16_t> contentPropertyIndex = vertexPropertyOrder.at("content");
+    std::pair<uint16_t, uint16_t> languagePropertyIndex = vertexPropertyOrder.at("language");
+
+    std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> commentVertices_creationDate;
+    commentVertices_creationDate = this->emergingSchema.getVertices("comment", "creationDate");
+    std::cout << "Count of Comment Vertices Found: " << std::distance(commentVertices_creationDate.first, commentVertices_creationDate.second) << std::endl;
+
+    std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> postVertices_creationDate;
+    postVertices_creationDate = this->emergingSchema.getVertices("post", "creationDate");
+    std::cout << "Count of Post Vertices Found: " << std::distance(postVertices_creationDate.first, postVertices_creationDate.second) << std::endl;
+
+    std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> commentVertices_length;
+    std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> postVertices_length;
+
+    if (lengthPropertyIndex.first == creationDatePropertyIndex.first) {
+        commentVertices_length = commentVertices_creationDate;
+        postVertices_length = postVertices_creationDate;
+    } else {
+        commentVertices_length = this->emergingSchema.getVertices("comment", "length");
+        postVertices_length = this->emergingSchema.getVertices("post", "length");
+    }
+    
+    std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> commentVertices_content;
+    std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> postVertices_content;
+
+    if (contentPropertyIndex.first == creationDatePropertyIndex.first) {
+        commentVertices_content = commentVertices_creationDate;
+        postVertices_content = postVertices_creationDate;
+    } else if (contentPropertyIndex.first == lengthPropertyIndex.first) {
+        commentVertices_content = commentVertices_length;
+        postVertices_content = postVertices_length;
+    } else {
+        commentVertices_content = this->emergingSchema.getVertices("comment", "content");
+        postVertices_content = this->emergingSchema.getVertices("post", "content");
+    }
+    
+    std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> postVertices_language;
+
+    if (languagePropertyIndex.first == creationDatePropertyIndex.first) {
+        postVertices_language = postVertices_creationDate;
+    } else if (languagePropertyIndex.first == lengthPropertyIndex.first) {
+        postVertices_language = postVertices_length;
+    } else if (languagePropertyIndex.first == contentPropertyIndex.first) {
+        postVertices_language = postVertices_content;
+    } else {
+        postVertices_language = this->emergingSchema.getVertices("post", "language");
+    }
+    
+    // 2- filter result on creation date before $date, length less than $messageLength, content is not empty and post language in $languages
+
+    std::vector<std::pair<std::vector<std::string>, std::vector<double> > > tempResultSet;
+
+    for (std::map<std::string, std::vector<char*> >::const_iterator it = commentVertices_creationDate.first, 
+            it_length = commentVertices_length.first,
+            it_content = commentVertices_content.first;
+            it != commentVertices_creationDate.second;
+            ++it, ++it_length, ++it_content) {
+
+        const char* content = it_content->second.at(contentPropertyIndex.second);
+
+        std::string::size_type sz; // alias of size_t
+        uint16_t length = std::stoi(it_length->second.at(lengthPropertyIndex.second), &sz);
+
+        const char* creationDate = it->second.at(creationDatePropertyIndex.second);
+        tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
+
+        if (
+                (content && (content[0] != '\0')) &&
+                (length < messageLength) &&
+                (UtilityFunctions::compareDateTime(messageCreationDate, creationDate_tm) == 1)
+                ) {
+
+            std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
+
+            resultRecord.first.emplace_back(it->first);
+            resultRecord.second.emplace_back(1);
+            tempResultSet.emplace_back(resultRecord);
+        }
+    }
+
+    this->adjacencyList.getTargetVertex("replyOf", tempResultSet);
+
+    std::vector<std::map<std::string, std::vector<char*> >::const_iterator> replyOfPosts;
+    replyOfPosts = this->emergingSchema.getVertices(tempResultSet, "language");
+
+    for (uint32_t i; i < replyOfPosts.size(); i++) {
+        const char* language = replyOfPosts[i]->second.at(languagePropertyIndex.second);
+
+        if (language && std::find(messageLanguages.begin(), messageLanguages.end(), std::string(language)) != messageLanguages.end()) {
+            tempResultSet[i].first.erase(tempResultSet[i].first.end() - 1);
+            resultSet.emplace_back(tempResultSet[i]);
+        }
+    }
+    
+    tempResultSet.clear();
+
+
+
+    for (std::map<std::string, std::vector<char*> >::const_iterator it = postVertices_creationDate.first, 
+            it_length = postVertices_length.first,
+            it_content = postVertices_content.first,
+            it_language = postVertices_language.first;
+            it != postVertices_creationDate.second;
+            ++it, ++it_length, ++it_content, ++it_language) {
+
+        const char* language = it_language->second.at(languagePropertyIndex.second);
+
+        const char* content = it_content->second.at(contentPropertyIndex.second);
+
+        std::string::size_type sz; // alias of size_t
+        uint16_t length = std::stoi(it_length->second.at(lengthPropertyIndex.second), &sz);
+
+        const char* creationDate = it->second.at(creationDatePropertyIndex.second);
+        tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
+
+        if (
+                (content && (content[0] != '\0')) &&
+                (length < messageLength) &&
+                (UtilityFunctions::compareDateTime(messageCreationDate, creationDate_tm) == 1) &&
+                (language && std::find(messageLanguages.begin(), messageLanguages.end(), std::string(language)) != messageLanguages.end())
+                ) {
+
+            std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
+
+            resultRecord.first.emplace_back(it->first);
+            resultRecord.second.emplace_back(1);
+            resultSet.emplace_back(resultRecord);
+        }
+    }
+    
+    
+    this->adjacencyList.getTargetVertexWithReplacement("hasCreator", resultSet);
+
+    std::cout << "Count of Relevant Messages Found: " << resultSet.size() << std::endl;
+
+}

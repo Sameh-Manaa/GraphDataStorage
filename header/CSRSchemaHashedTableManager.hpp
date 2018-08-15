@@ -10,6 +10,7 @@
 #include <string>
 #include <tuple>
 #include <dirent.h>
+#include "UtilityFunctions.hpp"
 
 #include "CSR.hpp"
 #include "SchemaHashedTable.hpp"
@@ -27,6 +28,8 @@ public:
     std::map<int, std::string> getVertexProperties(std::string vertexHeaderLine);
     std::map<int, std::string> getEdgeProperties(std::string edgeHeaderLine);
     
+    void executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
+
     CSRSchemaHashedTableManager(int bSize):batchSize(bSize){};
 };
 

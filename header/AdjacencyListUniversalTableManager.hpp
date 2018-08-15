@@ -17,6 +17,7 @@
 #include <dirent.h>
 #include <stdio.h>
 #include <chrono>
+#include "UtilityFunctions.hpp"
 
 #include "AdjacencyList.hpp"
 #include "UniversalTable.hpp"
@@ -36,6 +37,7 @@ public:
 
     void executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     void executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
+    void executeQueryDC(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
 
     AdjacencyListUniversalTableManager(int bSize) : batchSize(bSize) {
     };

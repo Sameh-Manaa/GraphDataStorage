@@ -10,20 +10,20 @@ UniversalTable::UniversalTable() {
     //this->edgeUniversalMap.max_load_factor(10);
 }
 
-UniversalTable::~UniversalTable(){
+UniversalTable::~UniversalTable() {
     for (auto const& vertex : this->vertexUniversalMap) {
         for (char* vertexProperty : vertex.second) {
             delete[] vertexProperty;
         }
     }
-    
-    
+
+
     for (auto const& edge : this->edgeUniversalMap) {
         for (char* edgeProperty : edge.second) {
             delete[] edgeProperty;
         }
     }
-    
+
     this->clearUniversalTable();
 }
 
@@ -194,7 +194,7 @@ uint64_t UniversalTable::getEdgeUniversalTableSizeInBytes() {
     return size * sizeof (char);
 }
 
-void UniversalTable::clearUniversalTable(){
+void UniversalTable::clearUniversalTable() {
     this->vertexUniversalMap.clear();
     this->vertexPropertyIndex.clear();
     this->edgeUniversalMap.clear();
@@ -212,4 +212,13 @@ UniversalTable::getVertices(std::string vertexType) {
     result.first = this->vertexUniversalMap.lower_bound(vertexType);
     result.second = this->vertexUniversalMap.upper_bound(vertexTypeInc);
     return result;
+}
+
+std::vector<std::map<std::string, std::vector<char*> >::const_iterator>
+UniversalTable::getVertices(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
+    std::vector<std::map<std::string, std::vector<char*> >::const_iterator> returnList;
+    for (uint32_t i = 0; i < resultSet.size(); i++) {
+        returnList.emplace_back(this->vertexUniversalMap.find(resultSet[i].first.back()));
+    }
+    return returnList;
 }

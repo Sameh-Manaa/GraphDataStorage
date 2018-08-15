@@ -44,6 +44,9 @@ public:
     std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator>
     getVertices(std::string vertexType, std::string propertyName);
     
+    std::vector<std::map<std::string, std::vector<char*> >::const_iterator>
+    getVertices(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet, std::string propertyName);
+    
     EmergingSchema();
     ~EmergingSchema();
 };

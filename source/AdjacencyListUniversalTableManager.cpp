@@ -336,6 +336,7 @@ void AdjacencyListUniversalTableManager::executeQueryBI18(tm messageCreationDate
     uint64_t contentPropertyIndex = vertexPropertyOrder.at("content");
     uint64_t languagePropertyIndex = vertexPropertyOrder.at("language");
 
+    std::vector<std::pair<std::vector<std::string>, std::vector<double> > > tempResultSet;
 
     for (std::map<std::string, std::vector<char*> >::const_iterator it = commentVertices.first; it != commentVertices.second; ++it) {
 
@@ -345,38 +346,39 @@ void AdjacencyListUniversalTableManager::executeQueryBI18(tm messageCreationDate
         uint16_t length = std::stoi(it->second.at(lengthPropertyIndex), &sz);
 
         const char* creationDate = it->second.at(creationDatePropertyIndex);
-        tm tm1;
-        sscanf(creationDate, "%4d-%2d-%2d", &tm1.tm_year, &tm1.tm_mon, &tm1.tm_mday);
+        tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
 
-        if ((messageCreationDate.tm_year > tm1.tm_year ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday))
-                && (content && (content[0] != '\0'))
-                && (length < messageLength)) {
-            
+        if (
+                (content && (content[0] != '\0')) &&
+                (length < messageLength) &&
+                (UtilityFunctions::compareDateTime(messageCreationDate, creationDate_tm) == 1)
+                ) {
+
             std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
-            resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
-
-            resultRecord.first.emplace_back("true");
-
-            std::string messageLengthCategory;
-            if (messageLength >= 0 && messageLength < 40) {
-                messageLengthCategory = "0";
-            } else if (messageLength >= 40 && messageLength < 80) {
-                messageLengthCategory = "1";
-            } else if (messageLength >= 80 && messageLength < 160) {
-                messageLengthCategory = "2";
-            } else if (messageLength >= 160) {
-                messageLengthCategory = "3";
-            }
-            resultRecord.first.emplace_back(messageLengthCategory);
-
-            resultRecord.second.emplace_back(messageLength);
-
-            resultSet.emplace_back(resultRecord);
+            resultRecord.first.emplace_back(it->first);
+            resultRecord.second.emplace_back(1);
+            tempResultSet.emplace_back(resultRecord);
         }
     }
+
+    this->adjacencyList.getTargetVertex("replyOf", tempResultSet);
+
+    std::vector<std::map<std::string, std::vector<char*> >::const_iterator> replyOfPosts;
+    replyOfPosts = this->universalTable.getVertices(tempResultSet);
+
+    for (uint32_t i; i < replyOfPosts.size(); i++) {
+        const char* language = replyOfPosts[i]->second.at(languagePropertyIndex);
+
+        if (language && std::find(messageLanguages.begin(), messageLanguages.end(), std::string(language)) != messageLanguages.end()) {
+            tempResultSet[i].first.erase(tempResultSet[i].first.end() - 1);
+            resultSet.emplace_back(tempResultSet[i]);
+        }
+    }
+    
+    tempResultSet.clear();
+
+
 
     for (std::map<std::string, std::vector<char*> >::const_iterator it = postVertices.first; it != postVertices.second; ++it) {
 
@@ -388,41 +390,31 @@ void AdjacencyListUniversalTableManager::executeQueryBI18(tm messageCreationDate
         uint16_t length = std::stoi(it->second.at(lengthPropertyIndex), &sz);
 
         const char* creationDate = it->second.at(creationDatePropertyIndex);
-        tm tm1;
-        sscanf(creationDate, "%4d-%2d-%2d", &tm1.tm_year, &tm1.tm_mon, &tm1.tm_mday);
+        tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
 
-        if ((messageCreationDate.tm_year > tm1.tm_year ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday))
-                && (content && (content[0] != '\0'))
-                && (length < messageLength)
-                && (language && std::find(messageLanguages.begin(), messageLanguages.end(), std::string(language)) != messageLanguages.end())
+        if (
+                (content && (content[0] != '\0')) &&
+                (length < messageLength) &&
+                (UtilityFunctions::compareDateTime(messageCreationDate, creationDate_tm) == 1) &&
+                (language && std::find(messageLanguages.begin(), messageLanguages.end(), std::string(language)) != messageLanguages.end())
                 ) {
 
             std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
-            resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
-
-            resultRecord.first.emplace_back("false");
-
-            std::string messageLengthCategory;
-            if (messageLength >= 0 && messageLength < 40) {
-                messageLengthCategory = "0";
-            } else if (messageLength >= 0 && messageLength < 40) {
-                messageLengthCategory = "1";
-            } else if (messageLength >= 0 && messageLength < 40) {
-                messageLengthCategory = "2";
-            } else {
-                messageLengthCategory = "3";
-            }
-            resultRecord.first.emplace_back(messageLengthCategory);
-
-            resultRecord.second.emplace_back(messageLength);
-
+            resultRecord.first.emplace_back(it->first);
+            resultRecord.second.emplace_back(1);
             resultSet.emplace_back(resultRecord);
         }
     }
+    
+    
+    this->adjacencyList.getTargetVertexWithReplacement("hasCreator", resultSet);
 
     std::cout << "Count of Relevant Messages Found: " << resultSet.size() << std::endl;
 
+}
+
+void AdjacencyListUniversalTableManager::executeQueryDC(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet){
+    this->adjacencyList.getAllEdges(resultSet);
+    std::cout << "Count of edges Found: " << resultSet.size() << std::endl;
 }

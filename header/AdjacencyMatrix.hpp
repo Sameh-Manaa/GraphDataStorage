@@ -19,7 +19,7 @@
 
 class AdjacencyMatrix {
 private:
-    typedef std::map<std::string, uint64_t> vertexIndex_map;
+    typedef std::map<std::string, uint32_t> vertexIndex_map;
     typedef vertexIndex_map::iterator vertexIndex_it;
     //vertexAdjacencyMap: map<[VERTEX_ID],vector<[NEIGHBOUR_VERTEX_FLAG]> >
     typedef std::vector< std::vector<bool> > vertexAdjacency_map;
@@ -45,8 +45,11 @@ public:
     bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId);
     std::list<std::string> getNeighbourVertices(std::string vertexId);
     uint64_t getVertexIndexByVertexId(std::string vertexId);
-    std::string getVertexIdByVertexIndex(uint64_t vertexIndex);
+    std::string getVertexIdByVertexIndex(uint64_t vertexIndex, std::string edgeLabel);
     uint64_t getAdjacencyMatrixSize();
+    void getTargetVertex(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
+    void getTargetVertexWithReplacement(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
+    void getAllEdges(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     void shrinkToFit();
     void setBatchSize(int batchSize);
 

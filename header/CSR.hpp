@@ -29,11 +29,11 @@ private:
     };
      */
 
-    typedef std::map<std::string, uint64_t> vertexIndexMap;
+    typedef std::map<std::string, int32_t> vertexIndexMap;
     typedef vertexIndexMap::iterator vertexMap_it;
-    typedef std::vector<uint64_t> vertexRowIndex;
+    typedef std::vector<uint32_t> vertexRowIndex;
     typedef std::vector<vertexMap_it> vertexColumnIndex;
-    typedef std::tuple<vertexIndexMap, vertexRowIndex, vertexColumnIndex > CSR_tuple;
+    typedef std::tuple<vertexIndexMap, vertexRowIndex, vertexColumnIndex> CSR_tuple;
     typedef std::unordered_map<std::string, CSR_tuple> labeledCSR_map;
     typedef labeledCSR_map::iterator labeledCSR_it;
 
@@ -63,6 +63,9 @@ public:
     uint64_t getVertexIndexByVertexId(std::string vertexId);
     std::string getVertexIdByVertexIndex(uint64_t vertexIndex);
     uint64_t getCSRSize();
+    void getTargetVertex(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
+    void getTargetVertexWithReplacement(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
+    void getAllEdges(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     CSR();
     ~CSR();
 };

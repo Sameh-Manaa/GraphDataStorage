@@ -241,3 +241,12 @@ EmergingSchema::getVertices(std::string vertexType, std::string propertyName) {
     result.second = this->vertexEmergingSchema.at(tablePropertyIndexPair.first).upper_bound(vertexTypeInc);
     return result;
 }
+
+std::vector<std::map<std::string, std::vector<char*> >::const_iterator>
+EmergingSchema::getVertices(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet, std::string propertyName) {
+    std::vector<std::map<std::string, std::vector<char*> >::const_iterator> returnList;
+    for (uint32_t i = 0; i < resultSet.size(); i++) {
+        returnList.emplace_back(this->vertexEmergingSchema.at(this->vertexPropertyEsIndex.at(propertyName).first).find(resultSet[i].first.back()));
+    }
+    return returnList;
+}

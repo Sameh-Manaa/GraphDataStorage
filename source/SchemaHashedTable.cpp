@@ -158,3 +158,13 @@ SchemaHashedTable::getVertices(std::string vertexType) {
     result.second = this->vertexSchemaHashedMap.upper_bound(vertexTypeInc);
     return result;
 }
+
+
+std::vector<std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator>
+SchemaHashedTable::getVertices(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
+    std::vector<std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator> returnList;
+    for (uint32_t i = 0; i < resultSet.size(); i++) {
+        returnList.emplace_back(this->vertexSchemaHashedMap.find(resultSet[i].first.back()));
+    }
+    return returnList;
+}
