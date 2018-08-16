@@ -247,19 +247,13 @@ void AdjacencyListEmergingSchemaManager::executeQueryBI1(tm messageCreationDate,
     for (std::map<std::string, std::vector<char*> >::const_iterator it = commentVertices_creationDate.first, it_length = commentVertices_length.first;
             it != commentVertices_creationDate.second;
             ++it, ++it_length) {
-        const char* str = it->second.at(creationDatePropertyIndex.second);
+        const char* creationDate = it->second.at(creationDatePropertyIndex.second);
+        tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
 
-        tm tm1;
-
-        sscanf(str, "%4d-%2d-%2d", &tm1.tm_year, &tm1.tm_mon, &tm1.tm_mday);
-
-        if (messageCreationDate.tm_year > tm1.tm_year ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday)
-                ) {
+        if (UtilityFunctions::compareDateTime(messageCreationDate, creationDate_tm) == 1) {
             std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
-            resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
+            resultRecord.first.emplace_back(std::to_string(creationDate_tm.tm_year));
 
             resultRecord.first.emplace_back("true");
 
@@ -287,19 +281,13 @@ void AdjacencyListEmergingSchemaManager::executeQueryBI1(tm messageCreationDate,
     for (std::map<std::string, std::vector<char*> >::const_iterator it = postVertices_creationDate.first, it_length = postVertices_length.first;
             it != postVertices_creationDate.second;
             ++it, ++it_length) {
-        const char* str = it->second.at(creationDatePropertyIndex.second);
+        const char* creationDate = it->second.at(creationDatePropertyIndex.second);
+        tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
 
-        tm tm1;
-
-        sscanf(str, "%4d-%2d-%2d", &tm1.tm_year, &tm1.tm_mon, &tm1.tm_mday);
-
-        if (messageCreationDate.tm_year > tm1.tm_year ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday)
-                ) {
+        if (UtilityFunctions::compareDateTime(messageCreationDate, creationDate_tm) == 1) {
             std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
-            resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
+            resultRecord.first.emplace_back(std::to_string(creationDate_tm.tm_year));
 
             resultRecord.first.emplace_back("false");
 
@@ -330,7 +318,7 @@ void AdjacencyListEmergingSchemaManager::executeQueryBI1(tm messageCreationDate,
 
 void AdjacencyListEmergingSchemaManager::executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
 
-// 1- get all vertices with type comment or post
+    // 1- get all vertices with type comment or post
     std::unordered_map<std::string, std::pair<uint16_t, uint16_t> > vertexPropertyOrder = this->emergingSchema.getVertexPropertyIndex();
 
     std::pair<uint16_t, uint16_t> creationDatePropertyIndex = vertexPropertyOrder.at("creationDate");
@@ -356,7 +344,7 @@ void AdjacencyListEmergingSchemaManager::executeQueryBI18(tm messageCreationDate
         commentVertices_length = this->emergingSchema.getVertices("comment", "length");
         postVertices_length = this->emergingSchema.getVertices("post", "length");
     }
-    
+
     std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> commentVertices_content;
     std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> postVertices_content;
 
@@ -370,7 +358,7 @@ void AdjacencyListEmergingSchemaManager::executeQueryBI18(tm messageCreationDate
         commentVertices_content = this->emergingSchema.getVertices("comment", "content");
         postVertices_content = this->emergingSchema.getVertices("post", "content");
     }
-    
+
     std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> postVertices_language;
 
     if (languagePropertyIndex.first == creationDatePropertyIndex.first) {
@@ -382,12 +370,12 @@ void AdjacencyListEmergingSchemaManager::executeQueryBI18(tm messageCreationDate
     } else {
         postVertices_language = this->emergingSchema.getVertices("post", "language");
     }
-    
+
     // 2- filter result on creation date before $date, length less than $messageLength, content is not empty and post language in $languages
 
     std::vector<std::pair<std::vector<std::string>, std::vector<double> > > tempResultSet;
 
-    for (std::map<std::string, std::vector<char*> >::const_iterator it = commentVertices_creationDate.first, 
+    for (std::map<std::string, std::vector<char*> >::const_iterator it = commentVertices_creationDate.first,
             it_length = commentVertices_length.first,
             it_content = commentVertices_content.first;
             it != commentVertices_creationDate.second;
@@ -428,12 +416,12 @@ void AdjacencyListEmergingSchemaManager::executeQueryBI18(tm messageCreationDate
             resultSet.emplace_back(tempResultSet[i]);
         }
     }
-    
+
     tempResultSet.clear();
 
 
 
-    for (std::map<std::string, std::vector<char*> >::const_iterator it = postVertices_creationDate.first, 
+    for (std::map<std::string, std::vector<char*> >::const_iterator it = postVertices_creationDate.first,
             it_length = postVertices_length.first,
             it_content = postVertices_content.first,
             it_language = postVertices_language.first;
@@ -464,8 +452,8 @@ void AdjacencyListEmergingSchemaManager::executeQueryBI18(tm messageCreationDate
             resultSet.emplace_back(resultRecord);
         }
     }
-    
-    
+
+
     this->adjacencyList.getTargetVertexWithReplacement("hasCreator", resultSet);
 
     std::cout << "Count of Relevant Messages Found: " << resultSet.size() << std::endl;

@@ -238,19 +238,13 @@ void AdjacencyListUniversalTableManager::executeQueryBI1(tm messageCreationDate,
     uint64_t lengthPropertyIndex = vertexPropertyOrder.at("length");
 
     for (std::map<std::string, std::vector<char*> >::const_iterator it = commentVertices.first; it != commentVertices.second; ++it) {
-        const char* str = it->second.at(creationDatePropertyIndex);
+        const char* creationDate = it->second.at(creationDatePropertyIndex);
+        tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
 
-        tm tm1;
-
-        sscanf(str, "%4d-%2d-%2d", &tm1.tm_year, &tm1.tm_mon, &tm1.tm_mday);
-
-        if (messageCreationDate.tm_year > tm1.tm_year ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday)
-                ) {
+        if (UtilityFunctions::compareDateTime(messageCreationDate, creationDate_tm) == 1) {
             std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
-            resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
+            resultRecord.first.emplace_back(std::to_string(creationDate_tm.tm_year));
 
             resultRecord.first.emplace_back("true");
 
@@ -276,19 +270,14 @@ void AdjacencyListUniversalTableManager::executeQueryBI1(tm messageCreationDate,
     }
 
     for (std::map<std::string, std::vector<char*> >::const_iterator it = postVertices.first; it != postVertices.second; ++it) {
-        const char* str = it->second.at(creationDatePropertyIndex);
+        
+        const char* creationDate = it->second.at(creationDatePropertyIndex);
+        tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
 
-        tm tm1;
-
-        sscanf(str, "%4d-%2d-%2d", &tm1.tm_year, &tm1.tm_mon, &tm1.tm_mday);
-
-        if (messageCreationDate.tm_year > tm1.tm_year ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday)
-                ) {
+        if (UtilityFunctions::compareDateTime(messageCreationDate, creationDate_tm) == 1) {
             std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
-            resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
+            resultRecord.first.emplace_back(std::to_string(creationDate_tm.tm_year));
 
             resultRecord.first.emplace_back("false");
 
@@ -375,7 +364,7 @@ void AdjacencyListUniversalTableManager::executeQueryBI18(tm messageCreationDate
             resultSet.emplace_back(tempResultSet[i]);
         }
     }
-    
+
     tempResultSet.clear();
 
 
@@ -406,15 +395,15 @@ void AdjacencyListUniversalTableManager::executeQueryBI18(tm messageCreationDate
             resultSet.emplace_back(resultRecord);
         }
     }
-    
-    
+
+
     this->adjacencyList.getTargetVertexWithReplacement("hasCreator", resultSet);
 
     std::cout << "Count of Relevant Messages Found: " << resultSet.size() << std::endl;
 
 }
 
-void AdjacencyListUniversalTableManager::executeQueryDC(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet){
+void AdjacencyListUniversalTableManager::executeQueryDC(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
     this->adjacencyList.getAllEdges(resultSet);
     std::cout << "Count of edges Found: " << resultSet.size() << std::endl;
 }

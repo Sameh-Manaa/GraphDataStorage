@@ -100,88 +100,68 @@ public:
     /* l is for left index and r is right index of the
        sub-array of keyValues to be sorted */
     static void GroupByValue(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& keyValues, std::vector<uint8_t>& groupByOperation) {
+        
         /*
          * group by operations
          * 0 count, 1 sum, 2 average
          */
-        keyValues.begin()->second.resize(keyValues.begin()->second.size() + groupByOperation.size(), 0);
-
-        //std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >::iterator it;
-        uint64_t groupingRecord = 0;
-
-        std::vector<double> groupingVector = keyValues.begin()->second;
+        
+        std::unordered_map<std::vector<double>, std::vector<double>, container_hash<std::vector<double> > > tempGrouppingMap;
+        tempGrouppingMap.reserve(keyValues.size());
 
         for (uint64_t i = 0; i < keyValues.size(); i++) {
-            if (CompareVectors(keyValues[i].second, groupingVector) != 0) {
-                keyValues[groupingRecord].first.clear();
-                groupingRecord++;
-                groupingVector = keyValues[i].second;
-                keyValues[groupingRecord].second = keyValues[i].second;
-                keyValues[groupingRecord].second.resize(keyValues[groupingRecord].second.size() + groupByOperation.size(), 0);
-                for (int g = 0; g < groupByOperation.size(); g++) {
-                    if (g == 0) {
-                        keyValues[groupingRecord].second[groupByOperation[g] + 1] = 1;
-                    } else if (g == 1) {
-                        keyValues[groupingRecord].second[groupByOperation[g] + 1] = keyValues[i].second[0];
-                    } else if (g == 2) {
-                        keyValues[groupingRecord].second[groupByOperation[g] + 1] = keyValues[i].second[0];
-                    }
-                }
-            } else {
-                for (int g = 0; g < groupByOperation.size() && groupByOperation[g] <= 2; g++) {
-                    if (g == 0) {
-                        keyValues[groupingRecord].second[groupByOperation[g] + 1]++;
-                    } else if (g == 1) {
-                        keyValues[groupingRecord].second[groupByOperation[g] + 1] += keyValues[i].second[0];
-                    } else if (g == 2) {
-                        keyValues[groupingRecord].second[groupByOperation[g] + 1] = keyValues[groupingRecord].second[groupByOperation[1] + 1] / keyValues[groupingRecord].second[groupByOperation[0] + 1];
-                    }
+            std::unordered_map<std::vector<double>, std::vector<double>, container_hash<std::vector<double> > >::iterator it;
+            it = tempGrouppingMap.emplace(keyValues[i].second, std::vector<double>()).first;
+            it->second.resize(groupByOperation.size(), 0);
+            for (int g = 0; g < groupByOperation.size(); g++) {
+                if (g == 0) {
+                    it->second[groupByOperation[g]]++;
+                } else if (g == 1) {
+                    it->second[groupByOperation[g]] += keyValues[i].second[0];
+                } else if (g == 2) {
+                    it->second[groupByOperation[g]] = it->second[groupByOperation[1]] / it->second[groupByOperation[0]];
                 }
             }
         }
-        keyValues[groupingRecord].first.clear();
-        keyValues.erase(keyValues.begin() + groupingRecord + 1, keyValues.end());
+
+        keyValues.clear();
+
+        for (auto &kv : tempGrouppingMap) {
+            kv.second.insert(kv.second.begin(), kv.first.begin(), kv.first.end());
+            keyValues.emplace_back(std::vector<std::string>(), kv.second);
+        }
     }
 
     static void GroupBy(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& keyValues, std::vector<uint8_t>& groupByOperation) {
+
         /*
          * group by operations
          * 0 count, 1 sum, 2 average
          */
-        keyValues.begin()->second.resize(keyValues.begin()->second.size() + groupByOperation.size(), 0);
-
-        //std::vector<std::pair<std::vector<std::string>, std::vector<std::string> > >::iterator it;
-        uint64_t groupingRecord = 0;
+        
+        std::unordered_map<std::vector<std::string>, std::vector<double>, container_hash<std::vector<std::string> > > tempGrouppingMap;
+        tempGrouppingMap.reserve(keyValues.size());
 
         for (uint64_t i = 0; i < keyValues.size(); i++) {
-            if (CompareVectors(keyValues[i].first, keyValues[groupingRecord].first) != 0) {
-                keyValues[groupingRecord].second.erase(keyValues[groupingRecord].second.begin());
-                groupingRecord++;
-                keyValues[groupingRecord].second.resize(keyValues[groupingRecord].second.size() + groupByOperation.size());
-                keyValues[groupingRecord].first = keyValues[i].first;
-                for (int g = 0; g < groupByOperation.size(); g++) {
-                    if (g == 0) {
-                        keyValues[groupingRecord].second[groupByOperation[g] + 1] = 1;
-                    } else if (g == 1) {
-                        keyValues[groupingRecord].second[groupByOperation[g] + 1] = keyValues[i].second[0];
-                    } else if (g == 2) {
-                        keyValues[groupingRecord].second[groupByOperation[g] + 1] = keyValues[i].second[0];
-                    }
-                }
-            } else {
-                for (int g = 0; g < groupByOperation.size() && groupByOperation[g] <= 2; g++) {
-                    if (g == 0) {
-                        keyValues[groupingRecord].second[groupByOperation[g] + 1]++;
-                    } else if (g == 1) {
-                        keyValues[groupingRecord].second[groupByOperation[g] + 1] += keyValues[i].second[0];
-                    } else if (g == 2) {
-                        keyValues[groupingRecord].second[groupByOperation[g] + 1] = keyValues[groupingRecord].second[groupByOperation[1] + 1] / keyValues[groupingRecord].second[groupByOperation[0] + 1];
-                    }
+            std::unordered_map<std::vector<std::string>, std::vector<double>, container_hash<std::vector<std::string> > >::iterator it;
+            it = tempGrouppingMap.emplace(keyValues[i].first, std::vector<double>()).first;
+            it->second.resize(groupByOperation.size(), 0);
+            for (int g = 0; g < groupByOperation.size(); g++) {
+                if (g == 0) {
+                    it->second[groupByOperation[g]]++;
+                } else if (g == 1) {
+                    it->second[groupByOperation[g]] += keyValues[i].second[0];
+                } else if (g == 2) {
+                    it->second[groupByOperation[g]] = it->second[groupByOperation[1]] / it->second[groupByOperation[0]];
                 }
             }
         }
-        keyValues[groupingRecord].second.erase(keyValues[groupingRecord].second.begin());
-        keyValues.erase(keyValues.begin() + groupingRecord + 1, keyValues.end());
+
+        keyValues.clear();
+
+        for (auto const &kv : tempGrouppingMap) {
+            keyValues.emplace_back(kv.first, kv.second);
+        }
     }
 
     static void GroupByDcQuery(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& keyValues, std::vector<uint8_t>& groupByOperation) {
@@ -192,13 +172,13 @@ public:
         for (uint64_t i = 0; i < keyValues.size(); i++) {
             tempGrouppingMap.emplace(keyValues[i].first, 0).first->second++;
         }
-        
+
         keyValues.clear();
-        
-        for(auto const &kv : tempGrouppingMap){
+
+        for (auto const &kv : tempGrouppingMap) {
             std::vector<std::string> tempKey = kv.first;
             tempKey[2] = std::to_string(kv.second);
-            keyValues.emplace_back(tempKey,std::vector<double>());
+            keyValues.emplace_back(tempKey, std::vector<double>());
         }
     }
 };

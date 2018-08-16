@@ -215,19 +215,14 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDa
     // 2- filter result on creation date before $date
 
     for (std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator it = commentVertices.first; it != commentVertices.second; ++it) {
-        const char* str = it->second.at("creationDate");
+        
+        const char* creationDate = it->second.at("creationDate");
+        tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
 
-        tm tm1;
-
-        sscanf(str, "%4d-%2d-%2d", &tm1.tm_year, &tm1.tm_mon, &tm1.tm_mday);
-
-        if (messageCreationDate.tm_year > tm1.tm_year ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday)
-                ) {
+        if (UtilityFunctions::compareDateTime(messageCreationDate, creationDate_tm) == 1) {
             std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
-            resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
+            resultRecord.first.emplace_back(std::to_string(creationDate_tm.tm_year));
 
             resultRecord.first.emplace_back("true");
 
@@ -253,19 +248,14 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDa
     }
 
     for (std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator it = postVertices.first; it != postVertices.second; ++it) {
-        const char* str = it->second.at("creationDate");
+        
+        const char* creationDate = it->second.at("creationDate");
+        tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
 
-        tm tm1;
-
-        sscanf(str, "%4d-%2d-%2d", &tm1.tm_year, &tm1.tm_mon, &tm1.tm_mday);
-
-        if (messageCreationDate.tm_year > tm1.tm_year ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon > tm1.tm_mon) ||
-                (messageCreationDate.tm_year == tm1.tm_year && messageCreationDate.tm_mon == tm1.tm_mon && messageCreationDate.tm_mday > tm1.tm_mday)
-                ) {
+        if (UtilityFunctions::compareDateTime(messageCreationDate, creationDate_tm) == 1) {
             std::pair<std::vector<std::string>, std::vector<double> > resultRecord;
 
-            resultRecord.first.emplace_back(std::to_string(tm1.tm_year));
+            resultRecord.first.emplace_back(std::to_string(creationDate_tm.tm_year));
 
             resultRecord.first.emplace_back("true");
 

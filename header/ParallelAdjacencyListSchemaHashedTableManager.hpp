@@ -30,8 +30,8 @@ private:
 public:
 
     bool loadGraph(std::string verticesDirectory, std::string edgesDirectory);
-    bool loadVertices(std::ifstream &vertexFile, std::map<int, std::string> &propertiesPositions, std::string &vertexType);
-    bool loadEdges(std::ifstream &edgeFile, std::map<int, std::string> &propertiesPositions, std::string &edgeFileName);
+    bool loadVertices(std::string &vertexFileName, std::map<int, std::string> &propertiesPositions, std::string &vertexType, int threadId);
+    bool loadEdges(std::string &edgeFilePath, std::map<int, std::string> &propertiesPositions, std::string &edgeFileName, int threadId);
     std::map<int, std::string> getVertexProperties(std::string vertexHeaderLine);
     std::map<int, std::string> getEdgeProperties(std::string edgeHeaderLine);
 
