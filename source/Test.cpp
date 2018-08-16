@@ -250,7 +250,7 @@ void testUniversalTable_Query_BI1(uint32_t batchSize, uint8_t iterations, std::v
 
         UtilityFunctions::GroupBy(resultSet, groupByOperation);
         UtilityFunctions::computePercentile(resultSet, 0);
-        MergeSort::mergeSort(resultSet,0,resultSet.size() - 1,sortingDirection);
+        MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
 
         after_query[i] = std::chrono::steady_clock::now();
     }
@@ -280,7 +280,7 @@ void testSchemaHashedTable_Query_BI1(uint32_t batchSize, uint8_t iterations, std
 
         UtilityFunctions::GroupBy(resultSet, groupByOperation);
         UtilityFunctions::computePercentile(resultSet, 0);
-        MergeSort::mergeSort(resultSet,0,resultSet.size() - 1,sortingDirection);
+        MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
 
         after_query[i] = std::chrono::steady_clock::now();
     }
@@ -311,7 +311,7 @@ void testEmergingSchema_Query_BI1(uint32_t batchSize, uint8_t iterations, std::v
 
         UtilityFunctions::GroupBy(resultSet, groupByOperation);
         UtilityFunctions::computePercentile(resultSet, 0);
-        MergeSort::mergeSort(resultSet,0,resultSet.size() - 1,sortingDirection);
+        MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
 
         after_query[i] = std::chrono::steady_clock::now();
     }
@@ -534,7 +534,7 @@ void testAdjacencyMatrix_Query_DC(uint32_t batchSize, uint8_t iterations, std::v
         UtilityFunctions::GroupByDcQuery(resultSet, groupByOperation);
         UtilityFunctions::GroupBy(resultSet, groupByOperation);
         //1 desc, -1 asc
-        sortingDirection = {-1,-1,-1};
+        sortingDirection = {-1, -1, -1};
         MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
 
         after_query[i] = std::chrono::steady_clock::now();
@@ -566,7 +566,7 @@ void testAdjacencyList_Query_DC(uint32_t batchSize, uint8_t iterations, std::vec
         UtilityFunctions::GroupByDcQuery(resultSet, groupByOperation);
         UtilityFunctions::GroupBy(resultSet, groupByOperation);
         //1 desc, -1 asc
-        sortingDirection = {-1,-1,-1};
+        sortingDirection = {-1, -1, -1};
         MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
 
         after_query[i] = std::chrono::steady_clock::now();
@@ -580,7 +580,7 @@ void testCSR_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> 
 
     CSRUniversalTableManager csrUniTblMgr(batchSize);
     csrUniTblMgr.loadGraph("data/vertexes", "data/edges");
-    
+
     std::vector<int> sortingDirection;
     //index: group by operation: 0 count, 1 sum, 2 average
     //value: storage index 0,1,2
@@ -598,7 +598,7 @@ void testCSR_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> 
         UtilityFunctions::GroupByDcQuery(resultSet, groupByOperation);
         UtilityFunctions::GroupBy(resultSet, groupByOperation);
         //1 desc, -1 asc
-        sortingDirection = {-1,-1,-1};
+        sortingDirection = {-1, -1, -1};
         MergeSort::mergeSort(resultSet, 0, resultSet.size() - 1, sortingDirection);
 
         after_query[i] = std::chrono::steady_clock::now();
@@ -606,8 +606,8 @@ void testCSR_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> 
 }
 
 int main(int argc, char** argv) {
-    int iterations = 4;
-    uint32_t batchSize_start = 1000, batchSize_end = 1000;
+    int iterations = 20;
+    uint32_t batchSize_start = 10, batchSize_end = 100000;
     std::vector<std::chrono::time_point<std::chrono::steady_clock> > before_ts, after_ts, before_fetch, after_fetch, after_query;
 
 
@@ -645,9 +645,9 @@ int main(int argc, char** argv) {
         writeLoadingDurationsToFile("Loading_CSREmergingSchema_" + to_string(batchSize), before_ts, after_ts);
     }
 
-    //return (EXIT_SUCCESS);
+    //return (EXIT_SUCCESS); 
 
-    iterations = 4;
+    iterations = 100;
 
     queryResultSet_vec resultSet;
     tm messageCreationDate = UtilityFunctions::getDateTime("2011-07-21T22:00:00");
