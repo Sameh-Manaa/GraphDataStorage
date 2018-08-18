@@ -63,6 +63,7 @@ public:
     uint64_t getVertexIndexByVertexId(std::string vertexId);
     std::string getVertexIdByVertexIndex(uint64_t vertexIndex);
     uint64_t getCSRSize();
+    uint64_t getCSRSizeInBytes();
     void getTargetVertex(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     void getTargetVertexWithReplacement(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     void getAllEdges(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);

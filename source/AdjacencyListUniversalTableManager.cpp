@@ -12,6 +12,12 @@ bool AdjacencyListUniversalTableManager::loadGraph(std::string verticesDirectory
     if (loadVertices(verticesDirectory) &&
             loadEdges(edgesDirectory)
             ) {
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
+        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
+        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
+        std::cout << "==========================================================================" << std::endl;
+
         //std::cout << "==========================================================================" << std::endl;
         //std::cout << "Vertex Universal Table Size In Bytes: " << this->universalTable.getVertexUniversalTableSizeInBytes() << std::endl;
         //std::cout << "Edge Universal Table Size In Bytes: " << this->universalTable.getEdgeUniversalTableSizeInBytes() << std::endl;
@@ -82,11 +88,11 @@ bool AdjacencyListUniversalTableManager::loadVertices(std::string verticesDirect
         this->universalTable.upsertVertex(vertexUniversalMap);
         vertexUniversalMap.clear();
 
-        std::cout << "file: " << pent->d_name << std::endl;
-        std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
-        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
-        std::cout << "--------------------------------------------------------------------------" << std::endl;
+        //        std::cout << "file: " << pent->d_name << std::endl;
+        //        std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
+        //        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
+        //        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
+        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -135,10 +141,10 @@ bool AdjacencyListUniversalTableManager::loadEdges(std::string edgesDirectory) {
 
             uint64_t propertyCounter = 0;
             while (getline(iss, property, '|')) {
-                if (propertiesPositions[propertyCounter] == -1 && propertyCounter == 0) {
+                if (propertyCounter == 0) {
                     sourceVertexId = property;
                     propertyCounter++;
-                } else if (propertiesPositions[propertyCounter] == -1 && propertyCounter == 1) {
+                } else if (propertyCounter == 1) {
                     targetVertexId = property;
                     propertyCounter++;
                 } else {
@@ -181,11 +187,11 @@ bool AdjacencyListUniversalTableManager::loadEdges(std::string edgesDirectory) {
         this->adjacencyList.addNeighbourVertex(edges);
         edges.clear();
 
-        std::cout << "file: " << pent->d_name << std::endl;
-        std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
-        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
-        std::cout << "--------------------------------------------------------------------------" << std::endl;
+        //        std::cout << "file: " << pent->d_name << std::endl;
+        //        std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
+        //        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
+        //        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
+        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -211,7 +217,7 @@ std::vector<int16_t> AdjacencyListUniversalTableManager::addEdgeProperties(std::
     std::istringstream iss(edgeHeaderLine);
     std::string propertyName;
     while (getline(iss, propertyName, '|')) {
-        if (propertyName.substr(propertyName.size() - 3, 3) == ".id") {
+        if (propertiesPositions.size() < 2) {
             propertiesPositions.push_back(-1);
             continue;
         }
@@ -270,7 +276,7 @@ void AdjacencyListUniversalTableManager::executeQueryBI1(tm messageCreationDate,
     }
 
     for (std::map<std::string, std::vector<char*> >::const_iterator it = postVertices.first; it != postVertices.second; ++it) {
-        
+
         const char* creationDate = it->second.at(creationDatePropertyIndex);
         tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
 

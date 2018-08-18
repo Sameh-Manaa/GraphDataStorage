@@ -43,10 +43,10 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadGraph(std::string vertic
 
         //loadVertices(vertexFile, propertiesPositions, vertexType);
 
-        std::cout << "file: " << vertexType << std::endl;
-        std::cout << "Parallel Adjacency List Size: " << this->parallelAdjacencyList.getAdjacencyListSize() << std::endl;
-        std::cout << "Parallel Schema Hashed Table Size: " << this->parallelSchemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-        std::cout << "--------------------------------------------------------------------------" << std::endl;
+        //        std::cout << "file: " << vertexType << std::endl;
+        //        std::cout << "Parallel Adjacency List Size: " << this->parallelAdjacencyList.getAdjacencyListSize() << std::endl;
+        //        std::cout << "Parallel Schema Hashed Table Size: " << this->parallelSchemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
 
     }
 
@@ -83,17 +83,23 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadGraph(std::string vertic
         //loadVertices(vertexFile, propertiesPositions, vertexType);
 
 
-        std::cout << "file: " << pent->d_name << std::endl;
-        std::cout << "Parallel Adjacency List Size: " << this->parallelAdjacencyList.getAdjacencyListSize() << std::endl;
-        std::cout << "Parallel Vertex Schema Hashed Table Size: " << this->parallelSchemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-        std::cout << "Parallel Edge Schema Hashed Table Size: " << this->parallelSchemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
-        std::cout << "--------------------------------------------------------------------------" << std::endl;
+        //        std::cout << "file: " << pent->d_name << std::endl;
+        //        std::cout << "Parallel Adjacency List Size: " << this->parallelAdjacencyList.getAdjacencyListSize() << std::endl;
+        //        std::cout << "Parallel Vertex Schema Hashed Table Size: " << this->parallelSchemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+        //        std::cout << "Parallel Edge Schema Hashed Table Size: " << this->parallelSchemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
+        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
 
     }
 
     closedir(pdir);
 
     delete pent;
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Parallel Adjacency List Size: " << this->parallelAdjacencyList.getAdjacencyListSize() << std::endl;
+    std::cout << "Parallel Vertex Schema Hashed Table Size: " << this->parallelSchemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+    std::cout << "Parallel Edge Schema Hashed Table Size: " << this->parallelSchemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
+    std::cout << "==========================================================================" << std::endl;
 
 
     return true;

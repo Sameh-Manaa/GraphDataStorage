@@ -25,7 +25,7 @@ private:
     
     struct MapItContainers;
     typedef std::map<std::string, MapItContainers >::iterator MyMap_it;
-    typedef std::map<std::string, std::pair<std::shared_ptr<std::shared_timed_mutex>, std::map<std::string, MapItContainers > > >::iterator AL_it;
+    typedef std::unordered_map<std::string, std::pair<std::shared_ptr<std::shared_timed_mutex>, std::map<std::string, MapItContainers > > >::iterator AL_it;
 
     struct MapItContainers {
     public:
@@ -39,7 +39,7 @@ private:
     std::shared_timed_mutex globalAlMutex;
     //vertexAdjacencyMap: map<[VERTEX_ID],map<[EDGE_LABEL],vector<[NEIGHBOUR_VERTEX_ID]> > >
     //std::map<std::string, std::pair<std::shared_ptr<std::shared_timed_mutex>, std::map<std::string, std::vector<std::string> > > > vertexAdjacencyMap;
-    std::map<std::string, std::pair<std::shared_ptr<std::shared_timed_mutex>, std::map<std::string, MapItContainers > > > vertexAdjacencyMap;
+    std::unordered_map<std::string, std::pair<std::shared_ptr<std::shared_timed_mutex>, std::map<std::string, MapItContainers > > > vertexAdjacencyMap;
 
 public:
     std::pair < MyMap_it, bool> insertVertex(std::string vertexId);

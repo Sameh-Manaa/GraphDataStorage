@@ -176,6 +176,26 @@ uint64_t AdjacencyList::getAdjacencyListSize() {
     return size;
 }
 
+uint64_t AdjacencyList::getAdjacencyListSizeInBytes() {
+    uint64_t size = sizeof (this->vertexAdjacencyMap);
+    for (auto const& labeledEdge : this->vertexAdjacencyMap) {
+        size += sizeof (labeledEdge.first);
+        size += labeledEdge.first.length() + 1;
+        size += sizeof (labeledEdge.second);
+        for (auto const& edge : labeledEdge.second) {
+            size += sizeof (edge.first);
+            size += edge.first.length() + 1;
+            size += sizeof (edge.second);
+            size += sizeof (edge.second.vec);
+            for (auto const& it : edge.second.vec) {
+                size += sizeof (it);
+            }
+        }
+    }
+
+    return size * sizeof (char);
+}
+
 void AdjacencyList::getTargetVertex(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
     AL_it labeledEdgesSet_it = this->vertexAdjacencyMap.find(edgeLabel);
 

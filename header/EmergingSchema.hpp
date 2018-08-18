@@ -38,6 +38,9 @@ public:
     
     uint64_t getVertexEmergingSchemaSize();
     uint64_t getEdgeEmergingSchemaSize();
+    uint64_t getVertexEmergingSchemaSizeInBytes();
+    uint64_t getEdgeEmergingSchemaSizeInBytes();
+    uint64_t getEmergingSchemaSizeInBytes();
     void generateVerticesEmergingSchema(UniversalTable &universalTable);
     void generateEdgesEmergingSchema(UniversalTable &universalTable);
 

@@ -176,6 +176,13 @@ uint64_t UniversalTable::getVertexUniversalTableSizeInBytes() {
                 size += strlen(vertexProperty);
         }
     }
+
+    size += sizeof (this->vertexPropertyIndex);
+    for (auto const& vertexIndex : this->vertexPropertyIndex) {
+        size += sizeof (vertexIndex.first);
+        size += vertexIndex.first.length() + 1;
+        size += sizeof (vertexIndex.second);
+    }
     return size * sizeof (char);
 }
 
@@ -191,7 +198,19 @@ uint64_t UniversalTable::getEdgeUniversalTableSizeInBytes() {
                 size += strlen(edgeProperty);
         }
     }
+
+    size += sizeof (this->edgePropertyIndex);
+    for (auto const& edgeIndex : this->edgePropertyIndex) {
+        size += sizeof (edgeIndex.first);
+        size += edgeIndex.first.length() + 1;
+        size += sizeof (edgeIndex.second);
+    }
     return size * sizeof (char);
+}
+
+uint64_t UniversalTable::getUniversalTableSizeInBytes() {
+    uint64_t size = this->getVertexUniversalTableSizeInBytes() + this->getEdgeUniversalTableSizeInBytes();
+    return size;
 }
 
 void UniversalTable::clearUniversalTable() {

@@ -397,6 +397,31 @@ uint64_t CSR::getCSRSize() {
     return size;
 }
 
+uint64_t CSR::getCSRSizeInBytes() {
+    uint64_t size = sizeof (this->labeledCSR);
+    for (auto const& labeledEdge : this->labeledCSR) {
+        size += sizeof (labeledEdge.first);
+        size += labeledEdge.first.length() + 1;
+        size += sizeof (labeledEdge.second);
+        size += sizeof (vertexIndexMap);
+        size += sizeof (vertexRowIndex);
+        size += sizeof (vertexColumnIndex);
+        for (auto const& vertexIndex : vertexIndexMap(std::get<0>(labeledEdge.second))) {
+            size += sizeof (vertexIndex.first);
+            size += vertexIndex.first.length() + 1;
+            size += sizeof (vertexIndex.second);
+        }
+        for (auto const& vrIndex : vertexRowIndex(std::get<1>(labeledEdge.second))) {
+            size += sizeof (vrIndex);
+        }
+        for (auto const& vcIndex : vertexColumnIndex(std::get<2>(labeledEdge.second))) {
+            size += sizeof (vcIndex);
+        }
+    }
+
+    return size * sizeof (char);
+}
+
 void CSR::getTargetVertex(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
     labeledCSR_it labeledEdgesSet_it = this->labeledCSR.find(edgeLabel);
     vertexIndexMap& vi_map = std::get<0>(labeledEdgesSet_it->second);

@@ -49,6 +49,67 @@ uint64_t EmergingSchema::getEdgeEmergingSchemaSize() {
     return this->edgeEmergingSchema.size();
 }
 
+uint64_t EmergingSchema::getVertexEmergingSchemaSizeInBytes() {
+    uint64_t size = sizeof (this->vertexEmergingSchema);
+    for (auto const& table : this->vertexEmergingSchema) {
+        size += sizeof (table.first);
+        size += sizeof (table.second);
+        for (auto const& vertex : table.second) {
+            size += sizeof (vertex.first);
+            size += vertex.first.length() + 1;
+            size += sizeof (vertex.second);
+            for (char* const& vertexProperty : vertex.second) {
+                size += sizeof (vertexProperty);
+                if (vertexProperty)
+                    size += strlen(vertexProperty);
+            }
+        }
+    }
+
+    size += sizeof (this->vertexPropertyEsIndex);
+    for (auto const& vertexIndex : this->vertexPropertyEsIndex) {
+        size += sizeof (vertexIndex.first);
+        size += vertexIndex.first.length() + 1;
+        size += sizeof (vertexIndex.second);
+        size += sizeof (vertexIndex.second.first);
+        size += sizeof (vertexIndex.second.second);
+    }
+    return size * sizeof (char);
+}
+
+uint64_t EmergingSchema::getEdgeEmergingSchemaSizeInBytes() {
+    uint64_t size = sizeof (this->edgeEmergingSchema);
+    for (auto const& table : this->edgeEmergingSchema) {
+        size += sizeof (table.first);
+        size += sizeof (table.second);
+        for (auto const& edge : table.second) {
+            size += sizeof (edge.first);
+            size += edge.first.length() + 1;
+            size += sizeof (edge.second);
+            for (char* const& edgeProperty : edge.second) {
+                size += sizeof (edgeProperty);
+                if (edgeProperty)
+                    size += strlen(edgeProperty);
+            }
+        }
+    }
+
+    size += sizeof (this->edgePropertyEsIndex);
+    for (auto const& edgeIndex : this->edgePropertyEsIndex) {
+        size += sizeof (edgeIndex.first);
+        size += edgeIndex.first.length() + 1;
+        size += sizeof (edgeIndex.second);
+        size += sizeof (edgeIndex.second.first);
+        size += sizeof (edgeIndex.second.second);
+    }
+    return size * sizeof (char);
+}
+
+uint64_t EmergingSchema::getEmergingSchemaSizeInBytes() {
+    uint64_t size = this->getVertexEmergingSchemaSizeInBytes() + this->getEdgeEmergingSchemaSizeInBytes();
+    return size;
+}
+
 void EmergingSchema::generateVerticesEmergingSchema(UniversalTable &universalTable) {
 
     //generate ES vertices

@@ -10,6 +10,13 @@ bool CSRSchemaHashedTableManager::loadGraph(std::string verticesDirectory, std::
     if (loadVertices(verticesDirectory) &&
             loadEdges(edgesDirectory)
             ) {
+
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
+        std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+        std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
+        std::cout << "==========================================================================" << std::endl;
+
         return true;
     } else {
         return false;
@@ -76,11 +83,11 @@ bool CSRSchemaHashedTableManager::loadVertices(std::string verticesDirectory) {
         this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
         vertexSchemaHashedMap.clear();
 
-        std::cout << "file: " << pent->d_name << std::endl;
-        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
-        std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-        std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
-        std::cout << "--------------------------------------------------------------------------" << std::endl;
+        //        std::cout << "file: " << pent->d_name << std::endl;
+        //        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
+        //        std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+        //        std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
+        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -171,11 +178,11 @@ bool CSRSchemaHashedTableManager::loadEdges(std::string edgesDirectory) {
         this->csr.addNeighbourVertex(edges);
         edges.clear();
 
-        std::cout << "file: " << pent->d_name << std::endl;
-        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
-        std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-        std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
-        std::cout << "--------------------------------------------------------------------------" << std::endl;
+        //        std::cout << "file: " << pent->d_name << std::endl;
+        //        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
+        //        std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+        //        std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
+        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -254,7 +261,7 @@ void CSRSchemaHashedTableManager::executeQueryBI18(tm messageCreationDate, uint1
             resultSet.emplace_back(tempResultSet[i]);
         }
     }
-    
+
     tempResultSet.clear();
 
 
@@ -285,8 +292,8 @@ void CSRSchemaHashedTableManager::executeQueryBI18(tm messageCreationDate, uint1
             resultSet.emplace_back(resultRecord);
         }
     }
-    
-    
+
+
     this->csr.getTargetVertexWithReplacement("hasCreator", resultSet);
 
     std::cout << "Count of Relevant Messages Found: " << resultSet.size() << std::endl;

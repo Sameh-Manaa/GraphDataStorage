@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <stdint.h>
+#include <cstdlib>
 #include "AdjacencyMatrix.hpp"
 #include "AdjacencyList.hpp"
 #include "AdjacencyMatrixUniversalTableManager.hpp"
@@ -116,120 +117,207 @@ void writeQueryResultToFile(std::string file_name, std::string headerLine, query
 void testAdjacencyMatrixUniversalTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Loading Start: AdjacencyMatrixUniversalTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
         AdjacencyMatrixUniversalTableManager adjMatUniTblMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
         adjMatUniTblMgr.loadGraph("data/vertexes", "data/edges");
         after_ts[i] = std::chrono::steady_clock::now();
     }
+
+    std::cout << "Loading End: AdjacencyMatrixUniversalTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 }
 
 void testAdjacencyListUniversalTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Loading Start: AdjacencyListUniversalTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
         AdjacencyListUniversalTableManager adjLstUniTblMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
         adjLstUniTblMgr.loadGraph("data/vertexes", "data/edges");
         after_ts[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "Loading End: AdjacencyListUniversalTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testCSRUniversalTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Loading Start: CSRUniversalTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
         CSRUniversalTableManager csrUniTblMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
         csrUniTblMgr.loadGraph("data/vertexes", "data/edges");
         after_ts[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "Loading End: CSRUniversalTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testAdjacencyMatrixSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Loading Start: AdjacencyMatrixSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
         AdjacencyMatrixSchemaHashedTableManager adjMatSHahsedTblMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
         adjMatSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
         after_ts[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "Loading End: AdjacencyMatrixSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testAdjacencyListSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Loading Start: AdjacencyListSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
         AdjacencyListSchemaHashedTableManager adjLstSHahsedTblMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
         adjLstSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
         after_ts[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "Loading End: AdjacencyListSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testCSRSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Loading Start: CSRSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
         CSRSchemaHashedTableManager csrSHashedTblMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
         csrSHashedTblMgr.loadGraph("data/vertexes", "data/edges");
         after_ts[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "Loading End: CSRSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testAdjacencyMatrixEmergingSchema(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Loading Start: AdjacencyMatrixEmergingSchema - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
         AdjacencyMatrixEmergingSchemaManager adjMatEsMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
         adjMatEsMgr.loadGraph("data/vertexes", "data/edges");
         after_ts[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "Loading End: AdjacencyMatrixEmergingSchema - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testAdjacencyListEmergingSchema(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Loading Start: AdjacencyListEmergingSchema - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
         AdjacencyListEmergingSchemaManager adjLstEsMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
         adjLstEsMgr.loadGraph("data/vertexes", "data/edges");
         after_ts[i] = std::chrono::steady_clock::now();
     }
+
+    std::cout << "Loading End: AdjacencyListEmergingSchema - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testCSREmergingSchema(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Loading Start: CSREmergingSchema - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
         CSREmergingSchemaManager csrEsMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
         csrEsMgr.loadGraph("data/vertexes", "data/edges");
         after_ts[i] = std::chrono::steady_clock::now();
     }
+
+    std::cout << "Loading End: CSREmergingSchema - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
-void testParallelAdjacencyListSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t parallilismDegree) {
+void testParallelAdjacencyListSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t parallelismDegree) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Loading Start: ParallelAdjacencyListSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << " - Parallelism: " << std::to_string(parallelismDegree) << std::endl;
     for (uint8_t i = 0; i < iterations; i++) {
-        ParallelAdjacencyListSchemaHashedTableManager pAdjLstSHahsedTblMgr(batchSize, parallilismDegree);
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
+        ParallelAdjacencyListSchemaHashedTableManager pAdjLstSHahsedTblMgr(batchSize, parallelismDegree);
         before_ts[i] = std::chrono::steady_clock::now();
         pAdjLstSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
         after_ts[i] = std::chrono::steady_clock::now();
     }
 
-    ParallelAdjacencyListSchemaHashedTableManager pAdjLstSHahsedTblMgr(batchSize, parallilismDegree);
+    ParallelAdjacencyListSchemaHashedTableManager pAdjLstSHahsedTblMgr(batchSize, parallelismDegree);
     pAdjLstSHahsedTblMgr.loadGraph("..", "..");
+
+    std::cout << "Loading End: ParallelAdjacencyListSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << " - Parallelism: " << std::to_string(parallelismDegree) << std::endl;
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testUniversalTable_Query_BI1(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, tm messageCreationDate, queryResultSet_vec &resultSet) {
     before_fetch.resize(iterations);
     after_fetch.resize(iterations);
     after_query.resize(iterations);
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Query: UniversalTable_Query_BI1 - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl;
 
     AdjacencyListUniversalTableManager adjLstUniTblMgr(batchSize);
     adjLstUniTblMgr.loadGraph("data/vertexes", "data/edges");
@@ -241,6 +329,8 @@ void testUniversalTable_Query_BI1(uint32_t batchSize, uint8_t iterations, std::v
     std::vector<uint8_t> groupByOperation = {0, 2, 1};
 
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
         resultSet.clear();
 
         before_fetch[i] = std::chrono::steady_clock::now();
@@ -254,12 +344,28 @@ void testUniversalTable_Query_BI1(uint32_t batchSize, uint8_t iterations, std::v
 
         after_query[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+    
+    ofstream evalFile;
+    evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::trunc);
+
+    evalFile << "DataStructure, Size(Byte)" << endl;
+
+    evalFile << "Universal Table, " << std::to_string(adjLstUniTblMgr.getUniversalTableSizeInBytes()) << endl;
+
+    evalFile.close();
+
 }
 
 void testSchemaHashedTable_Query_BI1(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, tm messageCreationDate, queryResultSet_vec &resultSet) {
     before_fetch.resize(iterations);
     after_fetch.resize(iterations);
     after_query.resize(iterations);
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Query: SchemaHashedTable_Query_BI1 - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+
+    std::cout << "==========================================================================" << std::endl;
 
     AdjacencyListSchemaHashedTableManager adjLstSHahsedTblMgr(batchSize);
     adjLstSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
@@ -271,6 +377,8 @@ void testSchemaHashedTable_Query_BI1(uint32_t batchSize, uint8_t iterations, std
     std::vector<uint8_t> groupByOperation = {0, 2, 1};
 
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
         resultSet.clear();
 
         before_fetch[i] = std::chrono::steady_clock::now();
@@ -284,12 +392,25 @@ void testSchemaHashedTable_Query_BI1(uint32_t batchSize, uint8_t iterations, std
 
         after_query[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
+    
+    ofstream evalFile;
+    evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+    evalFile << "Schema Hashed Table, " << std::to_string(adjLstSHahsedTblMgr.getSchemaHashedTableSizeInBytes()) << endl;
+
+    evalFile.close();
 }
 
 void testEmergingSchema_Query_BI1(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, tm messageCreationDate, queryResultSet_vec &resultSet) {
     before_fetch.resize(iterations);
     after_fetch.resize(iterations);
     after_query.resize(iterations);
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Query: EmergingSchema_Query_BI1 - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl;
 
     AdjacencyListEmergingSchemaManager adjLstEsMgr(batchSize);
     adjLstEsMgr.loadGraph("data/vertexes", "data/edges");
@@ -301,6 +422,8 @@ void testEmergingSchema_Query_BI1(uint32_t batchSize, uint8_t iterations, std::v
     std::vector<uint8_t> groupByOperation = {0, 2, 1};
 
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
 
         resultSet.clear();
 
@@ -315,12 +438,26 @@ void testEmergingSchema_Query_BI1(uint32_t batchSize, uint8_t iterations, std::v
 
         after_query[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
+    
+    
+    ofstream evalFile;
+    evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+    evalFile << "Emerging Schema, " << std::to_string(adjLstEsMgr.getEmergingSchemaSizeInBytes()) << endl;
+
+    evalFile.close();
 }
 
 void testAdjacencyListUniversalTable_Query_BI18(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, queryResultSet_vec &resultSet) {
     before_fetch.resize(iterations);
     after_fetch.resize(iterations);
     after_query.resize(iterations);
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Query: AdjacencyListUniversalTable_Query_BI18 - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl;
 
     AdjacencyListUniversalTableManager adjLstUniTblMgr(batchSize);
     adjLstUniTblMgr.loadGraph("data/vertexes", "data/edges");
@@ -331,6 +468,8 @@ void testAdjacencyListUniversalTable_Query_BI18(uint32_t batchSize, uint8_t iter
     std::vector<uint8_t> groupByOperation = {0};
 
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
 
         resultSet.clear();
 
@@ -347,12 +486,18 @@ void testAdjacencyListUniversalTable_Query_BI18(uint32_t batchSize, uint8_t iter
 
         after_query[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testCSRUniversalTable_Query_BI18(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, queryResultSet_vec &resultSet) {
     before_fetch.resize(iterations);
     after_fetch.resize(iterations);
     after_query.resize(iterations);
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Query: CSRUniversalTable_Query_BI18 - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl;
 
     CSRUniversalTableManager csrUniTblMgr(batchSize);
     csrUniTblMgr.loadGraph("data/vertexes", "data/edges");
@@ -363,6 +508,8 @@ void testCSRUniversalTable_Query_BI18(uint32_t batchSize, uint8_t iterations, st
     std::vector<uint8_t> groupByOperation = {0};
 
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
 
         resultSet.clear();
 
@@ -379,12 +526,18 @@ void testCSRUniversalTable_Query_BI18(uint32_t batchSize, uint8_t iterations, st
 
         after_query[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testAdjacencyListSchemaHashedTable_Query_BI18(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, queryResultSet_vec &resultSet) {
     before_fetch.resize(iterations);
     after_fetch.resize(iterations);
     after_query.resize(iterations);
+    std::cout << "==========================================================================" << std::endl;
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Query: AdjacencyListSchemaHashedTable_Query_BI18 - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
 
     AdjacencyListSchemaHashedTableManager adjLstSHashedTblMgr(batchSize);
     adjLstSHashedTblMgr.loadGraph("data/vertexes", "data/edges");
@@ -395,6 +548,8 @@ void testAdjacencyListSchemaHashedTable_Query_BI18(uint32_t batchSize, uint8_t i
     std::vector<uint8_t> groupByOperation = {0};
 
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
 
         resultSet.clear();
 
@@ -411,12 +566,18 @@ void testAdjacencyListSchemaHashedTable_Query_BI18(uint32_t batchSize, uint8_t i
 
         after_query[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testCSRSchemaHashedTable_Query_BI18(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, queryResultSet_vec &resultSet) {
     before_fetch.resize(iterations);
     after_fetch.resize(iterations);
     after_query.resize(iterations);
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Query: CSRSchemaHashedTable_Query_BI18 - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl;
 
     CSRSchemaHashedTableManager csrSHashedTblMgr(batchSize);
     csrSHashedTblMgr.loadGraph("data/vertexes", "data/edges");
@@ -427,6 +588,8 @@ void testCSRSchemaHashedTable_Query_BI18(uint32_t batchSize, uint8_t iterations,
     std::vector<uint8_t> groupByOperation = {0};
 
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
 
         resultSet.clear();
 
@@ -443,12 +606,18 @@ void testCSRSchemaHashedTable_Query_BI18(uint32_t batchSize, uint8_t iterations,
 
         after_query[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testAdjacencyListEmergingSchema_Query_BI18(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, queryResultSet_vec &resultSet) {
     before_fetch.resize(iterations);
     after_fetch.resize(iterations);
     after_query.resize(iterations);
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Query: AdjacencyListEmergingSchema_Query_BI18 - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl;
 
     AdjacencyListEmergingSchemaManager adjLstEsTblMgr(batchSize);
     adjLstEsTblMgr.loadGraph("data/vertexes", "data/edges");
@@ -459,6 +628,8 @@ void testAdjacencyListEmergingSchema_Query_BI18(uint32_t batchSize, uint8_t iter
     std::vector<uint8_t> groupByOperation = {0};
 
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
 
         resultSet.clear();
 
@@ -475,12 +646,18 @@ void testAdjacencyListEmergingSchema_Query_BI18(uint32_t batchSize, uint8_t iter
 
         after_query[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testCSREmergingSchema_Query_BI18(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, queryResultSet_vec &resultSet) {
     before_fetch.resize(iterations);
     after_fetch.resize(iterations);
     after_query.resize(iterations);
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Query: CSREmergingSchema_Query_BI18 - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl;
 
     CSREmergingSchemaManager csrEsTblMgr(batchSize);
     csrEsTblMgr.loadGraph("data/vertexes", "data/edges");
@@ -491,6 +668,8 @@ void testCSREmergingSchema_Query_BI18(uint32_t batchSize, uint8_t iterations, st
     std::vector<uint8_t> groupByOperation = {0};
 
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
 
         resultSet.clear();
 
@@ -507,12 +686,18 @@ void testCSREmergingSchema_Query_BI18(uint32_t batchSize, uint8_t iterations, st
 
         after_query[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
 }
 
 void testAdjacencyMatrix_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, queryResultSet_vec &resultSet) {
     before_fetch.resize(iterations);
     after_fetch.resize(iterations);
     after_query.resize(iterations);
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Query: AdjacencyMatrix_Query_DC - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl;
 
     AdjacencyMatrixUniversalTableManager adjMatUniTblMgr(batchSize);
     adjMatUniTblMgr.loadGraph("data/vertexes", "data/edges");
@@ -523,6 +708,8 @@ void testAdjacencyMatrix_Query_DC(uint32_t batchSize, uint8_t iterations, std::v
     std::vector<uint8_t> groupByOperation = {0};
 
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
 
         resultSet.clear();
 
@@ -539,12 +726,25 @@ void testAdjacencyMatrix_Query_DC(uint32_t batchSize, uint8_t iterations, std::v
 
         after_query[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
+    
+    ofstream evalFile;
+    evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+    evalFile << "Adjacency Matrix, " << std::to_string(adjMatUniTblMgr.getAdjacencyMatrixSizeInBytes()) << endl;
+
+    evalFile.close();
 }
 
 void testAdjacencyList_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, queryResultSet_vec &resultSet) {
     before_fetch.resize(iterations);
     after_fetch.resize(iterations);
     after_query.resize(iterations);
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Query: AdjacencyList_Query_DC - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl;
 
     AdjacencyListUniversalTableManager adjLstUniTblMgr(batchSize);
     adjLstUniTblMgr.loadGraph("data/vertexes", "data/edges");
@@ -555,6 +755,8 @@ void testAdjacencyList_Query_DC(uint32_t batchSize, uint8_t iterations, std::vec
     std::vector<uint8_t> groupByOperation = {0};
 
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
 
         resultSet.clear();
 
@@ -571,12 +773,25 @@ void testAdjacencyList_Query_DC(uint32_t batchSize, uint8_t iterations, std::vec
 
         after_query[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
+    
+    ofstream evalFile;
+    evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+    evalFile << "Adjacency List, " << std::to_string(adjLstUniTblMgr.getAdjacencyListSizeInBytes()) << endl;
+
+    evalFile.close();
 }
 
 void testCSR_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, queryResultSet_vec &resultSet) {
     before_fetch.resize(iterations);
     after_fetch.resize(iterations);
     after_query.resize(iterations);
+
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Query: CSR_Query_DC - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
+    std::cout << "==========================================================================" << std::endl;
 
     CSRUniversalTableManager csrUniTblMgr(batchSize);
     csrUniTblMgr.loadGraph("data/vertexes", "data/edges");
@@ -587,6 +802,8 @@ void testCSR_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> 
     std::vector<uint8_t> groupByOperation = {0};
 
     for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
 
         resultSet.clear();
 
@@ -603,19 +820,46 @@ void testCSR_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> 
 
         after_query[i] = std::chrono::steady_clock::now();
     }
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
+    
+    
+    ofstream evalFile;
+    evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+    evalFile << "CSR, " << std::to_string(csrUniTblMgr.getCSRSizeInBytes()) << endl;
+
+    evalFile.close();
 }
 
 int main(int argc, char** argv) {
-    int iterations = 20;
-    uint32_t batchSize_start = 10, batchSize_end = 100000;
+    int iterations = 2;
+    uint32_t batchSize_start = 1000, batchSize_end = 1000;
     std::vector<std::chrono::time_point<std::chrono::steady_clock> > before_ts, after_ts, before_fetch, after_fetch, after_query;
 
+    const int dir_err = system("mkdir -p Evaluation-Results");
+    if (-1 == dir_err) {
+        printf("Error creating directory!n");
+        exit(1);
+    }
 
 
     for (uint32_t batchSize = batchSize_start; batchSize <= batchSize_end; batchSize *= 10) {
 
+        testParallelAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 1);
+        writeLoadingDurationsToFile("Loading_Parallel(1)_AdjacencyListSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+
+        testParallelAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 2);
+        writeLoadingDurationsToFile("Loading_Parallel(2)_AdjacencyListSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+
         testParallelAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 4);
-        writeLoadingDurationsToFile("Loading_Parallel_AdjacencyListSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+        writeLoadingDurationsToFile("Loading_Parallel(4)_AdjacencyListSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+
+        testParallelAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 8);
+        writeLoadingDurationsToFile("Loading_Parallel(8)_AdjacencyListSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+
+        testParallelAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 16);
+        writeLoadingDurationsToFile("Loading_Parallel(16)_AdjacencyListSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
 
         //testAdjacencyMatrixUniversalTable(batchSize, iterations, before_ts, after_ts);
         //writeLoadingResultsToFile("Loading_AdjacencyMatrixUniversalTable_" + to_string(batchSize), before_ts, after_ts);
@@ -647,7 +891,7 @@ int main(int argc, char** argv) {
 
     //return (EXIT_SUCCESS); 
 
-    iterations = 100;
+    iterations = 2;
 
     queryResultSet_vec resultSet;
     tm messageCreationDate = UtilityFunctions::getDateTime("2011-07-21T22:00:00");
@@ -717,7 +961,7 @@ int main(int argc, char** argv) {
 /*
  * todo list:
  * ----------
- * size in bytes
+ * size in bytes (done)
  * groupBy (done)
  * query: bi 18 (done) -- AdjMatSHashed, AdjMatEs
  * query: histogram (done)

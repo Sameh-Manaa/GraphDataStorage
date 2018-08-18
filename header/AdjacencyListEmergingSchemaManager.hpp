@@ -40,6 +40,9 @@ public:
     void executeQueryBI1(tm messageCreationDate, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     void executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     
+    uint64_t getAdjacencyListSizeInBytes(){return this->adjacencyList.getAdjacencyListSizeInBytes();};
+    uint64_t getEmergingSchemaSizeInBytes(){return this->emergingSchema.getEmergingSchemaSizeInBytes();};
+    
     AdjacencyListEmergingSchemaManager(int bSize):batchSize(bSize){};
 };
 

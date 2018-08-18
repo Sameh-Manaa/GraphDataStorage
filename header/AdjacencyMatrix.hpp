@@ -47,6 +47,7 @@ public:
     uint64_t getVertexIndexByVertexId(std::string vertexId);
     std::string getVertexIdByVertexIndex(uint64_t vertexIndex, std::string edgeLabel);
     uint64_t getAdjacencyMatrixSize();
+    uint64_t getAdjacencyMatrixSizeInBytes();
     void getTargetVertex(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     void getTargetVertexWithReplacement(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     void getAllEdges(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);

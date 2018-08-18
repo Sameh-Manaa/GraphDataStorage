@@ -46,6 +46,7 @@ public:
     std::unordered_map<std::string, MapItContainers > getNeighbourVertices(std::string vertexId);
     uint64_t getVertexIndexByVertexId(std::string vertexId);
     uint64_t getAdjacencyListSize();
+    uint64_t getAdjacencyListSizeInBytes();
     void getTargetVertex(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     void getTargetVertexWithReplacement(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     void getAllEdges(std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);

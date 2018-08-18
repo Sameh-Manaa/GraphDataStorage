@@ -65,6 +65,7 @@ public:
     uint64_t getVertexUniversalTableSize();
     uint64_t getEdgeUniversalTableSize();
     uint64_t getVertexUniversalTableSizeInBytes();
+    uint64_t getUniversalTableSizeInBytes();
     uint64_t getEdgeUniversalTableSizeInBytes();
     void clearUniversalTable();
 

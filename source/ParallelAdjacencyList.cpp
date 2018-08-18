@@ -157,10 +157,10 @@ void ParallelAdjacencyList::addNeighbourVertex(std::vector<std::tuple<std::strin
 
         std::pair < MyMap_it, bool> srcIt, tgtIt;
 
-        std::shared_lock<std::shared_timed_mutex> innerLock(*innerMutex);
+        //std::shared_lock<std::shared_timed_mutex> innerLock(*innerMutex);
         srcIt.first = alEntry.first->second.second.find(std::get<0>(*it));
         tgtIt.first = alEntry.first->second.second.find(std::get<2>(*it));
-        innerLock.unlock();
+        //innerLock.unlock();
 
         if (srcIt.first == alEntry.first->second.second.end()) {
             std::lock_guard<std::shared_timed_mutex> lock(*innerMutex);

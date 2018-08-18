@@ -11,10 +11,16 @@ bool CSREmergingSchemaManager::loadGraph(std::string verticesDirectory, std::str
         this->emergingSchema.generateVerticesEmergingSchema(this->universalTable);
         this->emergingSchema.generateEdgesEmergingSchema(this->universalTable);
         this->universalTable.clearUniversalTable();
-//        std::cout << "==========================================================================" << std::endl;
-//        std::cout << "Vertex Universal Table Size In Bytes: " << this->universalTable.getVertexUniversalTableSizeInBytes() << std::endl;
-//        std::cout << "Edge Universal Table Size In Bytes: " << this->universalTable.getEdgeUniversalTableSizeInBytes() << std::endl;
-//        std::cout << "==========================================================================" << std::endl;
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
+        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
+        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
+        std::cout << "==========================================================================" << std::endl;
+
+        //        std::cout << "==========================================================================" << std::endl;
+        //        std::cout << "Vertex Universal Table Size In Bytes: " << this->universalTable.getVertexUniversalTableSizeInBytes() << std::endl;
+        //        std::cout << "Edge Universal Table Size In Bytes: " << this->universalTable.getEdgeUniversalTableSizeInBytes() << std::endl;
+        //        std::cout << "==========================================================================" << std::endl;
         return true;
     } else {
         return false;
@@ -80,11 +86,11 @@ bool CSREmergingSchemaManager::loadVertices(std::string verticesDirectory) {
         this->universalTable.upsertVertex(vertexUniversalMap);
         vertexUniversalMap.clear();
 
-        std::cout << "file: " << pent->d_name << std::endl;
-        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
-        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
-        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
-        std::cout << "--------------------------------------------------------------------------" << std::endl;
+        //        std::cout << "file: " << pent->d_name << std::endl;
+        //        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
+        //        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
+        //        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
+        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -133,10 +139,10 @@ bool CSREmergingSchemaManager::loadEdges(std::string edgesDirectory) {
 
             uint64_t propertyCounter = 0;
             while (getline(iss, property, '|')) {
-                if (propertiesPositions[propertyCounter] == -1 && propertyCounter == 0) {
+                if (propertyCounter == 0) {
                     sourceVertexId = property;
                     propertyCounter++;
-                } else if (propertiesPositions[propertyCounter] == -1 && propertyCounter == 1) {
+                } else if (propertyCounter == 1) {
                     targetVertexId = property;
                     propertyCounter++;
                 } else {
@@ -175,11 +181,11 @@ bool CSREmergingSchemaManager::loadEdges(std::string edgesDirectory) {
         this->csr.addNeighbourVertex(edges);
         edges.clear();
 
-        std::cout << "file: " << pent->d_name << std::endl;
-        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
-        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
-        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
-        std::cout << "--------------------------------------------------------------------------" << std::endl;
+        //        std::cout << "file: " << pent->d_name << std::endl;
+        //        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
+        //        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
+        //        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
+        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -205,7 +211,7 @@ std::vector<int16_t> CSREmergingSchemaManager::addEdgeProperties(std::string edg
     std::istringstream iss(edgeHeaderLine);
     std::string propertyName;
     while (getline(iss, propertyName, '|')) {
-        if (propertyName.substr(propertyName.size() - 3, 3) == ".id") {
+        if (propertiesPositions.size() < 2) {
             propertiesPositions.push_back(-1);
             continue;
         }
@@ -216,7 +222,7 @@ std::vector<int16_t> CSREmergingSchemaManager::addEdgeProperties(std::string edg
 
 void CSREmergingSchemaManager::executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
 
-// 1- get all vertices with type comment or post
+    // 1- get all vertices with type comment or post
     std::unordered_map<std::string, std::pair<uint16_t, uint16_t> > vertexPropertyOrder = this->emergingSchema.getVertexPropertyIndex();
 
     std::pair<uint16_t, uint16_t> creationDatePropertyIndex = vertexPropertyOrder.at("creationDate");
@@ -242,7 +248,7 @@ void CSREmergingSchemaManager::executeQueryBI18(tm messageCreationDate, uint16_t
         commentVertices_length = this->emergingSchema.getVertices("comment", "length");
         postVertices_length = this->emergingSchema.getVertices("post", "length");
     }
-    
+
     std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> commentVertices_content;
     std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> postVertices_content;
 
@@ -256,7 +262,7 @@ void CSREmergingSchemaManager::executeQueryBI18(tm messageCreationDate, uint16_t
         commentVertices_content = this->emergingSchema.getVertices("comment", "content");
         postVertices_content = this->emergingSchema.getVertices("post", "content");
     }
-    
+
     std::pair<std::map<std::string, std::vector<char*> >::const_iterator, std::map<std::string, std::vector<char*> >::const_iterator> postVertices_language;
 
     if (languagePropertyIndex.first == creationDatePropertyIndex.first) {
@@ -268,12 +274,12 @@ void CSREmergingSchemaManager::executeQueryBI18(tm messageCreationDate, uint16_t
     } else {
         postVertices_language = this->emergingSchema.getVertices("post", "language");
     }
-    
+
     // 2- filter result on creation date before $date, length less than $messageLength, content is not empty and post language in $languages
 
     std::vector<std::pair<std::vector<std::string>, std::vector<double> > > tempResultSet;
 
-    for (std::map<std::string, std::vector<char*> >::const_iterator it = commentVertices_creationDate.first, 
+    for (std::map<std::string, std::vector<char*> >::const_iterator it = commentVertices_creationDate.first,
             it_length = commentVertices_length.first,
             it_content = commentVertices_content.first;
             it != commentVertices_creationDate.second;
@@ -314,12 +320,12 @@ void CSREmergingSchemaManager::executeQueryBI18(tm messageCreationDate, uint16_t
             resultSet.emplace_back(tempResultSet[i]);
         }
     }
-    
+
     tempResultSet.clear();
 
 
 
-    for (std::map<std::string, std::vector<char*> >::const_iterator it = postVertices_creationDate.first, 
+    for (std::map<std::string, std::vector<char*> >::const_iterator it = postVertices_creationDate.first,
             it_length = postVertices_length.first,
             it_content = postVertices_content.first,
             it_language = postVertices_language.first;
@@ -350,8 +356,8 @@ void CSREmergingSchemaManager::executeQueryBI18(tm messageCreationDate, uint16_t
             resultSet.emplace_back(resultRecord);
         }
     }
-    
-    
+
+
     this->csr.getTargetVertexWithReplacement("hasCreator", resultSet);
 
     std::cout << "Count of Relevant Messages Found: " << resultSet.size() << std::endl;

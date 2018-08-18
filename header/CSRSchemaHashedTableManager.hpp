@@ -30,6 +30,9 @@ public:
     
     void executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
 
+    uint64_t getCSRSizeInBytes(){return this->csr.getCSRSizeInBytes();};
+    uint64_t getSchemaHashedTableSizeInBytes(){return this->schemaHashedTable.getSchemaHashedTableSizeInBytes();};
+    
     CSRSchemaHashedTableManager(int bSize):batchSize(bSize){};
 };
 

@@ -32,6 +32,9 @@ public:
     std::map<int, std::string> getVertexProperties(std::string vertexHeaderLine);
     std::map<int, std::string> getEdgeProperties(std::string edgeHeaderLine);
     
+    uint64_t getAdjacencyMatrixSizeInBytes(){return this->adjacencyMatrix.getAdjacencyMatrixSizeInBytes();};
+    uint64_t getSchemaHashedTableSizeInBytes(){return this->schemaHashedTable.getSchemaHashedTableSizeInBytes();};
+    
     AdjacencyMatrixSchemaHashedTableManager(int bSize):batchSize(bSize){
         adjacencyMatrix.setBatchSize(bSize);
     };

@@ -185,6 +185,28 @@ uint64_t AdjacencyMatrix::getAdjacencyMatrixSize() {
     return size;
 }
 
+uint64_t AdjacencyMatrix::getAdjacencyMatrixSizeInBytes() {
+    uint64_t size = sizeof (this->labeledAdjacencyMatrix) + sizeof (this->batchSize);
+    for (auto const& labeledEdge : this->labeledAdjacencyMatrix) {
+        size += sizeof (labeledEdge.first);
+        size += labeledEdge.first.length() + 1;
+        size += sizeof (labeledEdge.second);
+        size += sizeof (labeledEdge.second.first);
+        size += sizeof (labeledEdge.second.second);
+        for (auto const& edgeIndex : labeledEdge.second.first) {
+            size += sizeof (edgeIndex.first);
+            size += edgeIndex.first.length() + 1;
+            size += sizeof (edgeIndex.second);
+        }
+        for (auto const& edgeMap : labeledEdge.second.second) {
+            size += sizeof (edgeMap);
+            size += edgeMap.size() / 8;
+        }
+    }
+
+    return size * sizeof (char);
+}
+
 void AdjacencyMatrix::getTargetVertex(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
     labeledAdjMat_it labeledEdgesSet_it = this->labeledAdjacencyMatrix.find(edgeLabel);
 

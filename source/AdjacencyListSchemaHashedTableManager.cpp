@@ -10,6 +10,11 @@ bool AdjacencyListSchemaHashedTableManager::loadGraph(std::string verticesDirect
     if (loadVertices(verticesDirectory) &&
             loadEdges(edgesDirectory)
             ) {
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
+        std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+        std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
+        std::cout << "==========================================================================" << std::endl;
         return true;
     } else {
         return false;
@@ -76,11 +81,11 @@ bool AdjacencyListSchemaHashedTableManager::loadVertices(std::string verticesDir
         this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
         vertexSchemaHashedMap.clear();
 
-        std::cout << "file: " << pent->d_name << std::endl;
-        std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-        std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-        std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
-        std::cout << "--------------------------------------------------------------------------" << std::endl;
+        //std::cout << "file: " << pent->d_name << std::endl;
+        //std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
+        //std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+        //std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
+        //std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -171,11 +176,11 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
         this->adjacencyList.addNeighbourVertex(edges);
         edges.clear();
 
-        std::cout << "file: " << pent->d_name << std::endl;
-        std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-        std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-        std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
-        std::cout << "--------------------------------------------------------------------------" << std::endl;
+        //std::cout << "file: " << pent->d_name << std::endl;
+        //std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
+        //std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
+        //std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
+        //std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -215,7 +220,7 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDa
     // 2- filter result on creation date before $date
 
     for (std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator it = commentVertices.first; it != commentVertices.second; ++it) {
-        
+
         const char* creationDate = it->second.at("creationDate");
         tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
 
@@ -248,7 +253,7 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDa
     }
 
     for (std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator it = postVertices.first; it != postVertices.second; ++it) {
-        
+
         const char* creationDate = it->second.at("creationDate");
         tm creationDate_tm = UtilityFunctions::getDateTime(creationDate);
 
@@ -283,7 +288,6 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDa
     std::cout << "Count of Relevant Messages Found: " << resultSet.size() << std::endl;
 
 }
-
 
 void AdjacencyListSchemaHashedTableManager::executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
 
@@ -337,7 +341,7 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI18(tm messageCreationD
             resultSet.emplace_back(tempResultSet[i]);
         }
     }
-    
+
     tempResultSet.clear();
 
 
@@ -368,8 +372,8 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI18(tm messageCreationD
             resultSet.emplace_back(resultRecord);
         }
     }
-    
-    
+
+
     this->adjacencyList.getTargetVertexWithReplacement("hasCreator", resultSet);
 
     std::cout << "Count of Relevant Messages Found: " << resultSet.size() << std::endl;

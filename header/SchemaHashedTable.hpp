@@ -42,6 +42,9 @@ public:
     std::list<std::pair<std::string, std::string> > getQualifiedEdges(std::vector<std::string> &selectiveProperties);
     uint64_t getVertexSchemaHashedTableSize();
     uint64_t getEdgeSchemaHashedTableSize();
+    uint64_t getVertexSchemaHashedTableSizeInBytes();
+    uint64_t getEdgeSchemaHashedTableSizeInBytes();
+    uint64_t getSchemaHashedTableSizeInBytes();
     
     std::pair<std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator, std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator>
     getVertices(std::string vertexType);
