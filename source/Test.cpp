@@ -876,8 +876,8 @@ void testCSR_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> 
 }
 
 int main(int argc, char** argv) {
-    int iterations = 40;
-    uint32_t batchSize_start = 1, batchSize_end = 10000;
+    int iterations = 20;
+    uint32_t batchSize_start = 1, batchSize_end = 100000;
     std::vector<std::chrono::time_point<std::chrono::steady_clock> > before_ts, after_ts, before_fetch, after_fetch, after_query;
 
     const int dir_err = system("mkdir -p Evaluation-Results");
@@ -893,7 +893,6 @@ int main(int argc, char** argv) {
      */
 
     {
-
         //loading data without "comment" or "post" files -- filesToLoad = 2
 
         testAdjacencyMatrixUniversalTable(1000, iterations, before_ts, after_ts, 2);
