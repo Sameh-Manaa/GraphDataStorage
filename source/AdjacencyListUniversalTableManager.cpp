@@ -8,10 +8,8 @@
 
 #include "AdjacencyListUniversalTableManager.hpp"
 
-bool AdjacencyListUniversalTableManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory) {
-    if (loadVertices(verticesDirectory) &&
-            loadEdges(edgesDirectory)
-            ) {
+bool AdjacencyListUniversalTableManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory, uint8_t filesToLoad) {
+    if (loadVertices(verticesDirectory, filesToLoad) && loadEdges(edgesDirectory, filesToLoad)) {
         std::cout << "==========================================================================" << std::endl;
         std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
         std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
@@ -28,7 +26,7 @@ bool AdjacencyListUniversalTableManager::loadGraph(std::string verticesDirectory
     }
 }
 
-bool AdjacencyListUniversalTableManager::loadVertices(std::string verticesDirectory) {
+bool AdjacencyListUniversalTableManager::loadVertices(std::string verticesDirectory, uint8_t filesToLoad) {
 
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
@@ -40,6 +38,15 @@ bool AdjacencyListUniversalTableManager::loadVertices(std::string verticesDirect
     pdir = opendir(verticesDirectory.data());
 
     while ((pent = readdir(pdir)) != NULL) {
+
+        std::string fileName(pent->d_name);
+
+        if (fileName.empty() || fileName.at(0) == '.' ||
+                (filesToLoad >= 1 && fileName.find("comment") != std::string::npos) ||
+                (filesToLoad >= 2 && fileName.find("post") != std::string::npos)) {
+            continue;
+        }
+        
         rowCount = 0;
 
         std::cout << verticesDirectory + "/" + pent->d_name << std::endl;
@@ -99,7 +106,7 @@ bool AdjacencyListUniversalTableManager::loadVertices(std::string verticesDirect
     return true;
 }
 
-bool AdjacencyListUniversalTableManager::loadEdges(std::string edgesDirectory) {
+bool AdjacencyListUniversalTableManager::loadEdges(std::string edgesDirectory, uint8_t filesToLoad) {
 
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
@@ -115,6 +122,15 @@ bool AdjacencyListUniversalTableManager::loadEdges(std::string edgesDirectory) {
     pdir = opendir(edgesDirectory.data());
 
     while ((pent = readdir(pdir)) != NULL) {
+
+        std::string fileName(pent->d_name);
+
+        if (fileName.empty() || fileName.at(0) == '.' ||
+                (filesToLoad >= 1 && fileName.find("comment") != std::string::npos) ||
+                (filesToLoad >= 2 && fileName.find("post") != std::string::npos)) {
+            continue;
+        }
+        
         rowCount = 0;
 
         std::cout << edgesDirectory + "/" + pent->d_name << std::endl;

@@ -26,9 +26,9 @@ private:
     int batchSize;
 public:
 
-    bool loadGraph(std::string verticesDirectory, std::string edgesDirectory);
-    bool loadVertices(std::string verticesDirectory);
-    bool loadEdges(std::string edgesDirectory);
+    bool loadGraph(std::string verticesDirectory, std::string edgesDirectory, uint8_t filesToLoad = 0);
+    bool loadVertices(std::string verticesDirectory, uint8_t filesToLoad);
+    bool loadEdges(std::string edgesDirectory, uint8_t filesToLoad);
     std::map<int, std::string> getVertexProperties(std::string vertexHeaderLine);
     std::map<int, std::string> getEdgeProperties(std::string edgeHeaderLine);
     

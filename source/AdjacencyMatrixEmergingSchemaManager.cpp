@@ -6,8 +6,8 @@
 
 #include "AdjacencyMatrixEmergingSchemaManager.hpp"
 
-bool AdjacencyMatrixEmergingSchemaManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory) {
-    if (loadVertices(verticesDirectory) && loadEdges(edgesDirectory)) {
+bool AdjacencyMatrixEmergingSchemaManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory, uint8_t filesToLoad) {
+    if (loadVertices(verticesDirectory, filesToLoad) && loadEdges(edgesDirectory, filesToLoad)) {
         this->adjacencyMatrix.shrinkToFit();
         this->emergingSchema.generateVerticesEmergingSchema(this->universalTable);
         this->emergingSchema.generateEdgesEmergingSchema(this->universalTable);
@@ -28,7 +28,7 @@ bool AdjacencyMatrixEmergingSchemaManager::loadGraph(std::string verticesDirecto
     }
 }
 
-bool AdjacencyMatrixEmergingSchemaManager::loadVertices(std::string verticesDirectory) {
+bool AdjacencyMatrixEmergingSchemaManager::loadVertices(std::string verticesDirectory, uint8_t filesToLoad) {
 
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
@@ -40,6 +40,15 @@ bool AdjacencyMatrixEmergingSchemaManager::loadVertices(std::string verticesDire
     pdir = opendir(verticesDirectory.data());
 
     while ((pent = readdir(pdir)) != NULL) {
+
+        std::string fileName(pent->d_name);
+
+        if (fileName.empty() || fileName.at(0) == '.' ||
+                (filesToLoad >= 1 && fileName.find("comment") != std::string::npos) ||
+                (filesToLoad >= 2 && fileName.find("post") != std::string::npos)) {
+            continue;
+        }
+        
         rowCount = 0;
 
         std::cout << verticesDirectory + "/" + pent->d_name << std::endl;
@@ -99,7 +108,7 @@ bool AdjacencyMatrixEmergingSchemaManager::loadVertices(std::string verticesDire
     return true;
 }
 
-bool AdjacencyMatrixEmergingSchemaManager::loadEdges(std::string edgesDirectory) {
+bool AdjacencyMatrixEmergingSchemaManager::loadEdges(std::string edgesDirectory, uint8_t filesToLoad) {
 
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
@@ -115,6 +124,15 @@ bool AdjacencyMatrixEmergingSchemaManager::loadEdges(std::string edgesDirectory)
     pdir = opendir(edgesDirectory.data());
 
     while ((pent = readdir(pdir)) != NULL) {
+
+        std::string fileName(pent->d_name);
+
+        if (fileName.empty() || fileName.at(0) == '.' ||
+                (filesToLoad >= 1 && fileName.find("comment") != std::string::npos) ||
+                (filesToLoad >= 2 && fileName.find("post") != std::string::npos)) {
+            continue;
+        }
+        
         rowCount = 0;
 
         std::cout << edgesDirectory + "/" + pent->d_name << std::endl;

@@ -114,7 +114,7 @@ void writeQueryResultToFile(std::string file_name, std::string headerLine, query
     evalFile.close();
 }
 
-void testAdjacencyMatrixUniversalTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
+void testAdjacencyMatrixUniversalTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t filesToLoad = 0) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
     std::cout << "==========================================================================" << std::endl;
@@ -125,15 +125,25 @@ void testAdjacencyMatrixUniversalTable(uint32_t batchSize, uint8_t iterations, s
         std::cout << "==========================================================================" << std::endl;
         AdjacencyMatrixUniversalTableManager adjMatUniTblMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
-        adjMatUniTblMgr.loadGraph("data/vertexes", "data/edges");
+        adjMatUniTblMgr.loadGraph("data/vertexes", "data/edges", filesToLoad);
         after_ts[i] = std::chrono::steady_clock::now();
+
+        if (i == iterations - 1) {
+            ofstream evalFile;
+            evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+            evalFile << std::to_string(filesToLoad) << ", Adjacency Matrix, " << std::to_string(adjMatUniTblMgr.getAdjacencyMatrixSizeInBytes()) << endl;
+            evalFile << std::to_string(filesToLoad) << ", Universal Table, " << std::to_string(adjMatUniTblMgr.getUniversalTableSizeInBytes()) << endl;
+
+            evalFile.close();
+        }
     }
 
     std::cout << "Loading End: AdjacencyMatrixUniversalTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 }
 
-void testAdjacencyListUniversalTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
+void testAdjacencyListUniversalTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t filesToLoad = 0) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
     std::cout << "==========================================================================" << std::endl;
@@ -144,15 +154,25 @@ void testAdjacencyListUniversalTable(uint32_t batchSize, uint8_t iterations, std
         std::cout << "==========================================================================" << std::endl;
         AdjacencyListUniversalTableManager adjLstUniTblMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
-        adjLstUniTblMgr.loadGraph("data/vertexes", "data/edges");
+        adjLstUniTblMgr.loadGraph("data/vertexes", "data/edges", filesToLoad);
         after_ts[i] = std::chrono::steady_clock::now();
+
+        if (i == iterations - 1) {
+            ofstream evalFile;
+            evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+            evalFile << std::to_string(filesToLoad) << ", Adjacency List, " << std::to_string(adjLstUniTblMgr.getAdjacencyListSizeInBytes()) << endl;
+            evalFile << std::to_string(filesToLoad) << ", Universal Table, " << std::to_string(adjLstUniTblMgr.getUniversalTableSizeInBytes()) << endl;
+
+            evalFile.close();
+        }
     }
     std::cout << "Loading End: AdjacencyListUniversalTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 
 }
 
-void testCSRUniversalTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
+void testCSRUniversalTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t filesToLoad = 0) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
     std::cout << "==========================================================================" << std::endl;
@@ -163,15 +183,25 @@ void testCSRUniversalTable(uint32_t batchSize, uint8_t iterations, std::vector<a
         std::cout << "==========================================================================" << std::endl;
         CSRUniversalTableManager csrUniTblMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
-        csrUniTblMgr.loadGraph("data/vertexes", "data/edges");
+        csrUniTblMgr.loadGraph("data/vertexes", "data/edges", filesToLoad);
         after_ts[i] = std::chrono::steady_clock::now();
+
+        if (i == iterations - 1) {
+            ofstream evalFile;
+            evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+            evalFile << std::to_string(filesToLoad) << ", CSR, " << std::to_string(csrUniTblMgr.getCSRSizeInBytes()) << endl;
+            evalFile << std::to_string(filesToLoad) << ", Universal Table, " << std::to_string(csrUniTblMgr.getUniversalTableSizeInBytes()) << endl;
+
+            evalFile.close();
+        }
     }
     std::cout << "Loading End: CSRUniversalTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 
 }
 
-void testAdjacencyMatrixSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
+void testAdjacencyMatrixSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t filesToLoad = 0) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
     std::cout << "==========================================================================" << std::endl;
@@ -182,15 +212,25 @@ void testAdjacencyMatrixSchemaHashedTable(uint32_t batchSize, uint8_t iterations
         std::cout << "==========================================================================" << std::endl;
         AdjacencyMatrixSchemaHashedTableManager adjMatSHahsedTblMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
-        adjMatSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
+        adjMatSHahsedTblMgr.loadGraph("data/vertexes", "data/edges", filesToLoad);
         after_ts[i] = std::chrono::steady_clock::now();
+
+        if (i == iterations - 1) {
+            ofstream evalFile;
+            evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+            evalFile << std::to_string(filesToLoad) << ", Adjacency Matrix, " << std::to_string(adjMatSHahsedTblMgr.getAdjacencyMatrixSizeInBytes()) << endl;
+            evalFile << std::to_string(filesToLoad) << ", Schema Hashed Table, " << std::to_string(adjMatSHahsedTblMgr.getSchemaHashedTableSizeInBytes()) << endl;
+
+            evalFile.close();
+        }
     }
     std::cout << "Loading End: AdjacencyMatrixSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 
 }
 
-void testAdjacencyListSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
+void testAdjacencyListSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t filesToLoad = 0) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
     std::cout << "==========================================================================" << std::endl;
@@ -201,15 +241,25 @@ void testAdjacencyListSchemaHashedTable(uint32_t batchSize, uint8_t iterations, 
         std::cout << "==========================================================================" << std::endl;
         AdjacencyListSchemaHashedTableManager adjLstSHahsedTblMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
-        adjLstSHahsedTblMgr.loadGraph("data/vertexes", "data/edges");
+        adjLstSHahsedTblMgr.loadGraph("data/vertexes", "data/edges", filesToLoad);
         after_ts[i] = std::chrono::steady_clock::now();
+
+        if (i == iterations - 1) {
+            ofstream evalFile;
+            evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+            evalFile << std::to_string(filesToLoad) << ", Adjacency List, " << std::to_string(adjLstSHahsedTblMgr.getAdjacencyListSizeInBytes()) << endl;
+            evalFile << std::to_string(filesToLoad) << ", Schema Hashed Table, " << std::to_string(adjLstSHahsedTblMgr.getSchemaHashedTableSizeInBytes()) << endl;
+
+            evalFile.close();
+        }
     }
     std::cout << "Loading End: AdjacencyListSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 
 }
 
-void testCSRSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
+void testCSRSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t filesToLoad = 0) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
     std::cout << "==========================================================================" << std::endl;
@@ -220,15 +270,25 @@ void testCSRSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vecto
         std::cout << "==========================================================================" << std::endl;
         CSRSchemaHashedTableManager csrSHashedTblMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
-        csrSHashedTblMgr.loadGraph("data/vertexes", "data/edges");
+        csrSHashedTblMgr.loadGraph("data/vertexes", "data/edges", filesToLoad);
         after_ts[i] = std::chrono::steady_clock::now();
+
+        if (i == iterations - 1) {
+            ofstream evalFile;
+            evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+            evalFile << std::to_string(filesToLoad) << ", CSR, " << std::to_string(csrSHashedTblMgr.getCSRSizeInBytes()) << endl;
+            evalFile << std::to_string(filesToLoad) << ", Schema Hashed Table, " << std::to_string(csrSHashedTblMgr.getSchemaHashedTableSizeInBytes()) << endl;
+
+            evalFile.close();
+        }
     }
     std::cout << "Loading End: CSRSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 
 }
 
-void testAdjacencyMatrixEmergingSchema(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
+void testAdjacencyMatrixEmergingSchema(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t filesToLoad = 0) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
     std::cout << "==========================================================================" << std::endl;
@@ -239,15 +299,25 @@ void testAdjacencyMatrixEmergingSchema(uint32_t batchSize, uint8_t iterations, s
         std::cout << "==========================================================================" << std::endl;
         AdjacencyMatrixEmergingSchemaManager adjMatEsMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
-        adjMatEsMgr.loadGraph("data/vertexes", "data/edges");
+        adjMatEsMgr.loadGraph("data/vertexes", "data/edges", filesToLoad);
         after_ts[i] = std::chrono::steady_clock::now();
+
+        if (i == iterations - 1) {
+            ofstream evalFile;
+            evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+            evalFile << std::to_string(filesToLoad) << ", Adjacency Matrix, " << std::to_string(adjMatEsMgr.getAdjacencyMatrixSizeInBytes()) << endl;
+            evalFile << std::to_string(filesToLoad) << ", Emerging Schema, " << std::to_string(adjMatEsMgr.getEmergingSchemaSizeInBytes()) << endl;
+
+            evalFile.close();
+        }
     }
     std::cout << "Loading End: AdjacencyMatrixEmergingSchema - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 
 }
 
-void testAdjacencyListEmergingSchema(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
+void testAdjacencyListEmergingSchema(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t filesToLoad = 0) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
     std::cout << "==========================================================================" << std::endl;
@@ -258,8 +328,18 @@ void testAdjacencyListEmergingSchema(uint32_t batchSize, uint8_t iterations, std
         std::cout << "==========================================================================" << std::endl;
         AdjacencyListEmergingSchemaManager adjLstEsMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
-        adjLstEsMgr.loadGraph("data/vertexes", "data/edges");
+        adjLstEsMgr.loadGraph("data/vertexes", "data/edges", filesToLoad);
         after_ts[i] = std::chrono::steady_clock::now();
+
+        if (i == iterations - 1) {
+            ofstream evalFile;
+            evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+            evalFile << std::to_string(filesToLoad) << ", Adjacency List, " << std::to_string(adjLstEsMgr.getAdjacencyListSizeInBytes()) << endl;
+            evalFile << std::to_string(filesToLoad) << ", Emerging Schema, " << std::to_string(adjLstEsMgr.getEmergingSchemaSizeInBytes()) << endl;
+
+            evalFile.close();
+        }
     }
 
     std::cout << "Loading End: AdjacencyListEmergingSchema - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
@@ -267,7 +347,7 @@ void testAdjacencyListEmergingSchema(uint32_t batchSize, uint8_t iterations, std
 
 }
 
-void testCSREmergingSchema(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts) {
+void testCSREmergingSchema(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t filesToLoad = 0) {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
     std::cout << "==========================================================================" << std::endl;
@@ -278,8 +358,18 @@ void testCSREmergingSchema(uint32_t batchSize, uint8_t iterations, std::vector<a
         std::cout << "==========================================================================" << std::endl;
         CSREmergingSchemaManager csrEsMgr(batchSize);
         before_ts[i] = std::chrono::steady_clock::now();
-        csrEsMgr.loadGraph("data/vertexes", "data/edges");
+        csrEsMgr.loadGraph("data/vertexes", "data/edges", filesToLoad);
         after_ts[i] = std::chrono::steady_clock::now();
+
+        if (i == iterations - 1) {
+            ofstream evalFile;
+            evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
+
+            evalFile << std::to_string(filesToLoad) << ", CSR, " << std::to_string(csrEsMgr.getCSRSizeInBytes()) << endl;
+            evalFile << std::to_string(filesToLoad) << ", Emerging Schema, " << std::to_string(csrEsMgr.getEmergingSchemaSizeInBytes()) << endl;
+
+            evalFile.close();
+        }
     }
 
     std::cout << "Loading End: CSREmergingSchema - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
@@ -345,15 +435,6 @@ void testUniversalTable_Query_BI1(uint32_t batchSize, uint8_t iterations, std::v
         after_query[i] = std::chrono::steady_clock::now();
     }
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
-    
-    ofstream evalFile;
-    evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::trunc);
-
-    evalFile << "DataStructure, Size(Byte)" << endl;
-
-    evalFile << "Universal Table, " << std::to_string(adjLstUniTblMgr.getUniversalTableSizeInBytes()) << endl;
-
-    evalFile.close();
 
 }
 
@@ -393,14 +474,6 @@ void testSchemaHashedTable_Query_BI1(uint32_t batchSize, uint8_t iterations, std
         after_query[i] = std::chrono::steady_clock::now();
     }
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
-
-    
-    ofstream evalFile;
-    evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
-
-    evalFile << "Schema Hashed Table, " << std::to_string(adjLstSHahsedTblMgr.getSchemaHashedTableSizeInBytes()) << endl;
-
-    evalFile.close();
 }
 
 void testEmergingSchema_Query_BI1(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, tm messageCreationDate, queryResultSet_vec &resultSet) {
@@ -440,14 +513,6 @@ void testEmergingSchema_Query_BI1(uint32_t batchSize, uint8_t iterations, std::v
     }
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 
-    
-    
-    ofstream evalFile;
-    evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
-
-    evalFile << "Emerging Schema, " << std::to_string(adjLstEsMgr.getEmergingSchemaSizeInBytes()) << endl;
-
-    evalFile.close();
 }
 
 void testAdjacencyListUniversalTable_Query_BI18(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, queryResultSet_vec &resultSet) {
@@ -728,13 +793,6 @@ void testAdjacencyMatrix_Query_DC(uint32_t batchSize, uint8_t iterations, std::v
     }
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 
-    
-    ofstream evalFile;
-    evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
-
-    evalFile << "Adjacency Matrix, " << std::to_string(adjMatUniTblMgr.getAdjacencyMatrixSizeInBytes()) << endl;
-
-    evalFile.close();
 }
 
 void testAdjacencyList_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, queryResultSet_vec &resultSet) {
@@ -775,13 +833,6 @@ void testAdjacencyList_Query_DC(uint32_t batchSize, uint8_t iterations, std::vec
     }
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 
-    
-    ofstream evalFile;
-    evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
-
-    evalFile << "Adjacency List, " << std::to_string(adjLstUniTblMgr.getAdjacencyListSizeInBytes()) << endl;
-
-    evalFile.close();
 }
 
 void testCSR_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_fetch, std::vector<auto> &after_fetch, std::vector<auto> &after_query, queryResultSet_vec &resultSet) {
@@ -822,19 +873,11 @@ void testCSR_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> 
     }
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 
-    
-    
-    ofstream evalFile;
-    evalFile.open("Evaluation-Results/SizeInBytes.csv", std::ofstream::out | std::ofstream::app);
-
-    evalFile << "CSR, " << std::to_string(csrUniTblMgr.getCSRSizeInBytes()) << endl;
-
-    evalFile.close();
 }
 
 int main(int argc, char** argv) {
-    int iterations = 2;
-    uint32_t batchSize_start = 1000, batchSize_end = 1000;
+    int iterations = 40;
+    uint32_t batchSize_start = 1, batchSize_end = 10000;
     std::vector<std::chrono::time_point<std::chrono::steady_clock> > before_ts, after_ts, before_fetch, after_fetch, after_query;
 
     const int dir_err = system("mkdir -p Evaluation-Results");
@@ -844,114 +887,302 @@ int main(int argc, char** argv) {
     }
 
 
-    for (uint32_t batchSize = batchSize_start; batchSize <= batchSize_end; batchSize *= 10) {
+    /*
+     * (Q1) How scalable are the data structures to accommodate graph data with 
+     *      larger size (i.e. higher number of vertices and/or edges)?
+     */
 
-        testParallelAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 1);
-        writeLoadingDurationsToFile("Loading_Parallel(1)_AdjacencyListSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+    {
 
-        testParallelAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 2);
-        writeLoadingDurationsToFile("Loading_Parallel(2)_AdjacencyListSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+        //loading data without "comment" or "post" files -- filesToLoad = 2
 
-        testParallelAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 4);
-        writeLoadingDurationsToFile("Loading_Parallel(4)_AdjacencyListSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+        testAdjacencyMatrixUniversalTable(1000, iterations, before_ts, after_ts, 2);
+        writeLoadingDurationsToFile("Q1_AdjacencyMatrixUniversalTable_2_" + to_string(1000), before_ts, after_ts);
 
-        testParallelAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 8);
-        writeLoadingDurationsToFile("Loading_Parallel(8)_AdjacencyListSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+        testAdjacencyListUniversalTable(1000, iterations, before_ts, after_ts, 2);
+        writeLoadingDurationsToFile("Q1_AdjacencyListUniversalTable_2_" + to_string(1000), before_ts, after_ts);
 
-        testParallelAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 16);
-        writeLoadingDurationsToFile("Loading_Parallel(16)_AdjacencyListSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+        testCSRUniversalTable(1000, iterations, before_ts, after_ts, 2);
+        writeLoadingDurationsToFile("Q1_CSRUniversalTable_2_" + to_string(1000), before_ts, after_ts);
 
-        //testAdjacencyMatrixUniversalTable(batchSize, iterations, before_ts, after_ts);
-        //writeLoadingResultsToFile("Loading_AdjacencyMatrixUniversalTable_" + to_string(batchSize), before_ts, after_ts);
+        testAdjacencyMatrixSchemaHashedTable(1000, iterations, before_ts, after_ts, 2);
+        writeLoadingDurationsToFile("Q1_AdjacencyMatrixSchemaHashedTable_2_" + to_string(1000), before_ts, after_ts);
 
-        testAdjacencyListUniversalTable(batchSize, iterations, before_ts, after_ts);
-        writeLoadingDurationsToFile("Loading_AdjacencyListUniversalTable_" + to_string(batchSize), before_ts, after_ts);
+        testAdjacencyListSchemaHashedTable(1000, iterations, before_ts, after_ts, 2);
+        writeLoadingDurationsToFile("Q1_AdjacencyListSchemaHashedTable_2_" + to_string(1000), before_ts, after_ts);
 
-        testCSRUniversalTable(batchSize, iterations, before_ts, after_ts);
-        writeLoadingDurationsToFile("Loading_CSRUniversalTable_" + to_string(batchSize), before_ts, after_ts);
+        testCSRSchemaHashedTable(1000, iterations, before_ts, after_ts, 2);
+        writeLoadingDurationsToFile("Q1_CSRSchemaHashedTable_2_" + to_string(1000), before_ts, after_ts);
 
-        //testAdjacencyMatrixSchemaHashedTable(batchSize, iterations, before_ts, after_ts);
-        //writeLoadingResultsToFile("Loading_AdjacencyMatrixSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+        testAdjacencyMatrixEmergingSchema(1000, iterations, before_ts, after_ts, 2);
+        writeLoadingDurationsToFile("Q1_AdjacencyMatrixEmergingSchema_2_" + to_string(1000), before_ts, after_ts);
 
-        testAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts);
-        writeLoadingDurationsToFile("Loading_AdjacencyListSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+        testAdjacencyListEmergingSchema(1000, iterations, before_ts, after_ts, 2);
+        writeLoadingDurationsToFile("Q1_AdjacencyListEmergingSchema_2_" + to_string(1000), before_ts, after_ts);
 
-        testCSRSchemaHashedTable(batchSize, iterations, before_ts, after_ts);
-        writeLoadingDurationsToFile("Loading_CSRSchemaHashedTable_" + to_string(batchSize), before_ts, after_ts);
+        testCSREmergingSchema(1000, iterations, before_ts, after_ts, 2);
+        writeLoadingDurationsToFile("Q1_CSREmergingSchema_2_" + to_string(1000), before_ts, after_ts);
 
-        //testAdjacencyMatrixEmergingSchema(batchSize, iterations, before_ts, after_ts);
-        //writeLoadingResultsToFile("Loading_AdjacencyMatrixEmergingSchema_" + to_string(batchSize), before_ts, after_ts);
+        //======================================================================
 
-        testAdjacencyListEmergingSchema(batchSize, iterations, before_ts, after_ts);
-        writeLoadingDurationsToFile("Loading_AdjacencyListEmergingSchema_" + to_string(batchSize), before_ts, after_ts);
 
-        testCSREmergingSchema(batchSize, iterations, before_ts, after_ts);
-        writeLoadingDurationsToFile("Loading_CSREmergingSchema_" + to_string(batchSize), before_ts, after_ts);
+
+
+        //loading data without "post" files -- filesToLoad = 1
+
+        testAdjacencyMatrixUniversalTable(1000, iterations, before_ts, after_ts, 1);
+        writeLoadingDurationsToFile("Q1_AdjacencyMatrixUniversalTable_1_" + to_string(1000), before_ts, after_ts);
+
+        testAdjacencyListUniversalTable(1000, iterations, before_ts, after_ts, 1);
+        writeLoadingDurationsToFile("Q1_AdjacencyListUniversalTable_1_" + to_string(1000), before_ts, after_ts);
+
+        testCSRUniversalTable(1000, iterations, before_ts, after_ts, 1);
+        writeLoadingDurationsToFile("Q1_CSRUniversalTable_1_" + to_string(1000), before_ts, after_ts);
+
+        testAdjacencyMatrixSchemaHashedTable(1000, iterations, before_ts, after_ts, 1);
+        writeLoadingDurationsToFile("Q1_AdjacencyMatrixSchemaHashedTable_1_" + to_string(1000), before_ts, after_ts);
+
+        testAdjacencyListSchemaHashedTable(1000, iterations, before_ts, after_ts, 1);
+        writeLoadingDurationsToFile("Q1_AdjacencyListSchemaHashedTable_1_" + to_string(1000), before_ts, after_ts);
+
+        testCSRSchemaHashedTable(1000, iterations, before_ts, after_ts, 1);
+        writeLoadingDurationsToFile("Q1_CSRSchemaHashedTable_1_" + to_string(1000), before_ts, after_ts);
+
+        testAdjacencyMatrixEmergingSchema(1000, iterations, before_ts, after_ts, 1);
+        writeLoadingDurationsToFile("Q1_AdjacencyMatrixEmergingSchema_1_" + to_string(1000), before_ts, after_ts);
+
+        testAdjacencyListEmergingSchema(1000, iterations, before_ts, after_ts, 1);
+        writeLoadingDurationsToFile("Q1_AdjacencyListEmergingSchema_1_" + to_string(1000), before_ts, after_ts);
+
+        testCSREmergingSchema(1000, iterations, before_ts, after_ts, 1);
+        writeLoadingDurationsToFile("Q1_CSREmergingSchema_1_" + to_string(1000), before_ts, after_ts);
+
+        //======================================================================
+
+
+
+
+        //loading data from all files -- filesToLoad = 0
+
+        //testAdjacencyMatrixUniversalTable(1000, iterations, before_ts, after_ts);
+        //writeLoadingDurationsToFile("Q1_AdjacencyMatrixUniversalTable_0_" + to_string(1000), before_ts, after_ts);
+
+        testAdjacencyListUniversalTable(1000, iterations, before_ts, after_ts);
+        writeLoadingDurationsToFile("Q1_AdjacencyListUniversalTable_0_" + to_string(1000), before_ts, after_ts);
+
+        testCSRUniversalTable(1000, iterations, before_ts, after_ts);
+        writeLoadingDurationsToFile("Q1_CSRUniversalTable_0_" + to_string(1000), before_ts, after_ts);
+
+        //testAdjacencyMatrixSchemaHashedTable(1000, iterations, before_ts, after_ts);
+        //writeLoadingDurationsToFile("Q1_AdjacencyMatrixSchemaHashedTable_0_" + to_string(1000), before_ts, after_ts);
+
+        testAdjacencyListSchemaHashedTable(1000, iterations, before_ts, after_ts);
+        writeLoadingDurationsToFile("Q1_AdjacencyListSchemaHashedTable_0_" + to_string(1000), before_ts, after_ts);
+
+        testCSRSchemaHashedTable(1000, iterations, before_ts, after_ts);
+        writeLoadingDurationsToFile("Q1_CSRSchemaHashedTable_0_" + to_string(1000), before_ts, after_ts);
+
+        //testAdjacencyMatrixEmergingSchema(1000, iterations, before_ts, after_ts);
+        //writeLoadingDurationsToFile("Q1_AdjacencyMatrixEmergingSchema_0_" + to_string(1000), before_ts, after_ts);
+
+        testAdjacencyListEmergingSchema(1000, iterations, before_ts, after_ts);
+        writeLoadingDurationsToFile("Q1_AdjacencyListEmergingSchema_0_" + to_string(1000), before_ts, after_ts);
+
+        testCSREmergingSchema(1000, iterations, before_ts, after_ts);
+        writeLoadingDurationsToFile("Q1_CSREmergingSchema_0_" + to_string(1000), before_ts, after_ts);
     }
 
-    //return (EXIT_SUCCESS); 
 
-    iterations = 2;
+    /*
+     * (Q2) What is the effect of the batch size when loading the data into the 
+     *      data structure in batches?
+     */
 
-    queryResultSet_vec resultSet;
-    tm messageCreationDate = UtilityFunctions::getDateTime("2011-07-21T22:00:00");
+    {
+        //loading data without "comment" files -- filesToLoad = 1
 
-    testUniversalTable_Query_BI1(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, resultSet);
-    writeQueryDurationsToFile("Query_BI1_UniversalTable_", before_fetch, after_fetch, after_query);
+        for (uint32_t batchSize = batchSize_start; batchSize <= batchSize_end; batchSize *= 10) {
 
-    testSchemaHashedTable_Query_BI1(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, resultSet);
-    writeQueryDurationsToFile("Query_BI1_SchemaHashedTable_", before_fetch, after_fetch, after_query);
+            testAdjacencyMatrixUniversalTable(batchSize, iterations, before_ts, after_ts, 1);
+            writeLoadingDurationsToFile("Q2_AdjacencyMatrixUniversalTable_1_" + to_string(batchSize), before_ts, after_ts);
 
-    testEmergingSchema_Query_BI1(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, resultSet);
-    writeQueryDurationsToFile("Query_BI1_EmergingSchema_", before_fetch, after_fetch, after_query);
+            testAdjacencyListUniversalTable(batchSize, iterations, before_ts, after_ts, 1);
+            writeLoadingDurationsToFile("Q2_AdjacencyListUniversalTable_1_" + to_string(batchSize), before_ts, after_ts);
 
+            testCSRUniversalTable(batchSize, iterations, before_ts, after_ts, 1);
+            writeLoadingDurationsToFile("Q2_CSRUniversalTable_1_" + to_string(batchSize), before_ts, after_ts);
 
-    writeQueryResultToFile("QueryResult_BI1", "year, isComment, lengthCategory, messageCount, averageMessageLength, sumMessageLength, percentageOfMessages", resultSet);
+            testAdjacencyMatrixSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 1);
+            writeLoadingDurationsToFile("Q2_AdjacencyMatrixSchemaHashedTable_1_" + to_string(batchSize), before_ts, after_ts);
 
+            testAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 1);
+            writeLoadingDurationsToFile("Q2_AdjacencyListSchemaHashedTable_1_" + to_string(batchSize), before_ts, after_ts);
 
+            testCSRSchemaHashedTable(batchSize, iterations, before_ts, after_ts, 1);
+            writeLoadingDurationsToFile("Q2_CSRSchemaHashedTable_1_" + to_string(batchSize), before_ts, after_ts);
 
+            testAdjacencyMatrixEmergingSchema(batchSize, iterations, before_ts, after_ts, 1);
+            writeLoadingDurationsToFile("Q2_AdjacencyMatrixEmergingSchema_1_" + to_string(batchSize), before_ts, after_ts);
 
-    messageCreationDate = UtilityFunctions::getDateTime("2011-07-22T00:00:00");
-    uint16_t messageLength = 20;
-    std::vector<std::string> messageLanguages = {"ar"};
+            testAdjacencyListEmergingSchema(batchSize, iterations, before_ts, after_ts, 1);
+            writeLoadingDurationsToFile("Q2_AdjacencyListEmergingSchema_1_" + to_string(batchSize), before_ts, after_ts);
 
-    testAdjacencyListUniversalTable_Query_BI18(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet);
-    writeQueryDurationsToFile("Query_BI18_AdjacencyListUniversalTable_", before_fetch, after_fetch, after_query);
+            testCSREmergingSchema(batchSize, iterations, before_ts, after_ts, 1);
+            writeLoadingDurationsToFile("Q2_CSREmergingSchema_1_" + to_string(batchSize), before_ts, after_ts);
+        }
 
-    testCSRUniversalTable_Query_BI18(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet);
-    writeQueryDurationsToFile("Query_BI18_CSRUniversalTable_", before_fetch, after_fetch, after_query);
-
-    testAdjacencyListSchemaHashedTable_Query_BI18(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet);
-    writeQueryDurationsToFile("Query_BI18_AdjacencyListSchemaHashedTable_", before_fetch, after_fetch, after_query);
-
-    testCSRSchemaHashedTable_Query_BI18(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet);
-    writeQueryDurationsToFile("Query_BI18_CSRSchemaHashedTable_", before_fetch, after_fetch, after_query);
-
-    testAdjacencyListEmergingSchema_Query_BI18(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet);
-    writeQueryDurationsToFile("Query_BI18_AdjacencyListEmergingSchema_", before_fetch, after_fetch, after_query);
-
-    testCSREmergingSchema_Query_BI18(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet);
-    writeQueryDurationsToFile("Query_BI18_CSREmergingSchema_", before_fetch, after_fetch, after_query);
-
-
-    writeQueryResultToFile("QueryResult_BI18", "messageCount, personCount", resultSet);
+        //======================================================================
 
 
 
 
+        //loading data from all files -- filesToLoad = 0
 
-    //testAdjacencyMatrix_Query_DC(1000, iterations, before_fetch, after_fetch, after_query, resultSet);
-    //writeQueryResultsToFile("Query_DC_AdjacencyMatrix_", before_fetch, after_fetch, after_query);
+        for (uint32_t batchSize = batchSize_start; batchSize <= batchSize_end; batchSize *= 10) {
 
-    testAdjacencyList_Query_DC(1000, iterations, before_fetch, after_fetch, after_query, resultSet);
-    writeQueryDurationsToFile("Query_DC_AdjacencyList_", before_fetch, after_fetch, after_query);
+            //testAdjacencyMatrixUniversalTable(batchSize, iterations, before_ts, after_ts);
+            //writeLoadingDurationsToFile("Q2_AdjacencyMatrixUniversalTable_0_" + to_string(batchSize), before_ts, after_ts);
 
-    testCSR_Query_DC(1000, iterations, before_fetch, after_fetch, after_query, resultSet);
-    writeQueryDurationsToFile("Query_DC_CSR_", before_fetch, after_fetch, after_query);
+            testAdjacencyListUniversalTable(batchSize, iterations, before_ts, after_ts);
+            writeLoadingDurationsToFile("Q2_AdjacencyListUniversalTable_0_" + to_string(batchSize), before_ts, after_ts);
+
+            testCSRUniversalTable(batchSize, iterations, before_ts, after_ts);
+            writeLoadingDurationsToFile("Q2_CSRUniversalTable_0_" + to_string(batchSize), before_ts, after_ts);
+
+            //testAdjacencyMatrixSchemaHashedTable(batchSize, iterations, before_ts, after_ts);
+            //writeLoadingDurationsToFile("Q2_AdjacencyMatrixSchemaHashedTable_0_" + to_string(batchSize), before_ts, after_ts);
+
+            testAdjacencyListSchemaHashedTable(batchSize, iterations, before_ts, after_ts);
+            writeLoadingDurationsToFile("Q2_AdjacencyListSchemaHashedTable_0_" + to_string(batchSize), before_ts, after_ts);
+
+            testCSRSchemaHashedTable(batchSize, iterations, before_ts, after_ts);
+            writeLoadingDurationsToFile("Q2_CSRSchemaHashedTable_0_" + to_string(batchSize), before_ts, after_ts);
+
+            //testAdjacencyMatrixEmergingSchema(batchSize, iterations, before_ts, after_ts);
+            //writeLoadingDurationsToFile("Q2_AdjacencyMatrixEmergingSchema_0_" + to_string(batchSize), before_ts, after_ts);
+
+            testAdjacencyListEmergingSchema(batchSize, iterations, before_ts, after_ts);
+            writeLoadingDurationsToFile("Q2_AdjacencyListEmergingSchema_0_" + to_string(batchSize), before_ts, after_ts);
+
+            testCSREmergingSchema(batchSize, iterations, before_ts, after_ts);
+            writeLoadingDurationsToFile("Q2_CSREmergingSchema_0_" + to_string(batchSize), before_ts, after_ts);
+        }
+    }
 
 
-    writeQueryResultToFile("QueryResult_DC", "EdgeDirection, EdgeLabel, EdgeCount, VertexCount", resultSet);
 
+    /*
+     * (Q3) Can loading the data in parallel improve the performance of loading?
+     */
+
+    {
+        //loading data from all files -- filesToLoad = 0
+
+        testParallelAdjacencyListSchemaHashedTable(1000, iterations, before_ts, after_ts, 1);
+        writeLoadingDurationsToFile("Q3_Parallel(1)_AdjacencyListSchemaHashedTable_0_" + to_string(1000), before_ts, after_ts);
+
+        testParallelAdjacencyListSchemaHashedTable(1000, iterations, before_ts, after_ts, 2);
+        writeLoadingDurationsToFile("Q3_Parallel(2)_AdjacencyListSchemaHashedTable_0_" + to_string(1000), before_ts, after_ts);
+
+        testParallelAdjacencyListSchemaHashedTable(1000, iterations, before_ts, after_ts, 4);
+        writeLoadingDurationsToFile("Q3_Parallel(4)_AdjacencyListSchemaHashedTable_0_" + to_string(1000), before_ts, after_ts);
+
+        testParallelAdjacencyListSchemaHashedTable(1000, iterations, before_ts, after_ts, 8);
+        writeLoadingDurationsToFile("Q3_Parallel(8)_AdjacencyListSchemaHashedTable_0_" + to_string(1000), before_ts, after_ts);
+
+        testParallelAdjacencyListSchemaHashedTable(1000, iterations, before_ts, after_ts, 16);
+        writeLoadingDurationsToFile("Q3_Parallel(16)_AdjacencyListSchemaHashedTable_0_" + to_string(1000), before_ts, after_ts);
+    }
+
+
+
+
+
+    /*
+     * (Q4) Which data structure performs better in simple non-traversal queries?
+     */
+    iterations = 100;
+
+    {
+        queryResultSet_vec resultSet;
+        tm messageCreationDate = UtilityFunctions::getDateTime("2011-07-21T22:00:00");
+
+        //loading data from all files -- filesToLoad = 0
+
+        testUniversalTable_Query_BI1(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, resultSet);
+        writeQueryDurationsToFile("Q4_Query_BI1_UniversalTable_0_", before_fetch, after_fetch, after_query);
+
+        testSchemaHashedTable_Query_BI1(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, resultSet);
+        writeQueryDurationsToFile("Q4_Query_BI1_SchemaHashedTable_0_", before_fetch, after_fetch, after_query);
+
+        testEmergingSchema_Query_BI1(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, resultSet);
+        writeQueryDurationsToFile("Q4_Query_BI1_EmergingSchema_0_", before_fetch, after_fetch, after_query);
+
+
+        writeQueryResultToFile("Q4_QueryResult_BI1_0", "year, isComment, lengthCategory, messageCount, averageMessageLength, sumMessageLength, percentageOfMessages", resultSet);
+    }
+
+
+
+
+    /*
+     * (Q5) Which data structure performs better in complex traversal queries?
+     */
+
+    {
+        queryResultSet_vec resultSet;
+        tm messageCreationDate = UtilityFunctions::getDateTime("2011-07-22T00:00:00");
+        uint16_t messageLength = 20;
+        std::vector<std::string> messageLanguages = {"ar"};
+
+        //loading data from all files -- filesToLoad = 0
+
+        testAdjacencyListUniversalTable_Query_BI18(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet);
+        writeQueryDurationsToFile("Q5_Query_BI18_AdjacencyListUniversalTable_0_", before_fetch, after_fetch, after_query);
+
+        testCSRUniversalTable_Query_BI18(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet);
+        writeQueryDurationsToFile("Q5_Query_BI18_CSRUniversalTable_0_", before_fetch, after_fetch, after_query);
+
+        testAdjacencyListSchemaHashedTable_Query_BI18(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet);
+        writeQueryDurationsToFile("Q5_Query_BI18_AdjacencyListSchemaHashedTable_0_", before_fetch, after_fetch, after_query);
+
+        testCSRSchemaHashedTable_Query_BI18(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet);
+        writeQueryDurationsToFile("Q5_Query_BI18_CSRSchemaHashedTable_0_", before_fetch, after_fetch, after_query);
+
+        testAdjacencyListEmergingSchema_Query_BI18(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet);
+        writeQueryDurationsToFile("Q5_Query_BI18_AdjacencyListEmergingSchema_0_", before_fetch, after_fetch, after_query);
+
+        testCSREmergingSchema_Query_BI18(1000, iterations, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet);
+        writeQueryDurationsToFile("Q5_Query_BI18_CSREmergingSchema_0_", before_fetch, after_fetch, after_query);
+
+
+        writeQueryResultToFile("Q5_QueryResult_BI18_0", "messageCount, personCount", resultSet);
+    }
+
+
+
+
+    /*
+     * (Q6) Which data structure performs better in full scanning the graph topology?
+     */
+
+    {
+        queryResultSet_vec resultSet;
+
+        //loading data from all files -- filesToLoad = 0
+
+        //testAdjacencyMatrix_Query_DC(1000, iterations, before_fetch, after_fetch, after_query, resultSet);
+        //writeQueryResultsToFile("Q6_Query_DC_AdjacencyMatrix_0_", before_fetch, after_fetch, after_query);
+
+        testAdjacencyList_Query_DC(1000, iterations, before_fetch, after_fetch, after_query, resultSet);
+        writeQueryDurationsToFile("Q6_Query_DC_AdjacencyList_0_", before_fetch, after_fetch, after_query);
+
+        testCSR_Query_DC(1000, iterations, before_fetch, after_fetch, after_query, resultSet);
+        writeQueryDurationsToFile("Q6_Query_DC_CSR_0_", before_fetch, after_fetch, after_query);
+
+
+        writeQueryResultToFile("Q6_QueryResult_DC_0", "EdgeDirection, EdgeLabel, EdgeCount, VertexCount", resultSet);
+    }
 
 
     return (EXIT_SUCCESS);
