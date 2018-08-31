@@ -132,6 +132,37 @@ void AdjacencyMatrix::addNeighbourVertex(std::vector<std::tuple<std::string, std
     }
 }
 
+void AdjacencyMatrix::addNeighbourVertex(std::string edgeLabel, std::map<std::string, std::set<std::string> > &edges) {
+    if (edges.empty()) {
+        return;
+    }
+
+    //std::string edgeLabel = std::get<1>(edges.front());
+    std::pair< labeledAdjMat_it, bool> adjMatEntry = this->labeledAdjacencyMatrix.emplace(edgeLabel, std::pair<vertexIndex_map, vertexAdjacency_map>());
+
+
+
+
+    for (auto& edge : edges) {
+        std::pair < vertexIndex_it, bool> srcIt =
+                adjMatEntry.first->second.first.emplace(edge.first, adjMatEntry.first->second.first.size());
+        for (auto& tgtVertex : edge.second) {
+            std::pair < vertexIndex_it, bool> tgtIt =
+                    adjMatEntry.first->second.first.emplace(tgtVertex, adjMatEntry.first->second.first.size());
+        }
+    }
+
+    this->resize(edgeLabel);
+
+    for (auto& edge : edges) {
+        uint64_t sourceVertexIndex = adjMatEntry.first->second.first.at(edge.first);
+        for (auto& tgtVertex : edge.second) {
+            uint64_t targetVertexIndex = adjMatEntry.first->second.first.at(tgtVertex);
+            adjMatEntry.first->second.second[sourceVertexIndex][targetVertexIndex] = true;
+        }
+    }
+}
+
 /*
 bool AdjacencyMatrix::removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId) {
     //check for the existence of the vertexId & neighbourVertexId

@@ -23,6 +23,9 @@ bool CSRSchemaHashedTableManager::loadGraph(std::string verticesDirectory, std::
 }
 
 bool CSRSchemaHashedTableManager::loadVertices(std::string verticesDirectory, uint8_t filesToLoad) {
+    if (!this->propertiesLoad) {
+        return true;
+    }
 
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
@@ -37,12 +40,10 @@ bool CSRSchemaHashedTableManager::loadVertices(std::string verticesDirectory, ui
 
         std::string fileName(pent->d_name);
 
-        if (fileName.empty() || fileName.at(0) == '.' ||
-                (filesToLoad >= 1 && fileName.find("comment") != std::string::npos) ||
-                (filesToLoad >= 2 && fileName.find("post") != std::string::npos)) {
+        if (fileName.empty() || fileName.at(0) == '.') {
             continue;
         }
-        
+
         rowCount = 0;
 
         std::cout << verticesDirectory + "/" + pent->d_name << std::endl;
@@ -120,12 +121,10 @@ bool CSRSchemaHashedTableManager::loadEdges(std::string edgesDirectory, uint8_t 
 
         std::string fileName(pent->d_name);
 
-        if (fileName.empty() || fileName.at(0) == '.' ||
-                (filesToLoad >= 1 && fileName.find("comment") != std::string::npos) ||
-                (filesToLoad >= 2 && fileName.find("post") != std::string::npos)) {
+        if (fileName.empty() || fileName.at(0) == '.') {
             continue;
         }
-        
+
         rowCount = 0;
 
         std::cout << edgesDirectory + "/" + pent->d_name << std::endl;
@@ -134,8 +133,12 @@ bool CSRSchemaHashedTableManager::loadEdges(std::string edgesDirectory, uint8_t 
         std::string edgeLine, headerLine;
         std::getline(edgeFile, headerLine);
 
-        std::map<int, std::string> propertiesPositions = this->getEdgeProperties(headerLine);
+        std::map<int, std::string> propertiesPositions;
         std::unordered_map<std::string, char*> properties;
+
+        if (this->propertiesLoad) {
+            propertiesPositions = this->getEdgeProperties(headerLine);
+        }
 
         std::istringstream iss(pent->d_name);
         std::string sourceVertex, edgeLabel, targetVertex;
@@ -158,41 +161,56 @@ bool CSRSchemaHashedTableManager::loadEdges(std::string edgesDirectory, uint8_t 
                 } else if (propertyCounter == 1) {
                     targetVertexId = property;
                     propertyCounter++;
-                } else {
+                } else if (this->propertiesLoad) {
                     char * propertyVal = new char [property.length() + 1];
                     strcpy(propertyVal, property.c_str());
                     properties[propertiesPositions[propertyCounter++]] = propertyVal;
+                } else {
+                    break;
                 }
             }
 
-            vertexSchemaHashedMap.emplace_back(sourceVertex + "_" + sourceVertexId, vertexProperties);
-            vertexSchemaHashedMap.emplace_back(targetVertex + "_" + targetVertexId, vertexProperties);
+            if (this->propertiesLoad) {
+                vertexSchemaHashedMap.emplace_back(sourceVertex + "_" + sourceVertexId, vertexProperties);
+                vertexSchemaHashedMap.emplace_back(targetVertex + "_" + targetVertexId, vertexProperties);
+                edgeSchemaHashedMap.emplace_back(sourceVertex + "_" + sourceVertexId + "$" + edgeLabel + "$" + targetVertex + "_" + targetVertexId, properties);
+            }
 
-            edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
-            edgeSchemaHashedMap.emplace_back(sourceVertex + "_" + sourceVertexId + "$" + edgeLabel + "$" + targetVertex + "_" + targetVertexId, properties);
+            if (this->topologyLoad) {
+                edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
+            }
 
             if (++loadCounter % batchSize == 0) {
 
-                this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
-                vertexSchemaHashedMap.clear();
+                if (this->propertiesLoad) {
+                    this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
+                    vertexSchemaHashedMap.clear();
 
-                this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
-                edgeSchemaHashedMap.clear();
+                    this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
+                    edgeSchemaHashedMap.clear();
+                }
 
-                this->csr.addNeighbourVertex(edges);
-                edges.clear();
+                if (this->topologyLoad) {
+                    this->csr.addNeighbourVertex(edges);
+                    edges.clear();
+                }
 
             }
         }
 
-        this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
-        vertexSchemaHashedMap.clear();
 
-        this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
-        edgeSchemaHashedMap.clear();
+        if (this->propertiesLoad) {
+            this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
+            vertexSchemaHashedMap.clear();
 
-        this->csr.addNeighbourVertex(edges);
-        edges.clear();
+            this->schemaHashedTable.upsertEdge(edgeSchemaHashedMap);
+            edgeSchemaHashedMap.clear();
+        }
+
+        if (this->topologyLoad) {
+            this->csr.addNeighbourVertex(edges);
+            edges.clear();
+        }
 
         //        std::cout << "file: " << pent->d_name << std::endl;
         //        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;

@@ -27,6 +27,7 @@ private:
     AdjacencyList adjacencyList;
     UniversalTable universalTable;
     int batchSize;
+    bool topologyLoad, propertiesLoad;
 public:
 
     bool loadGraph(std::string verticesDirectory, std::string edgesDirectory, uint8_t filesToLoad = 0);
@@ -42,7 +43,7 @@ public:
     uint64_t getAdjacencyListSizeInBytes(){return this->adjacencyList.getAdjacencyListSizeInBytes();};
     uint64_t getUniversalTableSizeInBytes(){return this->universalTable.getUniversalTableSizeInBytes();};
     
-    AdjacencyListUniversalTableManager(int bSize) : batchSize(bSize) {
+    AdjacencyListUniversalTableManager(int bSize, bool topology = true, bool properties = true) : batchSize(bSize), topologyLoad(topology), propertiesLoad(properties) {
     };
 
 };

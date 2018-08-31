@@ -15,6 +15,7 @@
 #include <string>
 #include <tuple>
 #include <dirent.h>
+#include "UtilityFunctions.hpp"
 
 #include "AdjacencyMatrix.hpp"
 #include "SchemaHashedTable.hpp"
@@ -31,6 +32,8 @@ public:
     bool loadEdges(std::string edgesDirectory, uint8_t filesToLoad);
     std::map<int, std::string> getVertexProperties(std::string vertexHeaderLine);
     std::map<int, std::string> getEdgeProperties(std::string edgeHeaderLine);
+    
+    void executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
     
     uint64_t getAdjacencyMatrixSizeInBytes(){return this->adjacencyMatrix.getAdjacencyMatrixSizeInBytes();};
     uint64_t getSchemaHashedTableSizeInBytes(){return this->schemaHashedTable.getSchemaHashedTableSizeInBytes();};

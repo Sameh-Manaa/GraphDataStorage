@@ -117,6 +117,47 @@ void AdjacencyList::addNeighbourVertex(std::vector<std::tuple<std::string, std::
     }
 }
 
+void AdjacencyList::addNeighbourVertex(std::string edgeLabel, std::map<std::string, std::set<std::string> > &edges) {
+
+    if (edges.empty()) {
+        return;
+    }
+
+    //std::string edgeLabel = std::get<1>(edges.front());
+
+    std::pair< AL_it, bool> alEntry = this->vertexAdjacencyMap.emplace(edgeLabel, std::map<std::string, MapItContainers >());
+
+    //loop over all edges and add them one by one
+    for (std::map<std::string, std::set<std::string> >::iterator it = edges.begin(); it != edges.end(); ++it) {
+        std::pair < MyMap_it, bool> srcIt =
+                alEntry.first->second.emplace(it->first, MapItContainers());
+        int i = 0;
+        for (std::set<std::string>::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
+            std::pair < MyMap_it, bool> tgtIt =
+                    alEntry.first->second.emplace(*it2, MapItContainers());
+
+            //set the neighbourVertexId as a neighbor to the vertexId with the edgeLabel 
+            bool inserted = false;
+            for (; i < srcIt.first->second.vec.size(); i++) {
+                if (srcIt.first->second.vec.at(i)->first < *it2) {
+                    continue;
+                } else if (srcIt.first->second.vec.at(i)->first > *it2) {
+                    srcIt.first->second.vec.emplace(srcIt.first->second.vec.begin() + i, tgtIt.first);
+                    inserted = true;
+                    break;
+                } else {
+                    inserted = true;
+                    break;
+                }
+            }
+            if (!inserted) {
+                srcIt.first->second.vec.emplace_back(tgtIt.first);
+            }
+        }
+    }
+}
+
+
 /*
 bool AdjacencyList::removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId) {
     //check for the existence of the vertexId & neighbourVertexId

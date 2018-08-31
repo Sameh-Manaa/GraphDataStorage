@@ -18,6 +18,8 @@ private:
     CSR csr;
     UniversalTable universalTable;
     int batchSize;
+    bool topologyLoad, propertiesLoad;
+    
 public:
 
     bool loadGraph(std::string verticesDirectory, std::string edgesDirectory, uint8_t filesToLoad = 0);
@@ -32,7 +34,7 @@ public:
     uint64_t getCSRSizeInBytes(){return this->csr.getCSRSizeInBytes();};
     uint64_t getUniversalTableSizeInBytes(){return this->universalTable.getUniversalTableSizeInBytes();};
     
-    CSRUniversalTableManager(int bSize) : batchSize(bSize) {
+    CSRUniversalTableManager(int bSize, bool topology = true, bool properties = true) : batchSize(bSize), topologyLoad(topology), propertiesLoad(properties) {
     };
 
 };
