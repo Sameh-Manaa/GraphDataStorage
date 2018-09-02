@@ -339,25 +339,48 @@ void testEmergingSchema(uint32_t batchSize, uint8_t iterations, std::vector<auto
 
 }
 
-void testParallelAdjacencyListSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t parallelismDegree, std::string scaleFactor = "1") {
+void testParallelAdjacencyList(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t parallelismDegree, std::string scaleFactor = "1") {
     before_ts.resize(iterations);
     after_ts.resize(iterations);
     std::cout << "==========================================================================" << std::endl;
-    std::cout << "Loading Start: ParallelAdjacencyListSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << " - Parallelism: " << std::to_string(parallelismDegree) << std::endl;
+    std::cout << "Loading Start: ParallelAdjacencyList - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << " - Parallelism: " << std::to_string(parallelismDegree) << std::endl;
     for (uint8_t i = 0; i < iterations; i++) {
         std::cout << "==========================================================================" << std::endl;
         std::cout << "Iteration: " << std::to_string(i) << std::endl;
         std::cout << "==========================================================================" << std::endl;
-        ParallelAdjacencyListSchemaHashedTableManager pAdjLstSHahsedTblMgr(batchSize, parallelismDegree);
+        ParallelAdjacencyListSchemaHashedTableManager pAdjLst(batchSize, parallelismDegree, true, false);
         before_ts[i] = std::chrono::steady_clock::now();
-        pAdjLstSHahsedTblMgr.loadGraph("data_" + scaleFactor + "/vertexes", "data_" + scaleFactor + "/edges");
+        pAdjLst.loadGraph("data_" + scaleFactor + "/vertexes", "data_" + scaleFactor + "/edges");
         after_ts[i] = std::chrono::steady_clock::now();
     }
 
-    ParallelAdjacencyListSchemaHashedTableManager pAdjLstSHahsedTblMgr(batchSize, parallelismDegree);
-    pAdjLstSHahsedTblMgr.loadGraph("..", "..");
+    ParallelAdjacencyListSchemaHashedTableManager pAdjLst(batchSize, parallelismDegree);
+    pAdjLst.loadGraph("..", "..");
 
-    std::cout << "Loading End: ParallelAdjacencyListSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << " - Parallelism: " << std::to_string(parallelismDegree) << std::endl;
+    std::cout << "Loading End: ParallelAdjacencyList - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << " - Parallelism: " << std::to_string(parallelismDegree) << std::endl;
+    std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
+
+}
+
+void testParallelSchemaHashedTable(uint32_t batchSize, uint8_t iterations, std::vector<auto> &before_ts, std::vector<auto> &after_ts, uint8_t parallelismDegree, std::string scaleFactor = "1") {
+    before_ts.resize(iterations);
+    after_ts.resize(iterations);
+    std::cout << "==========================================================================" << std::endl;
+    std::cout << "Loading Start: ParallelSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << " - Parallelism: " << std::to_string(parallelismDegree) << std::endl;
+    for (uint8_t i = 0; i < iterations; i++) {
+        std::cout << "==========================================================================" << std::endl;
+        std::cout << "Iteration: " << std::to_string(i) << std::endl;
+        std::cout << "==========================================================================" << std::endl;
+        ParallelAdjacencyListSchemaHashedTableManager pSHahsedTblMgr(batchSize, parallelismDegree, false, true);
+        before_ts[i] = std::chrono::steady_clock::now();
+        pSHahsedTblMgr.loadGraph("data_" + scaleFactor + "/vertexes", "data_" + scaleFactor + "/edges");
+        after_ts[i] = std::chrono::steady_clock::now();
+    }
+
+    ParallelAdjacencyListSchemaHashedTableManager pSHahsedTblMgr(batchSize, parallelismDegree);
+    pSHahsedTblMgr.loadGraph("..", "..");
+
+    std::cout << "Loading End: ParallelSchemaHashedTable - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << " - Parallelism: " << std::to_string(parallelismDegree) << std::endl;
     std::cout << "==========================================================================" << std::endl << std::endl << std::endl << std::endl;
 
 }
@@ -486,7 +509,7 @@ void testAdjacencyMatrixUniversalTable_Query_BI18(uint32_t batchSize, uint8_t it
     std::cout << "Query: AdjacencyMatrixUniversalTable_Query_BI18 - Batch Size: " << std::to_string(batchSize) << " - Iterations: " << std::to_string(iterations) << std::endl;
     std::cout << "==========================================================================" << std::endl;
 
-    AdjacencyMatrixUniversalTableManager adjMatUniTblMgr(batchSize);
+    AdjacencyMatrixUniversalTableManager adjMatUniTblMgr(batchSize, false, true);
     adjMatUniTblMgr.loadGraph("data_" + scaleFactor + "/vertexes", "data_" + scaleFactor + "/edges");
 
     std::vector<int> sortingDirection = {-1};
@@ -958,7 +981,7 @@ void testCSR_Query_DC(uint32_t batchSize, uint8_t iterations, std::vector<auto> 
 }
 
 int main(int argc, char** argv) {
-    int iterations = 20, iterations_query = 100;
+    int iterations = 20, iterations_query = 20;
     uint32_t batchSize_start = 1, batchSize_end = 100000;
     double ScaleFactor_start = 0.25, ScaleFactor_end = 4;
     double ScaleFactorAdjMatrix_start = 0.25, ScaleFactorAdjMatrix_end = 0.25;
@@ -974,9 +997,9 @@ int main(int argc, char** argv) {
     //testAdjacencyList(1, 1, before_ts, after_ts, std::to_string(1.00).substr(0, 4));
 
     //testAdjacencyList2(1000, 1, before_ts, after_ts, std::to_string(1.00).substr(0, 4));
-    
+
     //testCSR(100000, 1, before_ts, after_ts, std::to_string(1.00).substr(0, 4));
-    
+
     //testCSR2(1000, 1, before_ts, after_ts, std::to_string(1.00).substr(0, 4));
 
     //return 0;
@@ -989,17 +1012,130 @@ int main(int argc, char** argv) {
      *      larger size (i.e. higher number of vertices and/or edges)?
      */
 
+    {
+        for (double scaleFactor = ScaleFactor_start; scaleFactor <= 1; scaleFactor *= 2) {
+
+            testAdjacencyList(1000, iterations, before_ts, after_ts, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q1_AdjacencyList_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+        }
+
+        for (double scaleFactor = 2; scaleFactor <= ScaleFactor_end; scaleFactor *= 2) {
+
+            testAdjacencyList(1000, iterations, before_ts, after_ts, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q1_AdjacencyList_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testCSR(1000, iterations, before_ts, after_ts, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q1_CSR_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testUniversalTable(1000, iterations, before_ts, after_ts, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q1_UniversalTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testSchemaHashedTable(1000, iterations, before_ts, after_ts, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q1_SchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testEmergingSchema(1000, iterations, before_ts, after_ts, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q1_EmergingSchema_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+        }
+    }
+
     /*
      * (Q2) What is the effect of the batch size when loading the data into the 
      *      data structure in batches?
      */
 
+
     {
-        for (uint32_t batchSize = batchSize_end; batchSize >= batchSize_start; batchSize /= 10) {
-            testAdjacencyMatrix(batchSize, iterations, before_ts, after_ts, "0.25");
-            writeLoadingDurationsToFile("Q1_AdjacencyMatrix_0.25" + to_string(batchSize), before_ts, after_ts);
+        for (uint32_t batchSize = batchSize_start; batchSize <= batchSize_end; batchSize *= 10) {
+
+            testAdjacencyList(batchSize, iterations, before_ts, after_ts, "1.00");
+            writeLoadingDurationsToFile("Q1_AdjacencyList_1.00_" + std::to_string(batchSize), before_ts, after_ts);
+
+            testCSR(batchSize, iterations, before_ts, after_ts, "1.00");
+            writeLoadingDurationsToFile("Q1_CSR_1.00_" + std::to_string(batchSize), before_ts, after_ts);
+
+            testUniversalTable(batchSize, iterations, before_ts, after_ts, "1.00");
+            writeLoadingDurationsToFile("Q1_UniversalTable_1.00_" + std::to_string(batchSize), before_ts, after_ts);
+
+            testSchemaHashedTable(batchSize, iterations, before_ts, after_ts, "1.00");
+            writeLoadingDurationsToFile("Q1_SchemaHashedTable_1.00_" + std::to_string(batchSize), before_ts, after_ts);
+
+            testEmergingSchema(batchSize, iterations, before_ts, after_ts, "1.00");
+            writeLoadingDurationsToFile("Q1_EmergingSchema_1.00_" + std::to_string(batchSize), before_ts, after_ts);
         }
     }
+
+
+
+
+    /*
+     * (Q3) Can loading the data in parallel improve the performance of loading?
+     */
+
+    {
+
+        for (double scaleFactor = ScaleFactor_start; scaleFactor <= ScaleFactor_end; scaleFactor *= 4) {
+
+            testParallelAdjacencyList(1000, iterations, before_ts, after_ts, 1, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q3_Parallel(1)_AdjacencyList_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testParallelAdjacencyList(1000, iterations, before_ts, after_ts, 2, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q3_Parallel(2)_AdjacencyList_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testParallelAdjacencyList(1000, iterations, before_ts, after_ts, 4, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q3_Parallel(4)_AdjacencyList_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testParallelAdjacencyList(1000, iterations, before_ts, after_ts, 8, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q3_Parallel(8)_AdjacencyList_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testParallelAdjacencyList(1000, iterations, before_ts, after_ts, 16, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q3_Parallel(16)_AdjacencyList_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testParallelSchemaHashedTable(1000, iterations, before_ts, after_ts, 1, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q3_Parallel(1)_SchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testParallelSchemaHashedTable(1000, iterations, before_ts, after_ts, 2, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q3_Parallel(2)_SchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testParallelSchemaHashedTable(1000, iterations, before_ts, after_ts, 4, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q3_Parallel(4)_SchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testParallelSchemaHashedTable(1000, iterations, before_ts, after_ts, 8, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q3_Parallel(8)_SchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+
+            testParallelSchemaHashedTable(1000, iterations, before_ts, after_ts, 16, std::to_string(scaleFactor).substr(0, 4));
+            writeLoadingDurationsToFile("Q3_Parallel(16)_SchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_ts, after_ts);
+        }
+    }
+
+
+
+    /*
+     * (Q4) Which data structure performs better in simple non-traversal queries?
+     */
+
+    {
+        queryResultSet_vec resultSet;
+        tm messageCreationDate = UtilityFunctions::getDateTime("2011-07-21T22:00:00");
+
+
+        for (double scaleFactor = ScaleFactor_start; scaleFactor <= ScaleFactor_end; scaleFactor *= 4) {
+
+            testUniversalTable_Query_BI1(1000, iterations_query, before_fetch, after_fetch, after_query, messageCreationDate, resultSet, std::to_string(scaleFactor).substr(0, 4));
+            writeQueryDurationsToFile("Q4_Query_BI1_UniversalTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
+            writeQueryResultToFile("Q4_QueryResult_BI1_UniversalTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "year, isComment, lengthCategory, messageCount, averageMessageLength, sumMessageLength, percentageOfMessages", resultSet);
+
+            testSchemaHashedTable_Query_BI1(1000, iterations_query, before_fetch, after_fetch, after_query, messageCreationDate, resultSet, std::to_string(scaleFactor).substr(0, 4));
+            writeQueryDurationsToFile("Q4_Query_BI1_SchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
+            writeQueryResultToFile("Q4_QueryResult_BI1_SchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "year, isComment, lengthCategory, messageCount, averageMessageLength, sumMessageLength, percentageOfMessages", resultSet);
+
+            testEmergingSchema_Query_BI1(1000, iterations_query, before_fetch, after_fetch, after_query, messageCreationDate, resultSet, std::to_string(scaleFactor).substr(0, 4));
+            writeQueryDurationsToFile("Q4_Query_BI1_EmergingSchema_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
+            writeQueryResultToFile("Q4_QueryResult_BI1_EmergingSchema_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "year, isComment, lengthCategory, messageCount, averageMessageLength, sumMessageLength, percentageOfMessages", resultSet);
+        }
+    }
+
 
 
 
@@ -1014,20 +1150,31 @@ int main(int argc, char** argv) {
         std::vector<std::string> messageLanguages = {"ar"};
 
 
-        for (double scaleFactor = ScaleFactorAdjMatrix_start; scaleFactor <= ScaleFactorAdjMatrix_end; scaleFactor *= 2) {
+        for (double scaleFactor = ScaleFactor_start; scaleFactor <= ScaleFactor_end; scaleFactor *= 4) {
 
-            testAdjacencyMatrixUniversalTable_Query_BI18(1000, iterations_query, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet, std::to_string(scaleFactor).substr(0, 4));
-            writeQueryDurationsToFile("Q5_Query_BI18_AdjacencyMatrixUniversalTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
-            writeQueryResultToFile("Q5_QueryResult_BI18_AdjacencyMatrixUniversalTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "messageCount, personCount", resultSet);
+            testAdjacencyListUniversalTable_Query_BI18(1000, iterations_query, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet, std::to_string(scaleFactor).substr(0, 4));
+            writeQueryDurationsToFile("Q5_Query_BI18_AdjacencyListUniversalTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
+            writeQueryResultToFile("Q5_QueryResult_BI18_AdjacencyListUniversalTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "messageCount, personCount", resultSet);
 
-            testAdjacencyMatrixSchemaHashedTable_Query_BI18(1000, iterations_query, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet, std::to_string(scaleFactor).substr(0, 4));
-            writeQueryDurationsToFile("Q5_Query_BI18_AdjacencyMatrixSchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
-            writeQueryResultToFile("Q5_QueryResult_BI18_AdjacencyMatrixSchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "messageCount, personCount", resultSet);
+            testAdjacencyListSchemaHashedTable_Query_BI18(1000, iterations_query, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet, std::to_string(scaleFactor).substr(0, 4));
+            writeQueryDurationsToFile("Q5_Query_BI18_AdjacencyListSchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
+            writeQueryResultToFile("Q5_QueryResult_BI18_AdjacencyListSchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "messageCount, personCount", resultSet);
 
-            testAdjacencyMatrixEmergingSchema_Query_BI18(1000, iterations_query, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet, std::to_string(scaleFactor).substr(0, 4));
-            writeQueryDurationsToFile("Q5_Query_BI18_AdjacencyMatrixEmergingSchema_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
-            writeQueryResultToFile("Q5_QueryResult_BI18_AdjacencyMatrixEmergingSchema_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "messageCount, personCount", resultSet);
+            testAdjacencyListEmergingSchema_Query_BI18(1000, iterations_query, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet, std::to_string(scaleFactor).substr(0, 4));
+            writeQueryDurationsToFile("Q5_Query_BI18_AdjacencyListEmergingSchema_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
+            writeQueryResultToFile("Q5_QueryResult_BI18_AdjacencyListEmergingSchema_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "messageCount, personCount", resultSet);
 
+            testCSRUniversalTable_Query_BI18(1000, iterations_query, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet, std::to_string(scaleFactor).substr(0, 4));
+            writeQueryDurationsToFile("Q5_Query_BI18_CSRUniversalTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
+            writeQueryResultToFile("Q5_QueryResult_BI18_CSRUniversalTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "messageCount, personCount", resultSet);
+
+            testCSRSchemaHashedTable_Query_BI18(1000, iterations_query, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet, std::to_string(scaleFactor).substr(0, 4));
+            writeQueryDurationsToFile("Q5_Query_BI18_CSRSchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
+            writeQueryResultToFile("Q5_QueryResult_BI18_CSRSchemaHashedTable_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "messageCount, personCount", resultSet);
+
+            testCSREmergingSchema_Query_BI18(1000, iterations_query, before_fetch, after_fetch, after_query, messageCreationDate, messageLength, messageLanguages, resultSet, std::to_string(scaleFactor).substr(0, 4));
+            writeQueryDurationsToFile("Q5_Query_BI18_CSREmergingSchema_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
+            writeQueryResultToFile("Q5_QueryResult_BI18_CSREmergingSchema_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "messageCount, personCount", resultSet);
         }
 
     }
@@ -1042,11 +1189,15 @@ int main(int argc, char** argv) {
         queryResultSet_vec resultSet;
 
 
-        for (double scaleFactor = ScaleFactorAdjMatrix_start; scaleFactor <= ScaleFactorAdjMatrix_end; scaleFactor *= 2) {
+        for (double scaleFactor = ScaleFactor_end; scaleFactor >= ScaleFactor_start; scaleFactor /= 4) {
 
-            testAdjacencyMatrix_Query_DC(1000, iterations_query, before_fetch, after_fetch, after_query, resultSet, std::to_string(scaleFactor).substr(0, 4));
-            writeQueryDurationsToFile("Q6_Query_DC_AdjacencyMatrix_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
-            writeQueryResultToFile("Q6_QueryResult_DC_AdjacencyMatrix_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "EdgeDirection, EdgeLabel, EdgeCount, VertexCount", resultSet);
+            testAdjacencyList_Query_DC(1000, iterations_query, before_fetch, after_fetch, after_query, resultSet, std::to_string(scaleFactor).substr(0, 4));
+            writeQueryDurationsToFile("Q6_Query_DC_AdjacencyList_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
+            writeQueryResultToFile("Q6_QueryResult_DC_AdjacencyList_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "EdgeDirection, EdgeLabel, EdgeCount, VertexCount", resultSet);
+
+            testCSR_Query_DC(1000, iterations_query, before_fetch, after_fetch, after_query, resultSet, std::to_string(scaleFactor).substr(0, 4));
+            writeQueryDurationsToFile("Q6_Query_DC_CSR_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", before_fetch, after_fetch, after_query);
+            writeQueryResultToFile("Q6_QueryResult_DC_CSR_" + std::to_string(scaleFactor).substr(0, 4) + "_1000", "EdgeDirection, EdgeLabel, EdgeCount, VertexCount", resultSet);
 
         }
     }

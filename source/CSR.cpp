@@ -458,9 +458,9 @@ void CSR::getTargetVertexWithReplacement(std::string edgeLabel, std::vector<std:
     for (uint32_t i = 0; i < resultSet.size(); i++) {
         std::string sourceVertexId = resultSet[i].first[0];
         vertexMap_it sourceVertexIndex = vi_map.find(sourceVertexId);
-        while (sourceVertexIndex->second != -1) {
-            sourceVertexIndex = vc_vec.at(vr_vec.at(sourceVertexIndex->second));
-        }
+        //while (sourceVertexIndex->second != -1) {
+        sourceVertexIndex = vc_vec.at(vr_vec.at(sourceVertexIndex->second));
+        //}
         resultSet[i].first[0] = sourceVertexIndex->first;
     }
 }

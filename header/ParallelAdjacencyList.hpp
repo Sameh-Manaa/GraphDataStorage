@@ -47,6 +47,7 @@ public:
     bool removeVertex(std::string vertexId);
     bool addNeighbourVertex(std::string vertexId, std::string edgeLabel, std::string neighbourVertexId);
     void addNeighbourVertex(std::vector<std::tuple<std::string, std::string, std::string> > &edges);
+    void addNeighbourVertex(std::string edgeLabel, std::map<std::string, std::set<std::string> > &edges);
     bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId);
     bool removeNeighbourVertex(std::string vertexId, std::string neighbourVertexId, std::string edgeLabel);
     std::unordered_map<std::string, MapItContainers > getNeighbourVertices(std::string vertexId);

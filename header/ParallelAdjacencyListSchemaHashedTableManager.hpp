@@ -27,6 +27,7 @@ private:
     int batchSize;
     int parallelismDegree = 1;
     std::mutex fileReadMutex;
+    bool topologyLoad, propertiesLoad;
 public:
 
     bool loadGraph(std::string verticesDirectory, std::string edgesDirectory);
@@ -35,7 +36,7 @@ public:
     std::map<int, std::string> getVertexProperties(std::string vertexHeaderLine);
     std::map<int, std::string> getEdgeProperties(std::string edgeHeaderLine);
 
-    ParallelAdjacencyListSchemaHashedTableManager(int bSize, int parallilism) : batchSize(bSize), parallelismDegree(parallilism) {
+    ParallelAdjacencyListSchemaHashedTableManager(int bSize, int parallilism, bool topology = true, bool properties = true) : batchSize(bSize), parallelismDegree(parallilism), topologyLoad(topology), propertiesLoad(properties) {
     };
 };
 

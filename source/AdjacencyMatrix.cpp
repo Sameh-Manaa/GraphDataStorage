@@ -239,6 +239,8 @@ uint64_t AdjacencyMatrix::getAdjacencyMatrixSizeInBytes() {
 }
 
 void AdjacencyMatrix::getTargetVertex(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
+    std::cout << "getTargetVertex--ResultSet: " << resultSet.size() << std::endl;
+
     labeledAdjMat_it labeledEdgesSet_it = this->labeledAdjacencyMatrix.find(edgeLabel);
 
     for (uint32_t i = 0; i < resultSet.size(); i++) {
@@ -247,30 +249,39 @@ void AdjacencyMatrix::getTargetVertex(std::string edgeLabel, std::vector<std::pa
         std::vector<bool>& neighboursVector = labeledEdgesSet_it->second.second.at(sourceVertexIndex);
         int32_t targetVertexIndex = sourceVertexIndex;
         sourceVertexIndex = -1;
-        for (uint32_t i = 0; i < neighboursVector.size(); i++) {
-            if (neighboursVector[i]) {
-                targetVertexIndex = i;
-                sourceVertexIndex = i;
+        for (uint32_t ii = 0; ii < neighboursVector.size(); ii++) {
+            if (neighboursVector[ii]) {
+                targetVertexIndex = ii;
+                sourceVertexIndex = ii;
                 break;
             }
         }
 
-        while (sourceVertexIndex != -1) {
+        std::string targetVertex = getVertexIdByVertexIndex(targetVertexIndex, edgeLabel);
+
+        while (targetVertex.substr(0, 4) != "post") {
             std::vector<bool>& neighboursVector = labeledEdgesSet_it->second.second.at(sourceVertexIndex);
             sourceVertexIndex = -1;
-            for (uint32_t i = 0; i < neighboursVector.size(); i++) {
-                if (neighboursVector[i]) {
-                    targetVertexIndex = i;
-                    sourceVertexIndex = i;
+            for (uint32_t ii = 0; ii < neighboursVector.size(); ii++) {
+                if (neighboursVector[ii]) {
+                    targetVertexIndex = ii;
+                    sourceVertexIndex = ii;
                     break;
                 }
             }
+            targetVertex = getVertexIdByVertexIndex(targetVertexIndex, edgeLabel);
         }
-        resultSet[i].first.emplace_back(getVertexIdByVertexIndex(targetVertexIndex, edgeLabel));
+        resultSet[i].first.emplace_back(targetVertex);
+
+        if (i % 1000 == 0) {
+            std::cout << "getTargetVertex--processed: " << i << std::endl;
+        }
     }
 }
 
 void AdjacencyMatrix::getTargetVertexWithReplacement(std::string edgeLabel, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet) {
+    std::cout << "getTargetVertex--ResultSet: " << resultSet.size() << std::endl;
+
     labeledAdjMat_it labeledEdgesSet_it = this->labeledAdjacencyMatrix.find(edgeLabel);
 
     for (uint32_t i = 0; i < resultSet.size(); i++) {
@@ -287,18 +298,12 @@ void AdjacencyMatrix::getTargetVertexWithReplacement(std::string edgeLabel, std:
             }
         }
 
-        while (sourceVertexIndex != -1) {
-            std::vector<bool>& neighboursVector = labeledEdgesSet_it->second.second.at(sourceVertexIndex);
-            sourceVertexIndex = -1;
-            for (uint32_t i = 0; i < neighboursVector.size(); i++) {
-                if (neighboursVector[i]) {
-                    targetVertexIndex = i;
-                    sourceVertexIndex = i;
-                    break;
-                }
-            }
-        }
         resultSet[i].first[0] = getVertexIdByVertexIndex(targetVertexIndex, edgeLabel);
+        
+
+        if (i % 1000 == 0) {
+            std::cout << "getTargetVertex--processed: " << i << std::endl;
+        }
     }
 }
 

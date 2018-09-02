@@ -152,6 +152,7 @@ void AdjacencyList::addNeighbourVertex(std::string edgeLabel, std::map<std::stri
             }
             if (!inserted) {
                 srcIt.first->second.vec.emplace_back(tgtIt.first);
+                i++;
             }
         }
     }
@@ -256,9 +257,9 @@ void AdjacencyList::getTargetVertexWithReplacement(std::string edgeLabel, std::v
     for (uint32_t i = 0; i < resultSet.size(); i++) {
         std::string sourceVertexId = resultSet[i].first[0];
         MyMap_it innerMap_it = labeledEdgesSet_it->second.find(sourceVertexId);
-        while (!innerMap_it->second.vec.empty()) {
-            innerMap_it = innerMap_it->second.vec[0];
-        }
+        //while (!innerMap_it->second.vec.empty()) {
+        innerMap_it = innerMap_it->second.vec[0];
+        //}
         resultSet[i].first[0] = innerMap_it->first;
     }
 }
