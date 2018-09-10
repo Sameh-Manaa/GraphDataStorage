@@ -276,7 +276,7 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDa
 
             resultRecord.first.emplace_back(std::to_string(creationDate_tm.tm_year));
 
-            resultRecord.first.emplace_back("true");
+            resultRecord.first.emplace_back("false");
 
             std::string::size_type sz; // alias of size_t
 
