@@ -13,11 +13,6 @@ bool CSRUniversalTableManager::loadGraph(std::string verticesDirectory, std::str
         std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
         std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
         std::cout << "==========================================================================" << std::endl;
-
-        //        std::cout << "==========================================================================" << std::endl;
-        //        std::cout << "Vertex Universal Table Size In Bytes: " << this->universalTable.getVertexUniversalTableSizeInBytes() << std::endl;
-        //        std::cout << "Edge Universal Table Size In Bytes: " << this->universalTable.getEdgeUniversalTableSizeInBytes() << std::endl;
-        //        std::cout << "==========================================================================" << std::endl;
         return true;
     } else {
         return false;
@@ -92,12 +87,6 @@ bool CSRUniversalTableManager::loadVertices(std::string verticesDirectory, uint8
 
         this->universalTable.upsertVertex(vertexUniversalMap);
         vertexUniversalMap.clear();
-
-        //        std::cout << "file: " << pent->d_name << std::endl;
-        //        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
-        //        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
-        //        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
-        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -186,7 +175,6 @@ bool CSRUniversalTableManager::loadEdges(std::string edgesDirectory, uint8_t fil
 
             if (this->topologyLoad) {
                 edges[sourceVertex + "_" + sourceVertexId].emplace(targetVertex + "_" + targetVertexId);
-                //edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
             }
 
             if (++loadCounter % batchSize == 0) {
@@ -218,12 +206,6 @@ bool CSRUniversalTableManager::loadEdges(std::string edgesDirectory, uint8_t fil
             this->csr.addNeighbourVertex(edgeLabel, edges);
             edges.clear();
         }
-
-        //        std::cout << "file: " << pent->d_name << std::endl;
-        //        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
-        //        std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
-        //        std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
-        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);

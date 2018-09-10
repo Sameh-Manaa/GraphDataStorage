@@ -2,7 +2,6 @@
  * File:   AdjacencyListSchemaHashedTableManager.hpp
  * Author: same7
  *
- * Created on May 23, 2018, 01:01 AM
  */
 
 #ifndef ADJACENCYLISTSCHEMAHASHEDTABLEMANAGER_HPP

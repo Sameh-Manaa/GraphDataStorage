@@ -2,7 +2,6 @@
  * File:   AdjacencyListSchemaHashedTableManager.hpp
  * Author: same7
  *
- * Created on May 23, 2018, 01:01 AM
  */
 
 #ifndef ADJACENCYMATRIXSCHEMAHASHEDTABLEMANAGER_HPP
@@ -15,6 +14,7 @@
 #include <string>
 #include <tuple>
 #include <dirent.h>
+#include <algorithm>
 #include "UtilityFunctions.hpp"
 
 #include "AdjacencyMatrix.hpp"
@@ -25,6 +25,7 @@ private:
     AdjacencyMatrix adjacencyMatrix;
     SchemaHashedTable schemaHashedTable;
     int batchSize;
+    bool topologyLoad, propertiesLoad;
 public:
 
     bool loadGraph(std::string verticesDirectory, std::string edgesDirectory, uint8_t filesToLoad = 0);
@@ -32,13 +33,18 @@ public:
     bool loadEdges(std::string edgesDirectory, uint8_t filesToLoad);
     std::map<int, std::string> getVertexProperties(std::string vertexHeaderLine);
     std::map<int, std::string> getEdgeProperties(std::string edgeHeaderLine);
-    
+
     void executeQueryBI18(tm messageCreationDate, uint16_t messageLength, std::vector<std::string> messageLanguages, std::vector<std::pair<std::vector<std::string>, std::vector<double> > >& resultSet);
-    
-    uint64_t getAdjacencyMatrixSizeInBytes(){return this->adjacencyMatrix.getAdjacencyMatrixSizeInBytes();};
-    uint64_t getSchemaHashedTableSizeInBytes(){return this->schemaHashedTable.getSchemaHashedTableSizeInBytes();};
-    
-    AdjacencyMatrixSchemaHashedTableManager(int bSize):batchSize(bSize){
+
+    uint64_t getAdjacencyMatrixSizeInBytes() {
+        return this->adjacencyMatrix.getAdjacencyMatrixSizeInBytes();
+    };
+
+    uint64_t getSchemaHashedTableSizeInBytes() {
+        return this->schemaHashedTable.getSchemaHashedTableSizeInBytes();
+    };
+
+    AdjacencyMatrixSchemaHashedTableManager(int bSize, bool topology = true, bool properties = true) : batchSize(bSize), topologyLoad(topology), propertiesLoad(properties) {
         adjacencyMatrix.setBatchSize(bSize);
     };
 };

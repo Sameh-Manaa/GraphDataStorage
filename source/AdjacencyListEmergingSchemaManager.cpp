@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 #include "AdjacencyListEmergingSchemaManager.hpp"
 
 bool AdjacencyListEmergingSchemaManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory, uint8_t filesToLoad) {
@@ -19,11 +13,6 @@ bool AdjacencyListEmergingSchemaManager::loadGraph(std::string verticesDirectory
         std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
         std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
         std::cout << "==========================================================================" << std::endl;
-
-        //std::cout << "==========================================================================" << std::endl;
-        //std::cout << "Vertex Universal Table Size In Bytes: " << this->universalTable.getVertexUniversalTableSizeInBytes() << std::endl;
-        //std::cout << "Edge Universal Table Size In Bytes: " << this->universalTable.getEdgeUniversalTableSizeInBytes() << std::endl;
-        //std::cout << "==========================================================================" << std::endl;
         return true;
     } else {
         return false;
@@ -48,9 +37,7 @@ bool AdjacencyListEmergingSchemaManager::loadVertices(std::string verticesDirect
 
         std::string fileName(pent->d_name);
 
-        if (fileName.empty() || fileName.at(0) == '.' ||
-                (filesToLoad >= 1 && fileName.find("comment") != std::string::npos) ||
-                (filesToLoad >= 2 && fileName.find("post") != std::string::npos)) {
+        if (fileName.empty() || fileName.at(0) == '.') {
             continue;
         }
 
@@ -100,12 +87,6 @@ bool AdjacencyListEmergingSchemaManager::loadVertices(std::string verticesDirect
 
         this->universalTable.upsertVertex(vertexUniversalMap);
         vertexUniversalMap.clear();
-
-        //std::cout << "file: " << pent->d_name << std::endl;
-        //std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-        //std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
-        //std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
-        //std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -116,8 +97,10 @@ bool AdjacencyListEmergingSchemaManager::loadEdges(std::string edgesDirectory, u
 
     uint64_t loadCounter = 0;
     uint64_t rowCount = 0;
+    
     std::vector < std::pair <std::string, std::vector<char*> > > edgeUniversalMap;
-    std::vector<std::tuple<std::string, std::string, std::string> > edges;
+    std::map<std::string, std::set<std::string> > edges;
+    
     std::vector < std::pair < std::string, std::vector<char*> > > vertexUniversalMap;
     std::vector<char*> vertexProperties;
 
@@ -159,7 +142,6 @@ bool AdjacencyListEmergingSchemaManager::loadEdges(std::string edgesDirectory, u
         getline(iss, edgeLabel, '_');
         getline(iss, targetVertex, '_');
 
-
         while (std::getline(edgeFile, edgeLine)) {
             rowCount++;
 
@@ -190,7 +172,7 @@ bool AdjacencyListEmergingSchemaManager::loadEdges(std::string edgesDirectory, u
             }
 
             if (this->topologyLoad) {
-                edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
+                edges[sourceVertex + "_" + sourceVertexId].emplace(targetVertex + "_" + targetVertexId);
             }
 
             if (++loadCounter % batchSize == 0) {
@@ -204,7 +186,7 @@ bool AdjacencyListEmergingSchemaManager::loadEdges(std::string edgesDirectory, u
                 }
 
                 if (this->topologyLoad) {
-                    this->adjacencyList.addNeighbourVertex(edges);
+                    this->adjacencyList.addNeighbourVertex(edgeLabel, edges);
                     edges.clear();
                 }
             }
@@ -219,15 +201,9 @@ bool AdjacencyListEmergingSchemaManager::loadEdges(std::string edgesDirectory, u
         }
 
         if (this->topologyLoad) {
-            this->adjacencyList.addNeighbourVertex(edges);
+            this->adjacencyList.addNeighbourVertex(edgeLabel, edges);
             edges.clear();
         }
-
-        //std::cout << "file: " << pent->d_name << std::endl;
-        //std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-        //std::cout << "Vertex Universal Table Size: " << this->universalTable.getVertexUniversalTableSize() << std::endl;
-        //std::cout << "Edge Universal Table Size: " << this->universalTable.getEdgeUniversalTableSize() << std::endl;
-        //std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -498,7 +474,6 @@ void AdjacencyListEmergingSchemaManager::executeQueryBI18(tm messageCreationDate
             resultSet.emplace_back(resultRecord);
         }
     }
-
 
     this->adjacencyList.getTargetVertexWithReplacement("hasCreator", resultSet);
 

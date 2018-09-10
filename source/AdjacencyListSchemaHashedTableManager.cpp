@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 #include "AdjacencyListSchemaHashedTableManager.hpp"
 
 bool AdjacencyListSchemaHashedTableManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory, uint8_t filesToLoad) {
@@ -88,12 +82,6 @@ bool AdjacencyListSchemaHashedTableManager::loadVertices(std::string verticesDir
 
         this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
         vertexSchemaHashedMap.clear();
-
-        //std::cout << "file: " << pent->d_name << std::endl;
-        //std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-        //std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-        //std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
-        //std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -107,7 +95,7 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
 
 
     std::vector< std::pair<std::string, std::unordered_map<std::string, char*> > > edgeSchemaHashedMap;
-    std::vector<std::tuple<std::string, std::string, std::string> > edges;
+    std::map<std::string, std::set<std::string> > edges;
 
     std::vector< std::pair< std::string, std::unordered_map<std::string, char*> > > vertexSchemaHashedMap;
     std::unordered_map<std::string, char*> vertexProperties;
@@ -145,7 +133,6 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
         getline(iss, edgeLabel, '_');
         getline(iss, targetVertex, '_');
 
-
         while (std::getline(edgeFile, edgeLine)) {
             rowCount++;
 
@@ -169,7 +156,6 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
                 }
             }
 
-
             if (this->propertiesLoad) {
                 vertexSchemaHashedMap.emplace_back(sourceVertex + "_" + sourceVertexId, vertexProperties);
                 vertexSchemaHashedMap.emplace_back(targetVertex + "_" + targetVertexId, vertexProperties);
@@ -177,7 +163,7 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
             }
 
             if (this->topologyLoad) {
-                edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
+                edges[sourceVertex + "_" + sourceVertexId].emplace(targetVertex + "_" + targetVertexId);
             }
 
             if (++loadCounter % batchSize == 0) {
@@ -191,7 +177,7 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
                 }
 
                 if (this->topologyLoad) {
-                    this->adjacencyList.addNeighbourVertex(edges);
+                    this->adjacencyList.addNeighbourVertex(edgeLabel, edges);
                     edges.clear();
                 }
 
@@ -207,15 +193,9 @@ bool AdjacencyListSchemaHashedTableManager::loadEdges(std::string edgesDirectory
         }
 
         if (this->topologyLoad) {
-            this->adjacencyList.addNeighbourVertex(edges);
+            this->adjacencyList.addNeighbourVertex(edgeLabel, edges);
             edges.clear();
         }
-
-        //std::cout << "file: " << pent->d_name << std::endl;
-        //std::cout << "Adjacency List Size: " << this->adjacencyList.getAdjacencyListSize() << std::endl;
-        //std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-        //std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
-        //std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -253,7 +233,6 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI1(tm messageCreationDa
     std::cout << "Count of Post Vertices Found: " << std::distance(postVertices.first, postVertices.second) << std::endl;
 
     // 2- filter result on creation date before $date
-
     for (std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator it = commentVertices.first; it != commentVertices.second; ++it) {
 
         const char* creationDate = it->second.at("creationDate");
@@ -336,7 +315,6 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI18(tm messageCreationD
     std::cout << "Count of Post Vertices Found: " << std::distance(postVertices.first, postVertices.second) << std::endl;
 
     // 2- filter result on creation date before $date, length less than $messageLength, content is not empty and post language in $languages
-
     std::vector<std::pair<std::vector<std::string>, std::vector<double> > > tempResultSet;
 
     for (std::map<std::string, std::unordered_map<std::string, char*> >::const_iterator it = commentVertices.first; it != commentVertices.second; ++it) {
@@ -407,7 +385,6 @@ void AdjacencyListSchemaHashedTableManager::executeQueryBI18(tm messageCreationD
             resultSet.emplace_back(resultRecord);
         }
     }
-
 
     this->adjacencyList.getTargetVertexWithReplacement("hasCreator", resultSet);
 

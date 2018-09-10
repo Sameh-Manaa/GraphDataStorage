@@ -1,13 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 #include"EmergingSchema.hpp"
-
-EmergingSchema::EmergingSchema() {
-}
 
 EmergingSchema::~EmergingSchema() {
     for (auto const& vertexTable : this->vertexEmergingSchema) {
@@ -121,7 +112,7 @@ void EmergingSchema::generateVerticesEmergingSchema(UniversalTable &universalTab
 
     total_values = universalTable.vertexUniversalMap.size();
 
-    k = 8;
+    k = total_points;
 
     max_iterations = 20;
 
@@ -178,13 +169,9 @@ void EmergingSchema::generateVerticesEmergingSchema(UniversalTable &universalTab
                     itBoolPair.first->second.resize(propertyEsOrderPair.second.second + 1);
                 }
                 itBoolPair.first->second.at(propertyEsOrderPair.second.second) = vertex.second.at(universalTable.vertexPropertyIndex.at(propertyEsOrderPair.first));
-                //if (itBoolPair.second) {
-                //    itBoolPair.first->second.at(0) = vertex.second.at(universalTable.vertexPropertyIndex.at("VertexType"));
-                //}
             }
         }
     }
-
 
     for (auto const& table : this->vertexEmergingSchema) {
         std::cout << "Table(" << table.first << ") --> Size(" << table.second.size() << ") --> Properties(" << table.second.begin()->second.size() << ")" << std::endl;
@@ -202,7 +189,7 @@ void EmergingSchema::generateEdgesEmergingSchema(UniversalTable &universalTable)
 
     total_values = universalTable.edgeUniversalMap.size();
 
-    k = 2;
+    k = total_points;
 
     max_iterations = 20;
 
@@ -282,7 +269,6 @@ void EmergingSchema::generateEdgesEmergingSchema(UniversalTable &universalTable)
             }
         }
     }
-
 
     for (auto const& table : this->edgeEmergingSchema) {
         std::cout << "Table(" << table.first << ") --> Size(" << table.second.size() << ") --> Properties(" << table.second.begin()->second.size() << ")" << std::endl;

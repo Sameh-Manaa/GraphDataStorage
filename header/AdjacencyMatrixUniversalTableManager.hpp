@@ -2,7 +2,6 @@
  * File:   AdjacencyMatrixUniversalTableManager.hpp
  * Author: same7
  *
- * Created on May 21, 2018, 12:37 PM
  */
 
 #ifndef ADJACENCYMATRIXUNIVERSALTABLEMANAGER_HPP
@@ -15,6 +14,7 @@
 #include <string>
 #include <tuple>
 #include <dirent.h>
+#include <algorithm>
 #include "UtilityFunctions.hpp"
 
 #include "AdjacencyMatrix.hpp"

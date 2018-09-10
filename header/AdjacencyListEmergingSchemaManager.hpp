@@ -2,7 +2,6 @@
  * File:   AdjacencyListEmergingSchemaManager.hpp
  * Author: same7
  *
- * Created on Jul 18, 2018, 11:32 AM
  */
 
 #ifndef ADJACENCYLISTEMERGINGSCHEMAMANAGER_HPP

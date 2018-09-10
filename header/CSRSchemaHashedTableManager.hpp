@@ -1,5 +1,3 @@
-
-
 #ifndef CSRSCHEMAHASHEDTABLEMANAGER_HPP
 #define CSRSCHEMAHASHEDTABLEMANAGER_HPP
 
@@ -10,6 +8,7 @@
 #include <string>
 #include <tuple>
 #include <dirent.h>
+#include <algorithm>
 #include "UtilityFunctions.hpp"
 
 #include "CSR.hpp"
@@ -20,8 +19,8 @@ private:
     CSR csr;
     SchemaHashedTable schemaHashedTable;
     int batchSize;
-    bool topologyLoad, propertiesLoad;
 public:
+    bool topologyLoad, propertiesLoad;
 
     bool loadGraph(std::string verticesDirectory, std::string edgesDirectory, uint8_t filesToLoad = 0);
     bool loadVertices(std::string verticesDirectory, uint8_t filesToLoad);

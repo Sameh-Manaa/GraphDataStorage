@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 #include "CSRSchemaHashedTableManager.hpp"
 
 bool CSRSchemaHashedTableManager::loadGraph(std::string verticesDirectory, std::string edgesDirectory, uint8_t filesToLoad) {
@@ -90,12 +84,6 @@ bool CSRSchemaHashedTableManager::loadVertices(std::string verticesDirectory, ui
 
         this->schemaHashedTable.upsertVertex(vertexSchemaHashedMap);
         vertexSchemaHashedMap.clear();
-
-        //        std::cout << "file: " << pent->d_name << std::endl;
-        //        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
-        //        std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-        //        std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
-        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);
@@ -111,7 +99,7 @@ bool CSRSchemaHashedTableManager::loadEdges(std::string edgesDirectory, uint8_t 
     std::unordered_map<std::string, char*> vertexProperties;
 
     std::vector< std::pair<std::string, std::unordered_map<std::string, char*> > > edgeSchemaHashedMap;
-    std::vector<std::tuple<std::string, std::string, std::string> > edges;
+    std::map<std::string, std::set<std::string> > edges;
 
     DIR *pdir = NULL;
     struct dirent *pent = NULL;
@@ -177,7 +165,7 @@ bool CSRSchemaHashedTableManager::loadEdges(std::string edgesDirectory, uint8_t 
             }
 
             if (this->topologyLoad) {
-                edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
+                edges[sourceVertex + "_" + sourceVertexId].emplace(targetVertex + "_" + targetVertexId);
             }
 
             if (++loadCounter % batchSize == 0) {
@@ -191,7 +179,7 @@ bool CSRSchemaHashedTableManager::loadEdges(std::string edgesDirectory, uint8_t 
                 }
 
                 if (this->topologyLoad) {
-                    this->csr.addNeighbourVertex(edges);
+                    this->csr.addNeighbourVertex(edgeLabel, edges);
                     edges.clear();
                 }
 
@@ -208,15 +196,9 @@ bool CSRSchemaHashedTableManager::loadEdges(std::string edgesDirectory, uint8_t 
         }
 
         if (this->topologyLoad) {
-            this->csr.addNeighbourVertex(edges);
+            this->csr.addNeighbourVertex(edgeLabel, edges);
             edges.clear();
         }
-
-        //        std::cout << "file: " << pent->d_name << std::endl;
-        //        std::cout << "CSR Size: " << this->csr.getCSRSize() << std::endl;
-        //        std::cout << "Vertex Schema Hashed Table Size: " << this->schemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-        //        std::cout << "Edge Schema Hashed Table Size: " << this->schemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
-        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
     }
 
     closedir(pdir);

@@ -17,6 +17,9 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadGraph(std::string vertic
 
         while ((pent = readdir(pdir)) != NULL) {
 
+            if (std::string(pent->d_name).empty() || std::string(pent->d_name).at(0) == '.') {
+                continue;
+            }
             std::cout << verticesDirectory + "/" + pent->d_name << std::endl;
             std::string vertexFileName = verticesDirectory + "/" + pent->d_name;
             std::ifstream vertexFile(verticesDirectory + "/" + pent->d_name);
@@ -45,14 +48,6 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadGraph(std::string vertic
                 thread.join();
             }
             threads.clear();
-
-            //loadVertices(vertexFile, propertiesPositions, vertexType);
-
-            //        std::cout << "file: " << vertexType << std::endl;
-            //        std::cout << "Parallel Adjacency List Size: " << this->parallelAdjacencyList.getAdjacencyListSize() << std::endl;
-            //        std::cout << "Parallel Schema Hashed Table Size: " << this->parallelSchemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-            //        std::cout << "--------------------------------------------------------------------------" << std::endl;
-
         }
 
         closedir(pdir);
@@ -62,7 +57,10 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadGraph(std::string vertic
     pdir = opendir(edgesDirectory.data());
 
     while ((pent = readdir(pdir)) != NULL) {
-
+        if (std::string(pent->d_name).empty() || std::string(pent->d_name).at(0) == '.') {
+            continue;
+        }
+        
         std::cout << edgesDirectory + "/" + pent->d_name << std::endl;
         std::string edgeFilePath = edgesDirectory + "/" + pent->d_name;
         std::ifstream edgeFile(edgesDirectory + "/" + pent->d_name);
@@ -85,16 +83,6 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadGraph(std::string vertic
             thread.join();
         }
         threads.clear();
-
-        //loadVertices(vertexFile, propertiesPositions, vertexType);
-
-
-        //        std::cout << "file: " << pent->d_name << std::endl;
-        //        std::cout << "Parallel Adjacency List Size: " << this->parallelAdjacencyList.getAdjacencyListSize() << std::endl;
-        //        std::cout << "Parallel Vertex Schema Hashed Table Size: " << this->parallelSchemaHashedTable.getVertexSchemaHashedTableSize() << std::endl;
-        //        std::cout << "Parallel Edge Schema Hashed Table Size: " << this->parallelSchemaHashedTable.getEdgeSchemaHashedTableSize() << std::endl;
-        //        std::cout << "--------------------------------------------------------------------------" << std::endl;
-
     }
 
     closedir(pdir);
@@ -123,9 +111,7 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadVertices(std::string &ve
     std::string headerLine;
     std::getline(vertexFile, headerLine);
 
-
     std::vector < std::pair<std::string, std::unordered_map<std::string, char*> > > vertexSchemaHashedMap;
-    //std::set<std::string> vertexIds;
 
     rowCount = 0;
 
@@ -133,9 +119,7 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadVertices(std::string &ve
 
     std::string vertexLine;
 
-    //fileReadMutex.lock();
     while (std::getline(vertexFile, vertexLine)) {
-        //fileReadMutex.unlock();
         rowCount++;
         if (rowCount % this->parallelismDegree != threadId) {
             continue;
@@ -145,7 +129,6 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadVertices(std::string &ve
         std::string property, vertexOriginalId;
 
         int propertyCounter = 0;
-        //properties["VertexType"] = vertexType;
 
         while (getline(iss, property, '|')) {
             if (propertiesPositions[propertyCounter] == "id") {
@@ -165,9 +148,7 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadVertices(std::string &ve
             vertexSchemaHashedMap.clear();
 
         }
-        //fileReadMutex.lock();
     }
-    //fileReadMutex.unlock();
 
     this->parallelSchemaHashedTable.upsertVertex(vertexSchemaHashedMap);
     vertexSchemaHashedMap.clear();
@@ -202,9 +183,7 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadEdges(std::string &edgeF
 
     std::string edgeLine;
 
-    //fileReadMutex.lock();
     while (std::getline(edgeFile, edgeLine)) {
-        //fileReadMutex.unlock();
         rowCount++;
 
         if (rowCount % this->parallelismDegree != threadId) {
@@ -239,7 +218,6 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadEdges(std::string &edgeF
 
         if (this->topologyLoad) {
             edges[sourceVertex + "_" + sourceVertexId].emplace(targetVertex + "_" + targetVertexId);
-            //edges.emplace_back(std::make_tuple(sourceVertex + "_" + sourceVertexId, edgeLabel, targetVertex + "_" + targetVertexId));
         }
 
         if (++loadCounter % batchSize == 0) {
@@ -258,10 +236,7 @@ bool ParallelAdjacencyListSchemaHashedTableManager::loadEdges(std::string &edgeF
             }
 
         }
-        //fileReadMutex.lock();
     }
-    //fileReadMutex.unlock();
-
 
     if (this->propertiesLoad) {
         this->parallelSchemaHashedTable.upsertVertex(vertexSchemaHashedMap);

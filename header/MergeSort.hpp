@@ -2,7 +2,7 @@
 //License: https://creativecommons.org/licenses/by-sa/4.0/
 
 /*
- changes has made on original code to enable sorting string values
+ changes has been made on original code to enable sorting string values
  */
 
 /* C program for Merge Sort */
