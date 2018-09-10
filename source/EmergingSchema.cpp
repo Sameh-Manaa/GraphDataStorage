@@ -145,13 +145,13 @@ void EmergingSchema::generateVerticesEmergingSchema(UniversalTable &universalTab
 
         int tablePropertyCount = 0;
         for (auto const& propertyEsOrderPair : this->vertexPropertyEsIndex) {
-            if (propertyEsOrderPair.second.first == clusterId) {
+            if (propertyEsOrderPair.second.first == clusterId +1) {
                 tablePropertyCount = (propertyEsOrderPair.second.second >= tablePropertyCount) ? propertyEsOrderPair.second.second + 1 : tablePropertyCount;
             }
         }
-        this->vertexPropertyEsIndex[propertyOrderPair.first] = std::make_pair(clusterId, tablePropertyCount);
+        this->vertexPropertyEsIndex[propertyOrderPair.first] = std::make_pair(clusterId +1, tablePropertyCount);
 
-        std::cout << "Property(" << propertyOrderPair.first << ") --> Cluster(" << clusterId << ")" << std::endl;
+        std::cout << "Property(" << propertyOrderPair.first << ") --> Cluster(" << clusterId +1 << ")" << std::endl;
     }
 
     for (auto const& propertyEsOrderPair : this->vertexPropertyEsIndex) {
@@ -169,6 +169,24 @@ void EmergingSchema::generateVerticesEmergingSchema(UniversalTable &universalTab
                     itBoolPair.first->second.resize(propertyEsOrderPair.second.second + 1);
                 }
                 itBoolPair.first->second.at(propertyEsOrderPair.second.second) = vertex.second.at(universalTable.vertexPropertyIndex.at(propertyEsOrderPair.first));
+            } else {
+                bool vertexWithoutProperties = true;
+                for (uint16_t i = 0; i < vertex.second.size(); i++) {
+                    if (vertex.second.at(i)) {
+                        vertexWithoutProperties = false;
+                        break;
+                    }
+                }
+                if (vertexWithoutProperties) {
+
+                    std::map<std::string, std::vector<char*> > vertexEsTable;
+                    std::unordered_map<uint16_t, std::map<std::string, std::vector<char*> > >::iterator it1 =
+                            vertexEmergingSchema.insert(std::make_pair(0, vertexEsTable)).first;
+
+                    std::vector<char*> vertexProperties;
+                    std::pair < std::map<std::string, std::vector<char*> >::iterator, bool> it3 =
+                            it1->second.insert(std::make_pair(vertex.first, vertexProperties));
+                }
             }
         }
     }
